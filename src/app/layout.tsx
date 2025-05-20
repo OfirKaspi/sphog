@@ -30,14 +30,14 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
           content="Shpog - סדנאות טרריום ייחודיות ומותאמות אישית, חוויה יצירתית ומרגיעה לכל אירוע."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png" />
+        <meta property="og:image" content="https://sphog.vercel.app/og-image.png"/>
         <meta property="og:image:width" content="1024" />
         <meta property="og:image:height" content="576" />
         <meta property="og:locale" content="he_IL" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
         <meta property="og:url" content="https://sphog.vercel.app" />
-        <meta name="twitter:card" content="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png" />
+        <meta name="twitter:card" content="https://sphog.vercel.app/og-image.png" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
         <link rel="canonical" href="https://sphog.vercel.app" />
