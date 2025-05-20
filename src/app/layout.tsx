@@ -36,11 +36,11 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
         <meta property="og:locale" content="he_IL" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
-        <meta property="og:url" content="https://shpog.com" />
+        <meta property="og:url" content="https://sphog.vercel.app" />
         <meta name="twitter:card" content="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
-        <link rel="canonical" href="https://shpog.com" />
+        <link rel="canonical" href="https://sphog.vercel.app" />
         <link
           rel="icon"
           href="/logo.png"
