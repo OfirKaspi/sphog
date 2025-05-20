@@ -6,6 +6,7 @@ import WhatsAppButton from "@/components/common/WhatsAppButton";
 import { CONFIG } from "@/config/config";
 import Script from "next/script";
 import GAListener from "@/components/common/GAListener";
+import Navbar from "@/components/layout/Navbar";
 
 // MUST CHANGE DETAILS, IMAGES, OR ANYTHING RELEVANT + FONTS
 const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
@@ -14,31 +15,35 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>LevelUp | סוכנות דיגיטלית לבניית אתרים, שיווק וכתיבה</title>
+        <title>Shpog | סדנאות טרריום בהתאמה אישית</title>
         <meta
           name="description"
-          content="LevelUp - סוכנות דיגיטלית מובילה לבניית אתרים, שיווק דיגיטלי וכתיבה שיווקית לעסקים שרוצים להצליח."
+          content="Shpog - סדנאות טרריום ייחודיות ומותאמות אישית, חוויה יצירתית ומרגיעה לכל אירוע."
         />
         <meta
           name="keywords"
-          content="בניית אתרים, סוכנות דיגיטל, שיווק בפייסבוק, כתיבה שיווקית, דפי נחיתה, אתרי תדמית, LevelUp"
+          content="סדנאות טרריום, עיצוב טרריום, סדנאות יצירה, Shpog"
         />
-        <meta property="og:title" content="LevelUp | סוכנות דיגיטלית" />
+        <meta property="og:title" content="Shpog | סדנאות טרריום" />
         <meta
           property="og:description"
-          content="LevelUp - סוכנות דיגיטלית מובילה המספקת פתרונות מקצועיים בבניית אתרים, שיווק וכתיבה שיווקית, המקדמים עסקים להצלחה."
+          content="Shpog - סדנאות טרריום ייחודיות ומותאמות אישית, חוויה יצירתית ומרגיעה לכל אירוע."
         />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://thelevelupagency.com/levelup-og-image.png" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image" content="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png" />
+        <meta property="og:image:width" content="1024" />
+        <meta property="og:image:height" content="576" />
         <meta property="og:locale" content="he_IL" />
-        <meta property="og:url" content="https://thelevelupagency.com" />
-        <meta name="twitter:card" content="https://thelevelupagency.com/levelup-og-image.png" />
-        <link rel="canonical" href="https://thelevelupagency.com" />
+        
+        {/* NEED TO BE CHANGED IN PRODUCTION */}
+        <meta property="og:url" content="https://shpog.com" />
+        <meta name="twitter:card" content="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png" />
+        
+        {/* NEED TO BE CHANGED IN PRODUCTION */}
+        <link rel="canonical" href="https://shpog.com" />
         <link
           rel="icon"
-          href="/social-media/facebook.svg"
+          href="/logo.png"
           type="image/png"
           sizes="32x32"
         />
@@ -59,7 +64,8 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
           `}
         </Script>
       </head>
-      <body className="antialiased">
+      <body className="antialiased bg-gray-100">
+        <Navbar />
         {children}
         <Footer />
         <WhatsAppButton />

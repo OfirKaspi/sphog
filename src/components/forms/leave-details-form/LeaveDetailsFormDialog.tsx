@@ -54,7 +54,7 @@ const LeaveDetailsDialog = ({ text, isFancyWrapper = true, isDark = true }: Leav
           </button>
         ) : (
           <Button
-            className="bg-purple-800 w-full h-10"
+            className="bg-primary w-full h-10"
             aria-label={text}
           >
             {text}

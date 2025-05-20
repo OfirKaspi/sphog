@@ -17,13 +17,13 @@ export const CONFIG = {
   GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
 
   // GENERAL DETAILS
-  facebookUsername: "the.levelup.agency",
-  instagramUsername: "the.levelup.agency",
-  whatsappNumber: "972552528601",
-  phoneNumber: "0552528601",
-  contactEmail: "contact@thelevelupagency.com",
-  contactAddress: "משה דיין 33, תל אביב, ישראל",
-  lat: 32.05066446929389,
-  lng: 34.79935393068719,
+  facebookUsername: "profile.php?id=100064906843760",
+  instagramUsername: "sphogmoss",
+  whatsappNumber: "972542267889",
+  phoneNumber: "0547256800",
+  contactEmail: "sphogmoss@gmail.com",
+  contactAddress: "התחייה 16, תל אביב, ישראל",
+  lat: 32.050030,
+  lng: 34.763215,
   year: 2025,
 };
