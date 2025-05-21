@@ -53,3 +53,13 @@ export interface Testimonial {
   role?: string
   image?: Image
 }
+
+export interface Tip {
+  id: number
+  title: string
+  description: string
+  image: {
+    src: string
+    alt: string
+  }
+}
