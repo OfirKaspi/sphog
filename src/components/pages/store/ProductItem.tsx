@@ -40,7 +40,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
 			<div className="flex flex-col justify-between flex-1 p-4 text-right">
 				<header>
 					<h2 className="text-lg font-bold text-gray-900 dark:text-white">{product.name}</h2>
-					<p className="text-sm text-gray-600 dark:text-gray-400 mt-1 max-w-[300px] break-words">
+					<p className="text-sm text-slate-900 dark:text-gray-400 mt-1 max-w-[300px] break-words">
 						{product.description}
 					</p>
 				</header>

@@ -1,5 +1,6 @@
 import BannerImage from "@/components/common/BannerImage"
 import PageHeader from "@/components/common/PageHeader"
+import Testimonials from "@/components/common/Testimonials"
 import getHomeData from "@/lib/api/homeData"
 
 const Home = () => {
@@ -17,6 +18,10 @@ const Home = () => {
           alt={data.bannerImage.alt}
         />
       </div>
+      <Testimonials
+        title={data.testimonials.title}
+        testimonials={data.testimonials.items}
+      />
     </section>
   )
 }

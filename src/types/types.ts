@@ -34,3 +34,22 @@ export interface Product {
   image: Image
   description: string;
 }
+
+export interface Mission {
+  title: string
+  subtitle?: string
+  points: string[]
+}
+
+export interface Value {
+  icon?: string // optional path to icon
+  title: string
+  description: string
+}
+
+export interface Testimonial {
+  name: string
+  quote: string
+  role?: string
+  image?: Image
+}

@@ -1,5 +1,6 @@
 import PageHeader from "@/components/common/PageHeader"
-import ProductList from "@/components/store/ProductList"
+import Testimonials from "@/components/common/Testimonials"
+import ProductList from "@/components/pages/store/ProductList"
 import getStoreData from "@/lib/api/storeData"
 
 const Store = () => {
@@ -11,9 +12,15 @@ const Store = () => {
         title={data.header.title}
         description={data.header.description}
       />
-      <ProductList
-        products={data.products}
-      />
+      <div className="space-y-5 md:space-y-10 mb-5 md:mb-10">
+        <ProductList
+          products={data.products}
+        />
+        <Testimonials
+          title={data.testimonials.title}
+          testimonials={data.testimonials.items}
+        />
+      </div>
     </section>
   )
 }

@@ -3,21 +3,26 @@
 import { useState } from "react"
 import LeaveDetailsForm from "@/components/forms/leave-details-form/LeaveDetailsForm"
 
-const LeaveDetailsOpenForm = () => {
+interface LeaveDetailsOpenFormProps {
+	title: string
+	description: string
+}
+
+const LeaveDetailsOpenForm = ({ description, title }: LeaveDetailsOpenFormProps) => {
 	const [isSuccess, setIsSuccess] = useState(false)
 
 	return (
-		<section className="max-w-md mx-auto p-6 border rounded-lg shadow-sm bg-white dark:bg-gray-900">
-			<div className="mb-6 text-center">
-				<h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
-					נשמח לשמוע ממך!
-				</h3>
-				<p className="mt-2 text-gray-600 dark:text-gray-300">
-					השאר את הפרטים שלך ונחזור אליך בהקדם עם הצעה מותאמת אישית לעסק שלך 🚀
-				</p>
-			</div>
+		<section className="max-w-screen-sm mx-auto p-5">
+			<div className="p-5 border rounded-lg shadow-lg bg-white">
+				{!isSuccess && (
+					<div className="mb-3 space-y-2 md:space-y-3 text-center">
+						<h3 className="text-3xl md:text-4xl text-primary leading-relaxed">{title}</h3>
+						<p className="md:text-lg text-slate-900">{description}</p>
+					</div>
+				)}
 
-			<LeaveDetailsForm isSuccess={isSuccess} setIsSuccess={setIsSuccess} />
+				<LeaveDetailsForm isSuccess={isSuccess} setIsSuccess={setIsSuccess} />
+			</div>
 		</section>
 	)
 }

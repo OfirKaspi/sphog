@@ -24,7 +24,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
     full_name: "",
     phone: "",
     email: "",
-    requested_service: "",
+    // requested_service: "",
     newsletter: true,
   });
 
@@ -45,7 +45,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
       newErrors.email = "אנא מלא כתובת אימייל תקינה";
     if (!formData.phone.match(/^05\d{8}$/))
       newErrors.phone = "אנא מלא מספר טלפון תקין";
-    if (!formData.requested_service) newErrors.requested_service = "אנא בחר סוג שירות";
+    // if (!formData.requested_service) newErrors.requested_service = "אנא בחר סוג שירות";
 
     return newErrors;
   };
@@ -76,7 +76,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
         full_name: "",
         phone: "",
         email: "",
-        requested_service: "",
+        // requested_service: "",
         newsletter: true,
       });
     } catch (error) {
@@ -146,7 +146,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           )}
         </div>
 
-        <div className="grid grid-cols-4 items-center gap-2">
+        {/* <div className="grid grid-cols-4 items-center gap-2">
           <Label htmlFor="requested_service">סוג שירות</Label>
           <Select
             onValueChange={(value) =>
@@ -167,7 +167,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           {errors.requested_service && (
             <p className="col-span-4 text-red-600">{errors.requested_service}</p>
           )}
-        </div>
+        </div> */}
 
         <div className="flex items-center space-x-2 rtl:space-x-reverse">
           <Checkbox
@@ -177,8 +177,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
               setFormData({ ...formData, newsletter: e.target.checked })
             }
           />
-          <Label htmlFor="newsletter">
-            קבל עדכונים והצעות מהסוכנות שלנו ישירות למייל
+          <Label htmlFor="newsletter" className="font-normal">
+            אני מאשר קבלת עדכונים והצעות ישירות למייל
           </Label>
         </div>
 

@@ -125,7 +125,39 @@ const getStoreData = () => {
                 },
                 description: "טרריום בצורת פירמידה עם קקטוסים ואבנים דקורטיביות"
             }
-        ]
+        ],
+        testimonials: {
+            title: "החנות שלנו",
+            items: [
+                {
+                    name: "ליאת רוזן",
+                    quote: "הזמנתי ערכת טרריום והגיע במהירות, ארוז מהמם!",
+                    role: "לקוחה מהחנות",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379392/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.39_pugj7r.jpg",
+                        alt: "תמונה של ליאת רוזן"
+                    }
+                },
+                {
+                    name: "גיל גרוס",
+                    quote: "איכות המוצרים מדהימה, לא האמנתי עד שראיתי בעצמי.",
+                    role: "מזמין חוזר",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379389/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.48.48_hajf4e.jpg",
+                        alt: "תמונה של גיל גרוס"
+                    }
+                },
+                {
+                    name: "הילה כהן",
+                    quote: "המחירים מעולים והשירות פשוט נהדר. אחזור לקנות שוב.",
+                    role: "לקוחות מרוצה",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379391/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.25_exulqi.jpg",
+                        alt: "תמונה של הילה כהן"
+                    }
+                }
+            ]
+        }
     }
 
     return data

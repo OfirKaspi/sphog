@@ -6,11 +6,11 @@ const LeaveDetailsFormSuccessMessage = () => {
 
 	return (
 		<div className="text-center py-12">
-			<header>
-				<h3 className="text-green-700 text-2xl">
+			<header className="space-y-2">
+				<h3 className="text-primary text-3xl md:text-4xl">
 					{header}
 				</h3>
-				<p className="text-gray-700 text-lg">
+				<p className="text-slate-900 md:text-lg">
 					{desc}
 				</p>
 			</header>

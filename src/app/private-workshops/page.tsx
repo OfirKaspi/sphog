@@ -1,4 +1,5 @@
 import PageHeader from "@/components/common/PageHeader"
+import Testimonials from "@/components/common/Testimonials"
 import getPrivateWorkshopData from "@/lib/api/privateWorkshopData"
 
 const PrivateWorkshop = () => {
@@ -9,6 +10,10 @@ const PrivateWorkshop = () => {
       <PageHeader
         title={data.header.title}
         description={data.header.description}
+      />
+      <Testimonials
+        title={data.testimonials.title}
+        testimonials={data.testimonials.items}
       />
     </section>
   )

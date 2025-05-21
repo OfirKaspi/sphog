@@ -26,7 +26,7 @@ const leadSchema = z.object({
   full_name: z.string().nonempty("נדרש שם מלא."),
   email: z.string().email("כתובת אימייל שגויה."),
   phone: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
-  requested_service: z.enum(["פיתוח אתרים", "עיצוב", "שיווק"]),
+  // requested_service: z.enum(["פיתוח אתרים", "עיצוב", "שיווק"]),
   newsletter: z.boolean().optional().default(true),
 })
 
@@ -50,12 +50,12 @@ export async function POST(req: NextRequest) {
     const origin = req.headers.get("origin")
 
     // ❌ Block requests that don't come from your domain
-    if (origin && origin !== "https://thelevelupagency.com") {
-      return NextResponse.json(
-        { success: false, message: "Unauthorized origin" },
-        { status: 403 }
-      )
-    }
+    // if (origin && origin !== "https://thelevelupagency.com") {
+    //   return NextResponse.json(
+    //     { success: false, message: "Unauthorized origin" },
+    //     { status: 403 }
+    //   )
+    // }
 
     // 🔐 Check rate limiting: how many times this IP submitted recently
     const rateKey = `rate-limit:${ip}`
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
       full_name: sanitize(validatedLead.full_name),
       email: sanitize(validatedLead.email.toLowerCase()),
       phone: sanitize(validatedLead.phone),
-      requested_service: sanitize(validatedLead.requested_service),
+      // requested_service: sanitize(validatedLead.requested_service),
       newsletter: validatedLead.newsletter,
       created_at: new Date().toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" }),
       crm_synced: false,
