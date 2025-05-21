@@ -4,6 +4,7 @@ import SocialMedia from "@/components/layout/SocialMedia";
 import Logo from "@/components/common/Logo";
 import { Separator } from "@/components/ui/separator";
 import { CONFIG } from "@/config/config";
+import FooterNavigation from "@/components/layout/FooterNavigation";
 
 export default function Footer() {
   const year = CONFIG.year
@@ -13,7 +14,7 @@ export default function Footer() {
         <div className="border-b-2 border-secondary lg:border-none pb-5 lg:pb-0 lg:flex">
           <Logo />
         </div>
-        {/* <FooterNavigation /> // NOT RELEVANT FOR SINGLE PAGE (LP) */}
+        <FooterNavigation />
         <SocialMedia />
       </div>
       <Separator className="hidden lg:flex" />

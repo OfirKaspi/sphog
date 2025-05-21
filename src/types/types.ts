@@ -7,7 +7,7 @@ interface Paragraph extends BaseEntity {
   desc: string;
 }
 
-interface Image extends BaseEntity {
+interface Image {
   alt: string;
   src: string;
 }
@@ -25,4 +25,12 @@ interface Image extends BaseEntity {
 
 export interface ImageSectionType extends Image, Paragraph {
   buttonText?: string; // Optional field for button text
+}
+
+export interface Product {
+  _id: number;
+  name: string;
+  price: number;
+  image: Image
+  description: string;
 }
