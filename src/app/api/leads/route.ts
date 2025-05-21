@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
   try {
     // 🌐 Capture user's IP and request origin for security
     const ip = req.headers.get("x-forwarded-for") || "unknown"
-    const origin = req.headers.get("origin")
+    // const origin = req.headers.get("origin")
 
     // ❌ Block requests that don't come from your domain
     // if (origin && origin !== "https://thelevelupagency.com") {
