@@ -22,7 +22,12 @@ export default function Footer() {
         <Contact />
         <LegalInfo />
       </div>
-      <p className="text-sm text-center">All Rights Reserved &copy; {year} LevelUp</p>
+      <p className="text-sm text-center">
+        All Rights Reserved &copy; {year}{" "}
+        <a href="https://thelevelupagency.com" target="_blank" rel="noopener noreferrer" className="hover:underline">
+          LevelUp
+        </a>
+      </p>
     </footer>
   );
 }
