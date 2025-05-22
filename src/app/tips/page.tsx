@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/Testimonials"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 import TipsGrid from "@/components/pages/tips/TipsGrid"
 import getTipsData from "@/lib/api/tipsData"
 

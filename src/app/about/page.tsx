@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/Testimonials"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import AboutMission from "@/components/pages/about/AboutMission"
 import AboutValues from "@/components/pages/about/AboutValues"

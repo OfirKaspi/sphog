@@ -18,7 +18,7 @@ const Contact = () => {
   return (
     <ul className="grid lg:grid-flow-col gap-5">
       {contacts.map((contact) => (
-        <li key={contact.text} className="flex gap-5 border-b-2 border-secondary pb-5 md:pb-2">
+        <li key={contact.text} className="flex gap-5 border-b-[1px] border-white pb-5 md:pb-2">
           <div className="flex gap-2 items-center text-sm">
             {contact.icon}
             {contact.text}

@@ -1,6 +1,6 @@
 import BannerImage from "@/components/common/BannerImage"
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/Testimonials"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 import getHomeData from "@/lib/api/homeData"
 
 const Home = () => {

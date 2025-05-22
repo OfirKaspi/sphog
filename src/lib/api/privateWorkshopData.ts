@@ -5,32 +5,32 @@ const getPrivateWorkshopData = () => {
             description: "מגוון סדנאות פרטיות מותאמות אישית"
         },
         testimonials: {
-            title: "סדנאות פרטיות",
+            title: "לקוחות ממליצים",
             items: [
                 {
                     name: "איילת שחר",
-                    quote: "חוויה אינטימית, מושקעת ויצירתית. פשוט מרגש!",
+                    quote: "חוויה אינטימית, מושקעת ויצירתית. פשוט מרגש! חוויה אינטימית, מושקעת ויצירתית. פשוט מרגש! חוויה אינטימית, מושקעת ויצירתית. פשוט מרגש! חוויה אינטימית, מושקעת ויצירתית. פשוט מרגש!",
                     role: "משתתפת בסדנה זוגית",
-                    avatar: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379391/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.25_exulqi.jpg",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747934925/sphog/pngimg.com_-_calvin_klein_PNG19_wq3nnx.png",
                         alt: "איילת שחר",
                     },
                 },
                 {
                     name: "אורן ברוך",
-                    quote: "הזמנתי את בת הזוג שלי לסדנה והיה מושלם. תודה!",
+                    quote: "הזמנתי את בת הזוג שלי לסדנה והיה מושלם. תודה! הזמנתי את בת הזוג שלי לסדנה והיה מושלם. תודה! הזמנתי את בת הזוג שלי לסדנה והיה מושלם. תודה! הזמנתי את בת הזוג שלי לסדנה והיה מושלם. תודה!",
                     role: "בן זוג מופתע",
-                    avatar: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379389/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.48.48_hajf4e.jpg",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747934396/sphog/coco-cola_z07zef.avif",
                         alt: "אורן ברוך",
                     },
                 },
                 {
                     name: "מיטל דהן",
-                    quote: "פעם ראשונה שאני באמת מתנתקת מהשגרה. הסדנה הזו עשתה לי טוב בלב.",
+                    quote: "פעם ראשונה שאני באמת מתנתקת מהשגרה. הסדנה הזו עשתה לי טוב בלב. פעם ראשונה שאני באמת מתנתקת מהשגרה. הסדנה הזו עשתה לי טוב בלב. פעם ראשונה שאני באמת מתנתקת מהשגרה. הסדנה הזו עשתה לי טוב בלב. פעם ראשונה שאני באמת מתנתקת מהשגרה. הסדנה הזו עשתה לי טוב בלב.",
                     role: "משתתפת בסדנת בוקר",
-                    avatar: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379392/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.49_zblyoi.jpg",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747935364/sphog/download_kmg8nz.jpg",
                         alt: "מיטל דהן",
                     },
                 },

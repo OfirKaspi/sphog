@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/Testimonials"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 import getPrivateWorkshopData from "@/lib/api/privateWorkshopData"
 
 const PrivateWorkshop = () => {

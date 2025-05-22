@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/Testimonials"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 import ProductList from "@/components/pages/store/ProductList"
 import getStoreData from "@/lib/api/storeData"
 

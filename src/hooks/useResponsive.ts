@@ -12,6 +12,7 @@ const useResponsive = () => {
       setIsMobile(width < 640);
       setIsTablet(width >= 640 && width < 1024);
       setIsDesktop(width >= 1024);
+      
     };
 
     updateMatch();
