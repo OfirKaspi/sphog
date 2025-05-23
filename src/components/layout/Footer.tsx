@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="p-5 space-y-5 lg:space-y-10 lg:pt-10 border-t-[1px] border-white bg-primary text-white">
       <div className="grid grid-cols-1 gap-5 lg:gap-0 lg:grid-cols-[1fr_auto_1fr] justify-center items-center w-full ">
         <div className="border-b-[1px] border-white lg:border-none pb-5 lg:pb-0 lg:flex">
-          <Logo />
+          <Logo isLogoWhite={true} isTextShow={false} size={80} />
         </div>
         <FooterNavigation />
         <SocialMedia />
