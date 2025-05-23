@@ -19,6 +19,8 @@ export const CONFIG = {
   // GENERAL DETAILS
   facebookUsername: "profile.php?id=100064906843760",
   instagramUsername: "sphogmoss",
+  tiktokUsername: "sphogmoss",
+  youtubeUsername: "sphog-moss",
   whatsappNumber: "972542267889",
   phoneNumber: "0547256800",
   contactEmail: "sphogmoss@gmail.com",
