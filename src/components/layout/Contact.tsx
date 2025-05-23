@@ -7,27 +7,51 @@ const Contact = () => {
     contactEmail,
     phoneNumber,
     contactAddress,
-  } = CONFIG
+  } = CONFIG;
   
   const contacts = [
-    { icon: <Mail className="text-white" />, text: contactEmail },
-    { icon: <Phone className="text-white" />, text: phoneNumber },
-    { icon: <MapPin className="text-white" />, text: contactAddress, isAddress: true },
-  ]
+    {
+      icon: <Mail className="text-white" />,
+      text: contactEmail,
+      href: `mailto:${contactEmail}`,
+    },
+    {
+      icon: <Phone className="text-white" />,
+      text: phoneNumber,
+      href: `tel:${phoneNumber}`,
+    },
+    {
+      icon: <MapPin className="text-white" />,
+      text: contactAddress,
+      isAddress: true,
+    },
+  ];
 
   return (
     <ul className="grid lg:grid-flow-col gap-5">
       {contacts.map((contact) => (
-        <li key={contact.text} className="flex gap-5 border-b-[1px] border-white pb-5 md:pb-2">
+        <li
+          key={contact.text}
+          className="flex gap-5 border-b-[1px] border-white pb-5 md:pb-2"
+        >
           <div className="flex gap-2 items-center text-sm">
-            {contact.icon}
-            {contact.text}
+            {contact.href ? (
+              <a href={contact.href} className="flex gap-2 text-white">
+                {contact.icon}
+                <span className="ml-2">{contact.text}</span>
+              </a>
+            ) : (
+              <>
+                {contact.icon}
+                <span>{contact.text}</span>
+              </>
+            )}
           </div>
           {contact.isAddress && <MapNavigation />}
         </li>
       ))}
     </ul>
   );
-}
+};
 
-export default Contact
+export default Contact;
