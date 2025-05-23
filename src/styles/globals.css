@@ -10,8 +10,8 @@
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 143, 64%, 24%;
-    --primary-foreground: 143, 48%, 34%;
+    --primary: 143, 48%, 34%;
+    --primary-foreground: 143, 64%, 24%;
     --secondary: 215, 13%, 50%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
@@ -58,6 +58,7 @@
     --chart-5: 340 75% 55%;
   }
 }
+
 /* ACCESSIBILITY */
 
 .accessibility-contrast {
@@ -95,7 +96,8 @@ html.accessibility-readable-font * {
 /* Links should remain obvious */
 .contrast-mode a {
   text-decoration: underline !important;
-  color: #0000EE !important; /* classic accessible link color */
+  color: #0000EE !important;
+  /* classic accessible link color */
 }
 
 /* Inputs and buttons should still be usable */

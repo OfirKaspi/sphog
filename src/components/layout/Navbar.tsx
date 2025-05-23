@@ -40,7 +40,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`sticky top-0 w-full min-h-20 p-5 z-50 flex flex-row-reverse items-center justify-between transition-all duration-100 
+      className={`sticky top-0 w-full h-20 p-5 z-50 flex flex-row-reverse items-center justify-between transition-all duration-100 
         ${isScrolled
           ? "bg-gray-100/80 backdrop-blur shadow-sm"
           : "bg-transparent"

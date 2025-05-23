@@ -7,7 +7,7 @@ interface Paragraph extends BaseEntity {
   desc: string;
 }
 
-interface Image {
+export interface Image {
   alt: string;
   src: string;
 }

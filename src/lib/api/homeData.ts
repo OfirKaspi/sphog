@@ -1,5 +1,25 @@
 const getHomeData = () => {
     const data = {
+        hero: {
+            title: "צור יצירת טבע חיה.",
+            subtitle: "סדנאות טרריום",
+            description: "הצטרפו לחוויה ירוקה, יצירתית ומהנה. מושלם ליחידים, זוגות, או גיבוש צוותים. אין צורך בניסיון קודם!",
+            ctaText: "צרו קשר עוד היום!",
+            // ctaLink: "https://wa.me/972526855222",
+            image: {
+                src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747997793/sphog/glass-terrarium-with-succulents-and-greenery-free-png_hprg6n.webp",
+                alt: "תמונה ראשית - טרריום"
+            }
+        },
+        shortsShowcase: {
+            title: "הצצה לסדנה שלנו",
+            mobileDescription: "רוצים לראות איך זה נראה מקרוב? צפו ברגע קצר מהסדנה הקסומה שלנו.",
+            desktopDescription: `בסדנאות הטרריום שלנו, כל משתתף יוצר עולם ירוק ואישי בתוך צנצנת זכוכית. 
+                                החוויה מתאימה לכל גיל ולכל אירוע — ימי הולדת, פעילויות זוגיות, גיבוש צוותים ואפילו מתנות מקוריות. 
+                                אנחנו מספקים את כל הציוד, ההנחיה וההשראה. 
+                                הצטרפו אלינו ליצירה טבעית, חווייתית, עם ערך אקולוגי ונגיעה אישית — זה הרבה יותר מסתם סדנה.`,
+            youtubeShortsUrl: "https://www.youtube.com/embed/5WsxxN3fet8"
+        },
         bannerImage: {
             src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png",
             alt: "תמונת בית",

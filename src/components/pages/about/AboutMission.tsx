@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export default function AboutMission({ title, subtitle, points }: Mission) {
   return (
-    <section className="max-w-screen-xl mx-auto p-5 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+    <section className="max-w-screen-lg mx-auto p-5 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
       <div className="relative w-full h-72 md:h-96 rounded-xl overflow-hidden shadow-lg">
         <Image
           src="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747811095/sphog/workshop1_xqufgq.jpg"
