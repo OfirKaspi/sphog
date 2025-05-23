@@ -14,9 +14,9 @@ const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
                     <Image
                         src={testimonial.image.src}
                         alt={testimonial.image.alt}
-                        width={100}
-                        height={100}
-                        className="absolute bg-white h-[60px] w-fit -top-[30px] left-1/2 -translate-x-1/2 rounded-xl object-cover border-4 border-white shadow-md"
+                        width={200}
+                        height={60}
+                        className="absolute w-auto h-[60px] bg-white -top-[30px] left-1/2 -translate-x-1/2 rounded-xl object-cover border-4 border-white shadow-md"
                     />
                 )}
                 <div>
