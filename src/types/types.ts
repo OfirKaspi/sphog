@@ -33,6 +33,7 @@ export interface Product {
   price: number;
   image: Image
   description: string;
+  isInStock: boolean; 
 }
 
 export interface Mission {

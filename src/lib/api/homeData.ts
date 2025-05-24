@@ -20,6 +20,78 @@ const getHomeData = () => {
                                 הצטרפו אלינו ליצירה טבעית, חווייתית, עם ערך אקולוגי ונגיעה אישית — זה הרבה יותר מסתם סדנה.`,
             youtubeShortsUrl: "https://www.youtube.com/embed/5WsxxN3fet8"
         },
+        workshopPreviewData: {
+            title: "בחרו את סדנת החלומות שלכם",
+            workshops: [
+                {
+                    title: "סדנה פרטית",
+                    description: "סדנאות אינטימיות לזוגות, ימי הולדת או גיבושים פרטיים. חוויה אישית וייחודית עם כל תשומת הלב עליכם.",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824381/sphog/5_qjkatd.jpg",
+                        alt: "תמונה של סדנה פרטית"
+                    },
+                    link: {
+                        text: "למידע נוסף על סדנאות פרטיות",
+                        href: "/private-workshops"
+                    }
+                },
+                {
+                    title: "סדנה לקבוצות גדולות",
+                    description: "סדנאות קבוצתיות עם אנשים נוספים שאוהבים טבע ויצירה בדיוק כמוכם. מתאים לכל הגילאים.",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747811095/sphog/workshop1_xqufgq.jpg",
+                        alt: "תמונה של סדנה לקבוצות גדולות"
+                    },
+                    link: {
+                        text: "למידע נוסף על סדנאות לקבוצות גדולות",
+                        href: "/public-workshops"
+                    }
+                    // link: "/public-workshops",
+                },
+            ],
+        },
+        storeTeaser: {
+            title: "הצצה לחנות",
+            link: {
+                text: "מעבר לחנות",
+                href: "/store"
+            },
+            products: [
+                {
+                    _id: 2,
+                    name: "ערכת טרריום למתחילים",
+                    description: "כל מה שצריך כדי להתחיל ליצור טרריום בבית – כולל כלים, אדמה, צמחייה והסברים.",
+                    isInStock: true,
+                    price: 129.99,
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761469/sphog/small-terrarium-glass-jar-with-cork-top_pz3j3b.jpg",
+                        alt: "ערכת טרריום למתחילים",
+                    },
+                },
+                {
+                    _id: 1,
+                    name: "טרריום מוכן בעבודת יד",
+                    description: "טרריום ייחודי ומוכן מראש, מתאים למתנה או לעיצוב הבית בצורה טבעית.",
+                    isInStock: true,
+                    price: 99.99,
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761471/sphog/glass-vase-with-rocks-plants-white-clear-surface-png-transparent-background_dc7dqm.jpg",
+                        alt: "טרריום מוכן בעבודת יד",
+                    },
+                },
+                {
+                    _id: 3,
+                    name: "אקססוריז לטרריום",
+                    isInStock: true,
+                    price: 49.99,
+                    description: "פריטים משלימים ליצירת טרריום אישי: אבנים, פסלונים קטנים, כלים ועוד.",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761470/sphog/modern-glass-terrarium-filled-with-succulents_nwmyth.jpg",
+                        alt: "אביזרים לטרריום",
+                    },
+                },
+            ]
+        },
         bannerImage: {
             src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png",
             alt: "תמונת בית",
