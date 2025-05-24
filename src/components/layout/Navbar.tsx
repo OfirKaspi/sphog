@@ -15,7 +15,7 @@ const Navbar = () => {
 
   const data = {
     _id: "1",
-    header: "ברוכים הבאים ל-Shmog!",
+    header: "ברוכים הבאים ל-Sphog!",
     buttonText: "צור קשר",
   };
 
@@ -42,7 +42,7 @@ const Navbar = () => {
     <nav
       className={`sticky top-0 w-full h-20 p-5 z-50 flex flex-row-reverse items-center justify-between transition-all duration-100 
         ${isScrolled
-          ? "bg-gray-100/80 backdrop-blur shadow-sm"
+          ? "bg-background-overlay backdrop-blur shadow-sm"
           : "bg-transparent"
         }`}
     >
@@ -60,7 +60,7 @@ const Navbar = () => {
               <Menu />
             </button>
           </SheetTrigger>
-          <SheetContent className="w-fit">
+          <SheetContent className="w-fit bg-white">
             <SheetTitle className="text-primary pt-5">{data.header}</SheetTitle>
             <Separator className="my-5" />
             <SheetDescription asChild>

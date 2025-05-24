@@ -1,18 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-fredoka;
+}
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --text: 231, 29%, 6%;
+    --text-foreground: 0 0% 98%;
+    --cta: 341, 77%, 52%;
+    --cta-foreground: 341, 77%, 62.2%;
+    --background: 207, 60%, 88%;
+    --background-overlay: 207, 60%, 88%, 0.8;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 143, 48%, 34%;
-    --primary-foreground: 143, 64%, 24%;
-    --secondary: 215, 13%, 50%;
+    --primary: 113, 100%, 18%;
+    --primary-foreground: 113, 100%, 24%;
+    --secondary: 82, 100%, 42%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
@@ -32,6 +42,8 @@
   }
 
   .dark {
+    --text: 231, 29%, 6%;
+    --cta: 341, 77%, 52%;
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
     --card: 0 0% 3.9%;

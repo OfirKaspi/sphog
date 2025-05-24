@@ -11,8 +11,27 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        fredoka: ['Fredoka', 'sans-serif'],
+      },
+      fontWeight: {
+        light: '300',
+        semibold: '400',
+        bold: '600',
+      },
       colors: {
-        background: 'hsl(var(--background))',
+        text: {
+          DEFAULT: 'hsl(var(--text))',
+          foreground: 'hsl(var(--text-foreground))',
+        },
+        cta: {
+          DEFAULT: 'hsl(var(--cta))',
+          foreground: 'hsl(var(--cta-foreground))'
+        },
+        background: {
+          DEFAULT: 'hsl(var(--background))',
+          overlay: 'hsl(var(--background-overlay))',
+        },
         foreground: 'hsl(var(--foreground))',
         card: {
           DEFAULT: 'hsl(var(--card))',

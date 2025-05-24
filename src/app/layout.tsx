@@ -64,7 +64,7 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
           `}
         </Script>
       </head>
-      <body className="antialiased bg-gray-100">
+      <body className="antialiased bg-background text-text">
         <Navbar />
         {children}
         <Footer />

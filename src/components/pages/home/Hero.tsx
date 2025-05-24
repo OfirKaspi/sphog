@@ -20,7 +20,7 @@ const Hero = ({ title, subtitle, description, ctaText, ctaLink = "", image }: He
     const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 
     return (
-        <section dir="rtl" className="w-full -mt-20 px-5 pt-32 md:pt-36 pb-12 md:pb-16 bg-gradient-to-tr from-green-100 via-slate-100 to-green-50 text-slate-900 relative overflow-hidden">
+        <section dir="rtl" className="w-full -mt-20 px-5 pt-32 md:pt-36 pb-12 md:pb-16 bg-gradient-to-tr from-green-100 via-background to-green-50 text-slate-900 relative overflow-hidden">
             {/* Decorative background blob */}
             <div className="absolute top-[-80px] -right-32 w-[300px] h-[300px] md:w-[600px] md:h-[600px] bg-green-200 rounded-full opacity-30 blur-3xl pointer-events-none" />
 
@@ -52,7 +52,7 @@ const Hero = ({ title, subtitle, description, ctaText, ctaLink = "", image }: He
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Button className="text-lg px-6 py-3 rounded-full bg-primary hover:bg-primary-foreground text-white transition shadow-md">
+                        <Button className="text-lg px-6 py-3 rounded-full bg-cta hover:bg-cta-foreground text-white transition-all duration-300 shadow-md">
                             {ctaText}
                         </Button>
                     </a>

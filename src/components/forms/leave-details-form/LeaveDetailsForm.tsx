@@ -101,7 +101,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           <Input
             id="full_name"
             placeholder="ישראל ישראלי"
-            className="col-span-3"
+            className="col-span-3 bg-slate-100"
             value={formData.full_name}
             onChange={(e) =>
               setFormData({ ...formData, full_name: e.target.value })
@@ -118,7 +118,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
             id="email"
             type="email"
             placeholder="example@example.com"
-            className="col-span-3"
+            className="col-span-3 bg-slate-100"
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
@@ -135,7 +135,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
             id="phone"
             type="text"
             placeholder="********05"
-            className="col-span-3"
+            className="col-span-3 bg-slate-100"
             value={formData.phone}
             onChange={(e) =>
               setFormData({ ...formData, phone: e.target.value })
