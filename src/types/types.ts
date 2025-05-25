@@ -76,4 +76,3 @@ export interface WorkshopData {
   image: Image;
   link: LinkType;
 }
-

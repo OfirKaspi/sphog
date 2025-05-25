@@ -1,4 +1,7 @@
+import FAQ from "@/components/common/FAQ"
 import Testimonials from "@/components/common/testimonials/Testimonials"
+import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
+import AboutUs from "@/components/pages/home/AboutUs"
 import Hero from "@/components/pages/home/Hero"
 import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
 import StoreTeaser from "@/components/pages/home/StoreTeaser"
@@ -16,10 +19,15 @@ const Home = () => {
       <WorkshopPreview {...data.workshopPreviewData} />
       <StoreTeaser {...data.storeTeaser} />
       <TipsSection {...data.tipsSection} />
+      <AboutUs {...data.aboutUs} />
       <Testimonials
         title={data.testimonials.title}
         testimonials={data.testimonials.items}
       />
+      <FAQ {...data.faq} />
+      <div className="py-16 px-5">
+        <LeaveDetailsOpenForm {...data.openForm} />
+      </div>
     </section>
   )
 }

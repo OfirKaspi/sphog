@@ -16,7 +16,7 @@ const Navbar = () => {
   const data = {
     _id: "1",
     header: "ברוכים הבאים ל-Sphog!",
-    buttonText: "צור קשר",
+    buttonText: "צרו קשר",
   };
 
   const pathname = usePathname();
