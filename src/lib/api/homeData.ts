@@ -92,6 +92,35 @@ const getHomeData = () => {
                 },
             ]
         },
+        tipsSection:{
+            title: "טיפים לטרריום מושלם",
+            link: {
+                text: "לטיפים נוספים",
+                href: "/tips"
+            },
+            tips:[
+                {
+                    _id: 1,
+                    title: "איך להשקות נכון טרריום סגור",
+                    description:
+                        "טרריום סגור דורש מעט מים – השקיה יתרה עלולה להזיק. יש לבדוק שהקירות פנימיים מכילים אדים קלים, ולהשקות רק אם נראים יובש מלא.",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824379/sphog/6_c1w4lp.jpg",
+                        alt: "טרריום עם טיפות מים",
+                    },
+                },
+                {
+                    _id: 2,
+                    title: "בחירת הצמחים המתאימים",
+                    description:
+                        "לטרריום עדיף לבחור צמחים סוקולנטים, טחבים או צמחים שאוהבים לחות. הימנעו מצמחים שדורשים שמש ישירה או מקום מאוורר מדי.",
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824379/sphog/7_d1gf6g.jpg",
+                        alt: "בחירת צמחים לטרריום",
+                    },
+                },
+            ],
+        },
         bannerImage: {
             src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png",
             alt: "תמונת בית",

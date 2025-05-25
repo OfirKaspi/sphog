@@ -1,14 +1,11 @@
 import Link from "next/link";
-import { Product } from "@/types/types";
+import { LinkType, Product } from "@/types/types";
 import ProductItem from "@/components/pages/store/ProductItem";
 import { Button } from "@/components/ui/button";
 
 interface StoreTeaserProps {
     title: string;
-    link: {
-        href: string;
-        text: string;
-    },
+    link: LinkType,
     products: Product[];
 }
 
@@ -19,7 +16,7 @@ export default function StoreTeaser({ products, title, link }: StoreTeaserProps)
 
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-10 text-center">{title}</h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                     {products.map((product) => (
                         <ProductItem key={product._id} product={product} />
                     ))}

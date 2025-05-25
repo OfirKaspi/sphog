@@ -7,6 +7,11 @@ interface Paragraph extends BaseEntity {
   desc: string;
 }
 
+export interface LinkType {
+  text: string;
+  href: string;
+}
+
 export interface Image {
   alt: string;
   src: string;
@@ -56,7 +61,7 @@ export interface Testimonial {
 }
 
 export interface Tip {
-  id: number
+  _id: number
   title: string
   description: string
   image: {
@@ -64,3 +69,11 @@ export interface Tip {
     alt: string
   }
 }
+
+export interface WorkshopData {
+  title: string;
+  description: string;
+  image: Image;
+  link: LinkType;
+}
+

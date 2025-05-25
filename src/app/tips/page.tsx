@@ -7,14 +7,16 @@ const Tips = () => {
   const data = getTipsData()
 
   return (
-    <section className="space-y-5 md:space-y-10 mb-5 md:mb-10">
+    <section>
       <PageHeader
         title={data.header.title}
         description={data.header.description}
       />
+      <div className="p-5">
       <TipsGrid
         tips={data.tips}
       />
+      </div>
       <Testimonials
         title={data.testimonials.title}
         testimonials={data.testimonials.items}

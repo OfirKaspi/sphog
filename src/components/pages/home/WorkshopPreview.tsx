@@ -1,17 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Image as ImageType } from "@/types/types";
 import { Button } from "@/components/ui/button";
-
-interface WorkshopData {
-    title: string;
-    description: string;
-    image: ImageType;
-    link: {
-        href: string;
-        text: string;
-    };
-}
+import { WorkshopData } from "@/types/types";
 
 interface WorkshopPreviewProps {
     title: string;
