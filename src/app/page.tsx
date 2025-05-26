@@ -20,12 +20,9 @@ const Home = () => {
       <StoreTeaser {...data.storeTeaser} />
       <TipsSection {...data.tipsSection} />
       <AboutUs {...data.aboutUs} />
-      <Testimonials
-        title={data.testimonials.title}
-        testimonials={data.testimonials.items}
-      />
+      <Testimonials {...data.testimonials}/>
       <FAQ {...data.faq} />
-      <div className="py-16 px-5">
+      <div className="py-16">
         <LeaveDetailsOpenForm {...data.openForm} />
       </div>
     </section>

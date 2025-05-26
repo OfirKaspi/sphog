@@ -7,14 +7,8 @@ const PublicWorkshop = () => {
 
   return (
     <section>
-      <PageHeader
-        title={data.header.title}
-        description={data.header.description}
-      />
-      <Testimonials
-        title={data.testimonials.title}
-        testimonials={data.testimonials.items}
-      />
+      <PageHeader {...data.header} />
+      <Testimonials {...data.testimonials} />
     </section>
   )
 }

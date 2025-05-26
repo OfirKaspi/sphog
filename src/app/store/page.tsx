@@ -8,19 +8,11 @@ const Store = () => {
 
   return (
     <section>
-      <PageHeader
-        title={data.header.title}
-        description={data.header.description}
-      />
-      <div className="space-y-5 md:space-y-10 mb-5 md:mb-10">
-        <ProductList
-          products={data.products}
-        />
-        <Testimonials
-          title={data.testimonials.title}
-          testimonials={data.testimonials.items}
-        />
-      </div>
+      <PageHeader {...data.promoHeader} />
+      <ProductList products={data.promoProducts} />
+      <PageHeader {...data.header} />
+      <ProductList products={data.products} />
+      <Testimonials {...data.testimonials} />
     </section>
   )
 }

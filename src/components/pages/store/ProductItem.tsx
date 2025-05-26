@@ -16,13 +16,23 @@ const ProductItem = ({ product }: ProductItemProps) => {
 	const { isMobile } = useResponsive()
 
 	return (
-		<section>
+		<section className="relative">
 			<div
 				className="flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-900 cursor-pointer overflow-hidden"
 				onClick={() => setSelectedImage(product.image.src)}
 			>
-				{isMobile ? (
-					<div className="relative w-full h-auto">
+				{/* Stock Indicator */}
+				<div className="absolute top-2 left-2 z-30 px-3 py-2 rounded-md overflow-hidden text-sm font-bold">
+					{product.isInStock ? (
+						<span className="bg-green-500 text-white px-2 py-1 rounded-md">במלאי</span>
+					) : (
+						<span className="bg-red-500 text-white px-2 py-1 rounded-md">לא במלאי</span>
+					)}
+				</div>
+
+				{/* Image Section */}
+				<div className="relative w-full overflow-hidden">
+					{isMobile ? (
 						<Image
 							src={product.image.src}
 							alt={product.image.alt}
@@ -31,18 +41,18 @@ const ProductItem = ({ product }: ProductItemProps) => {
 							className="object-cover w-full h-auto"
 							sizes="100vw"
 						/>
-					</div>
-				) : (
-					<div className="relative w-full aspect-square">
-						<Image
-							src={product.image.src}
-							alt={product.image.alt}
-							fill
-							className="object-cover"
-							sizes="33vw"
-						/>
-					</div>
-				)}
+					) : (
+						<div className="relative w-full aspect-square">
+							<Image
+								src={product.image.src}
+								alt={product.image.alt}
+								fill
+								className="object-cover"
+								sizes="33vw"
+							/>
+						</div>
+					)}
+				</div>
 
 				{/* This grows to take up space and pushes the price to the bottom */}
 				<div className="flex flex-col justify-between flex-1 p-4 text-right">
@@ -55,23 +65,16 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
 					{/* Stays at bottom */}
 					<div className="mt-4 flex justify-between items-center">
-						<span className="text-xl font-semibold text-[hsl(143,48%,34%)]">
-							₪{product.price.toFixed(2)}
-						</span>
-
-						{/* Availability Indicator */}
-						<div className="mt-2">
-							{product.isInStock ? (
-								<span className="text-sm font-medium text-green-600 dark:text-green-400">
-									במלאי
-								</span>
-							) : (
-								<span className="text-sm font-medium text-red-600 dark:text-red-400">
-									לא במלאי
+						<div>
+							{product.originalPrice && (
+								<span className="text-lg font-medium text-gray-500 line-through block">
+									₪{product.originalPrice.toFixed(2)}
 								</span>
 							)}
+							<span className="text-xl font-bold text-cta">
+								₪{product.price.toFixed(2)}
+							</span>
 						</div>
-
 					</div>
 				</div>
 

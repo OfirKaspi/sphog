@@ -10,28 +10,12 @@ const About = () => {
 
   return (
     <section >
-      <PageHeader
-        title={data.header.title}
-        description={data.header.description}
-      />
-      <div className="space-y-5 md:space-y-10 mb-5 md:mb-10">
-        <AboutMission
-          title={data.aboutMission.title}
-          subtitle={data.aboutMission.subtitle}
-          points={data.aboutMission.points}
-        />
-        <AboutValues
-          title={data.aboutValues.title}
-          values={data.aboutValues.values}
-        />
-        <Testimonials
-          title={data.testimonials.title}
-          testimonials={data.testimonials.items}
-        />
-        <LeaveDetailsOpenForm
-          title={data.openForm.title}
-          description={data.openForm.description}
-        />
+      <PageHeader {...data.header} />
+      <div className="space-y-5 mb-5 ">
+        <AboutMission {...data.aboutMission} />
+        <AboutValues {...data.aboutValues} />
+        <Testimonials {...data.testimonials} />
+        <LeaveDetailsOpenForm {...data.openForm} />
       </div>
     </section>
   )

@@ -1,8 +1,20 @@
 const getTipsData = () => {
   const data = {
     header: {
-      title: "טיפים",
-      description: "מגוון טיפים לעיצוב הבית והגינה",
+      title: "לעוד טיפים",
+      description: "גלו טיפים נוספים לשיפור הידע שלכם בגידול צמחים. כל טיפ נבחר בקפידה כדי להבטיח הצלחה בגינון הביתי שלכם.",
+    },
+    videoTip: {
+      title: "צפו בטיפים בפעולה",
+      description: "שדרגו את כישורי הגינון שלכם עם הסרטון המהיר והמעשיר הזה. צפו עכשיו ולמדו כיצד להפיק את המרב מהטיפים שלנו!",
+      video: {
+        src: "https://www.youtube.com/embed/QqpkJ1zVeTQ",
+        alt: "YouTube Shorts Video",
+      },
+      image: {
+        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1748281656/sphog/laptop-realistic_qugrqv.png",
+        alt: "Laptop",
+      },
     },
     tips:
       [
@@ -49,7 +61,7 @@ const getTipsData = () => {
       ],
     testimonials: {
       title: "לקוחות ממליצים",
-      items: [
+      testimonials: [
         {
           name: "גדי הרשקוביץ",
           quote: "למדתי סוף סוף איך לטפל בעציץ כמו שצריך, תודה על ההסבר הברור! ההסברים באתר היו כל כך מפורטים ומדויקים, שזה ממש עזר לי להבין את כל מה שצריך לדעת על גידול צמחים. אני ממליץ לכל מי שאוהב גינון להיכנס ולקרוא את המידע המועיל הזה. זה פשוט שינה לי את כל הגישה לטיפול בצמחים שלי, ואני בטוח שגם לכם זה יעזור!",

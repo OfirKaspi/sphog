@@ -1,6 +1,7 @@
 import PageHeader from "@/components/common/PageHeader"
 import Testimonials from "@/components/common/testimonials/Testimonials"
 import TipsGrid from "@/components/pages/tips/TipsGrid"
+import VideoTip from "@/components/pages/tips/VideoTip"
 import getTipsData from "@/lib/api/tipsData"
 
 const Tips = () => {
@@ -8,19 +9,12 @@ const Tips = () => {
 
   return (
     <section>
-      <PageHeader
-        title={data.header.title}
-        description={data.header.description}
-      />
+      <VideoTip {...data.videoTip} />
+      <PageHeader {...data.header} />
       <div className="p-5">
-      <TipsGrid
-        tips={data.tips}
-      />
+        <TipsGrid tips={data.tips} />
       </div>
-      <Testimonials
-        title={data.testimonials.title}
-        testimonials={data.testimonials.items}
-      />
+      <Testimonials {...data.testimonials} />
     </section>
   )
 }

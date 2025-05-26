@@ -15,7 +15,7 @@ const Testimonials = ({ testimonials, title }: TestimonialProps) => {
 
   return (
     <div className="mx-auto w-full py-16 max-w-screen-lg">
-      <h2 className="text-3xl md:text-4xl text-primary mb-2 text-center">{title}</h2>
+      <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2 text-center">{title}</h2>
       {isDesktop ? (
         <TestimonialsGrid testimonials={testimonials} />
       ) : (

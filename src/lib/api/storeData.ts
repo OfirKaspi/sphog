@@ -136,10 +136,65 @@ const getStoreData = () => {
                     alt: "טרריום בצורת פירמידה עם קקטוסים"
                 },
                 description: "טרריום תלוי מעוצב עם צמחים טבעיים"
-            }],
+            }
+        ],
+        promoHeader: {
+            title: "מבצעים מיוחדים",
+            description: "מוצרים מעוצבים במחירים מיוחדים"
+        },
+        promoProducts: [
+            {
+                _id: 1,
+                name: "טרריום קטן עם אזוב יער",
+                originalPrice: 199.90,
+                price: 159.90,
+                isInStock: true,
+                image: {
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761406/sphog/small-jar-with-piece-forest-moss_pnrwfj.jpg",
+                    alt: "טרריום קטן ומעוצב עם אזוב יער טבעי"
+                },
+                description: "טרריום קטן ומעוצב עם אזוב יער טבעי"
+            },
+            {
+                _id: 2,
+                name: "אגרטל זכוכית עם צמחים",
+                originalPrice: 199.90,
+                price: 124.90,
+                isInStock: false,
+                image: {
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761471/sphog/glass-vase-with-rocks-plants-white-clear-surface-png-transparent-background_dc7dqm.jpg",
+                    alt: "אגרטל זכוכית מעוצב עם צמחים טבעיים"
+                },
+                description: "אגרטל זכוכית מעוצב עם צמחים טבעיים"
+            },
+            {
+                _id: 3,
+                name: "טרריום זכוכית קטן עם פקק",
+                price: 239.90,
+                originalPrice: 399.90,
+                isInStock: true,
+                image: {
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761469/sphog/small-terrarium-glass-jar-with-cork-top_pz3j3b.jpg",
+                    alt: "טרריום זכוכית קטן עם פקק עץ"
+                },
+                description: "טרריום זכוכית קטן עם פקק עץ"
+            },
+            {
+                _id: 7,
+                name: "גן סוקולנטים מיניאטורי",
+                originalPrice: 399.90,
+                price: 259.90,
+                isInStock: true,
+                image: {
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747761409/sphog/mini-succulent-garden-glass-terrarium-windowsill_jxhf4k.jpg",
+                    alt: "גן סוקולנטים מיניאטורי בתוך טרריום זכוכית"
+                },
+                description: "גן סוקולנטים מיניאטורי בתוך טרריום זכוכית"
+            },
+        ],
         testimonials: {
-            title: "החנות שלנו",
-            items: [
+            title: "לקוחות מרוצים",
+            testimonials: [
                 {
                     name: "ליאת רוזן",
                     quote: "הזמנתי ערכת טרריום והגיע במהירות, ארוז מהמם! השירות היה פשוט יוצא מן הכלל, המוצר היה בדיוק כמו שתואר באתר, ואני מאוד מרוצה מהאיכות ומהעיצוב. בהחלט אחזור להזמין שוב בעתיד ואמליץ לחברים שלי על החנות המדהימה הזו.",

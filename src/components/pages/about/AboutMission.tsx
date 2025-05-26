@@ -16,7 +16,7 @@ export default function AboutMission({ title, subtitle, points }: Mission) {
 
       <div className="space-y-5 md:space-y-10">
         <header className="text-center md:text-start"> 
-          <h2 className="text-3xl md:text-4xl text-primary mb-2">{title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-primary mb-2">{title}</h2>
           {subtitle && <p className="md:text-lg text-slate-900 leading-relaxed">{subtitle}</p>}
         </header>
 
