@@ -23,11 +23,10 @@ const {
 
 // ✅ Zod validation schema to ensure data integrity on the backend
 const leadSchema = z.object({
-  full_name: z.string().nonempty("נדרש שם מלא."),
-  email: z.string().email("כתובת אימייל שגויה."),
-  phone: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
-  // requested_service: z.enum(["פיתוח אתרים", "עיצוב", "שיווק"]),
-  newsletter: z.boolean().optional().default(true),
+  fullName: z.string().nonempty("נדרש שם מלא."),
+  phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
+  requestedService: z.enum(["privateWorkshop", "publicWorkshop"]),
+  additionalDetails: z.string().optional(),
 })
 
 // 🔁 Rate limiting configuration: max 5 requests per 10 minutes per IP
@@ -90,11 +89,10 @@ export async function POST(req: NextRequest) {
 
     // 🗃️ Prepare lead data with timestamp for storage
     const leadWithTimestamp = {
-      full_name: sanitize(validatedLead.full_name),
-      email: sanitize(validatedLead.email.toLowerCase()),
-      phone: sanitize(validatedLead.phone),
-      // requested_service: sanitize(validatedLead.requested_service),
-      newsletter: validatedLead.newsletter,
+      fullName: sanitize(validatedLead.fullName),
+      phoneNumber: sanitize(validatedLead.phoneNumber),
+      requestedService: sanitize(validatedLead.requestedService),
+      additionalDetails: sanitize(validatedLead.additionalDetails || ""),
       created_at: new Date().toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" }),
       crm_synced: false,
       lead_source: "אתר מרכזי",

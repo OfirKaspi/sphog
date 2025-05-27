@@ -1,51 +1,37 @@
 "use client";
 
 import { useState } from "react";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 
 interface LeaveDetailsFormProps {
-  isSuccess: boolean,
-  setIsSuccess: (value: boolean) => void
+  isSuccess: boolean;
+  setIsSuccess: (value: boolean) => void;
 }
 
 const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) => {
   const [formData, setFormData] = useState({
-    full_name: "",
-    phone: "",
-    email: "",
-    // requested_service: "",
-    newsletter: true,
+    fullName: "",
+    phoneNumber: "",
+    requestedService: "",
+    additionalDetails: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [responseError, setResponseError] = useState<string | null>(null);
 
-  const { buttonText, loadingButtonText } = {
-    buttonText: "לחץ כאן לשליחה",
-    loadingButtonText: "שולח...",
-  }
-
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.full_name.trim()) newErrors.full_name = "נדרש שם מלא";
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-      newErrors.email = "אנא מלא כתובת אימייל תקינה";
-    if (!formData.phone.match(/^05\d{8}$/))
-      newErrors.phone = "אנא מלא מספר טלפון תקין";
-    // if (!formData.requested_service) newErrors.requested_service = "אנא בחר סוג שירות";
+    if (!formData.fullName.trim()) newErrors.fullName = "נדרש שם מלא";
+    if (!formData.phoneNumber.match(/^05\d{8}$/))
+      newErrors.phoneNumber = "אנא מלא מספר טלפון תקין";
+    if (!formData.requestedService)
+      newErrors.requestedService = "אנא בחר סוג סדנה";
 
     return newErrors;
   };
@@ -73,11 +59,10 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
 
       setIsSuccess(true);
       setFormData({
-        full_name: "",
-        phone: "",
-        email: "",
-        // requested_service: "",
-        newsletter: true,
+        fullName: "",
+        phoneNumber: "",
+        requestedService: "",
+        additionalDetails: "",
       });
     } catch (error) {
       console.error(error);
@@ -88,105 +73,84 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
   };
 
   if (isSuccess) {
-    return <LeaveDetailsFormSuccessMessage />
+    return <LeaveDetailsFormSuccessMessage />;
   }
 
   return (
-    <>
-      <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-        {responseError && <p className="text-red-600">{responseError}</p>}
+    <form className="grid gap-4 py-4 text-sm sm:text-base md:text-lg" onSubmit={handleSubmit}>
+      {responseError && <p className="text-red-600 text-sm sm:text-base">{responseError}</p>}
 
-        <div className="grid grid-cols-4 items-center gap-2">
-          <Label htmlFor="full_name">שם מלא</Label>
-          <Input
-            id="full_name"
-            placeholder="ישראל ישראלי"
-            className="col-span-3 bg-slate-100"
-            value={formData.full_name}
-            onChange={(e) =>
-              setFormData({ ...formData, full_name: e.target.value })
-            }
-          />
-          {errors.full_name && (
-            <p className="col-span-4 text-red-600">{errors.full_name}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-4 items-center gap-2">
+        <Label htmlFor="fullName" className="text-sm sm:text-base md:text-lg">שם מלא</Label>
+        <Input
+          id="fullName"
+          placeholder="ישראל ישראלי"
+          className="col-span-3 bg-slate-100 text-sm sm:text-base md:text-lg"
+          value={formData.fullName}
+          onChange={(e) =>
+            setFormData({ ...formData, fullName: e.target.value })
+          }
+        />
+        {errors.fullName && (
+          <p className="col-span-4 text-red-600 text-sm sm:text-base">{errors.fullName}</p>
+        )}
+      </div>
 
-        <div className="grid grid-cols-4 items-center gap-2">
-          <Label htmlFor="email">אימייל</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="example@example.com"
-            className="col-span-3 bg-slate-100"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-          />
-          {errors.email && (
-            <p className="col-span-4 text-red-600">{errors.email}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-4 items-center gap-2">
+        <Label htmlFor="phoneNumber" className="text-sm sm:text-base md:text-lg">טלפון</Label>
+        <Input
+          id="phoneNumber"
+          type="text"
+          placeholder="********05"
+          className="col-span-3 bg-slate-100 text-sm sm:text-base md:text-lg"
+          value={formData.phoneNumber}
+          onChange={(e) =>
+            setFormData({ ...formData, phoneNumber: e.target.value })
+          }
+        />
+        {errors.phoneNumber && (
+          <p className="col-span-4 text-red-600 text-sm sm:text-base">{errors.phoneNumber}</p>
+        )}
+      </div>
 
-        <div className="grid grid-cols-4 items-center gap-2">
-          <Label htmlFor="phone">טלפון</Label>
-          <Input
-            id="phone"
-            type="text"
-            placeholder="********05"
-            className="col-span-3 bg-slate-100"
-            value={formData.phone}
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-          />
-          {errors.phone && (
-            <p className="col-span-4 text-red-600">{errors.phone}</p>
-          )}
-        </div>
+      <div className="grid grid-cols-4 items-center gap-2">
+        <Label htmlFor="requestedService" className="text-sm sm:text-base md:text-lg">סוג סדנה</Label>
+        <select
+          id="requestedService"
+          className="col-span-3 bg-slate-100 border rounded px-3 py-2 text-sm sm:text-base md:text-lg"
+          value={formData.requestedService}
+          onChange={(e) =>
+            setFormData({ ...formData, requestedService: e.target.value })
+          }
+        >
+          <option value="" disabled>
+            בחר סוג סדנה
+          </option>
+          <option value="privateWorkshop">סדנה פרטית</option>
+          <option value="publicWorkshop">סדנה ציבורית</option>
+        </select>
+        {errors.requestedService && (
+          <p className="col-span-4 text-red-600 text-sm sm:text-base">{errors.requestedService}</p>
+        )}
+      </div>
 
-        {/* <div className="grid grid-cols-4 items-center gap-2">
-          <Label htmlFor="requested_service">סוג שירות</Label>
-          <Select
-            onValueChange={(value) =>
-              setFormData({ ...formData, requested_service: value })
-            }
-            value={formData.requested_service}
-            dir="rtl"
-          >
-            <SelectTrigger className="col-span-3">
-              <SelectValue placeholder="בחר שירות" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="פיתוח אתרים">מחלקת פיתוח אתרים</SelectItem>
-              <SelectItem value="עיצוב">מחלקת עיצוב</SelectItem>
-              <SelectItem value="שיווק">מחלקת שיווק</SelectItem>
-            </SelectContent>
-          </Select>
-          {errors.requested_service && (
-            <p className="col-span-4 text-red-600">{errors.requested_service}</p>
-          )}
-        </div> */}
+      <div className="grid grid-cols-4 items-start gap-2">
+        <Label htmlFor="additionalDetails" className="self-center text-sm sm:text-base md:text-lg">פרטים נוספים</Label>
+        <Textarea
+          id="additionalDetails"
+          placeholder="פרטים נוספים (אופציונלי)"
+          className="col-span-3 bg-slate-100 text-sm sm:text-base md:text-lg"
+          value={formData.additionalDetails}
+          onChange={(e) =>
+            setFormData({ ...formData, additionalDetails: e.target.value })
+          }
+        />
+      </div>
 
-        <div className="flex items-center space-x-2 rtl:space-x-reverse">
-          <Checkbox
-            id="newsletter"
-            checked={formData.newsletter}
-            onChange={(e) =>
-              setFormData({ ...formData, newsletter: e.target.checked })
-            }
-          />
-          <Label htmlFor="newsletter" className="font-normal">
-            אני מאשר קבלת עדכונים והצעות ישירות למייל
-          </Label>
-        </div>
-
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? loadingButtonText : buttonText}
-        </Button>
-      </form>
-    </>
+      <Button type="submit" className="w-full bg-cta hover:bg-cta-foreground text-sm sm:text-base md:text-lg" disabled={loading}>
+        {loading ? "שולח..." : "שלח"}
+      </Button>
+    </form>
   );
 };
 
