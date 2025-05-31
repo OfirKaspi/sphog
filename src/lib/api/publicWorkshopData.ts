@@ -4,6 +4,17 @@ const getPublicWorkshopData = () => {
             title: "סדנאות לקבוצות גדולות",
             description: "מגוון סדנאות לקבוצות גדולות, סדנאות לקבוצות גדולות, סדנאות לקבוצות גדולות",
         },
+        workshopFormData: {
+            header: {
+                title: "סדנה לקבוצות גדולות",
+                description: "בחר תאריך ושעה לסדנה לקבוצות גדולות מותאמת אישית.",
+            },
+            availableDates: [
+                { date: new Date("2025-06-15"), hours: ["10:00-11:00", "14:00-15:00"] },
+                { date: new Date("2025-06-16"), hours: ["09:00-10:00", "13:00-14:00"] },
+                { date: new Date("2025-06-17"), hours: ["11:00-12:00", "15:00-16:00"] },
+            ],
+        },
         testimonials: {
             title: "לקוחות ממליצים",
             testimonials: [

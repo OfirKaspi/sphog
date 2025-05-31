@@ -1,31 +1,35 @@
-import { DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog"
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
+import { DialogDescription, DialogHeader, DialogTitle } from "../../ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface LeaveDetailsFormDialogHeaderProps {
-	isSuccess: boolean
+  isSuccess: boolean;
 }
 
 const LeaveDetailsFormDialogHeader = ({ isSuccess }: LeaveDetailsFormDialogHeaderProps) => {
-	const { header, desc } = {
-		header: "נעים להכיר!",
-		desc: "השאירו פרטים לשיחת ייעוץ בחינם - תספרו לנו מה העסק שלכם צריך ותקבלו טיפים שתוכלו ליישם מיד",
-	}
+const { header, desc } = {
+	header: "נעים להכיר!",
+	desc: "השאירו פרטים ונחזור אליכם עם פתרונות מותאמים אישית לסדנאות ולפעילויות יצירה של טרריומים שיעזרו לכם להעצים וליצור חוויות בלתי נשכחות.",
+};
 
-	return (
-		<DialogHeader className="relative">
-			{isSuccess ? (
-				<VisuallyHidden>
-					<DialogTitle>{header}</DialogTitle>
-					<DialogDescription>{desc}</DialogDescription>
-				</VisuallyHidden>
-			) : (
-				<>
-					<DialogTitle className="text-center">{header}</DialogTitle>
-					<DialogDescription className="text-center">{desc}</DialogDescription>
-				</>
-			)}
-		</DialogHeader>
-	)
-}
+  return (
+    <DialogHeader className="relative">
+      {isSuccess ? (
+        <VisuallyHidden>
+          <DialogTitle>{header}</DialogTitle>
+          <DialogDescription>{desc}</DialogDescription>
+        </VisuallyHidden>
+      ) : (
+        <>
+          <DialogTitle className="text-3xl md:text-4xl text-primary leading-relaxed">
+            {header}
+          </DialogTitle>
+          <DialogDescription className="md:text-lg text-slate-900">
+            {desc}
+          </DialogDescription>
+        </>
+      )}
+    </DialogHeader>
+  );
+};
 
-export default LeaveDetailsFormDialogHeader
+export default LeaveDetailsFormDialogHeader;

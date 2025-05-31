@@ -93,9 +93,9 @@ export async function POST(req: NextRequest) {
       phoneNumber: sanitize(validatedLead.phoneNumber),
       requestedService: sanitize(validatedLead.requestedService),
       additionalDetails: sanitize(validatedLead.additionalDetails || ""),
-      created_at: new Date().toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" }),
-      crm_synced: false,
-      lead_source: "אתר מרכזי",
+      createdAt: new Date().toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" }),
+      crmSynced: false,
+      leadSource: "טופס לידים אתר - כללי",
     }
 
     const id = crypto.randomUUID()

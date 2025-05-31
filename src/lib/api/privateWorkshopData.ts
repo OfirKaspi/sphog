@@ -4,6 +4,17 @@ const getPrivateWorkshopData = () => {
             title: "סדנאות פרטיות",
             description: "מגוון סדנאות פרטיות מותאמות אישית"
         },
+        workshopFormData: {
+            header: {
+                title: "סדנה פרטית",
+                description: "בחר תאריך ושעה לסדנה פרטית מותאמת אישית.",
+            },
+            availableDates: [
+                { date: new Date("2025-06-12"), hours: ["10:00-11:00", "14:00-15:00"] },
+                { date: new Date("2025-06-13"), hours: ["09:00-10:00", "13:00-14:00"] },
+                { date: new Date("2025-06-14"), hours: ["11:00-12:00", "15:00-16:00"] },
+            ],
+        },
         testimonials: {
             title: "לקוחות ממליצים",
             testimonials: [
