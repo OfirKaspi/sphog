@@ -164,10 +164,10 @@ export default function WorkshopRegistrationForm({
           }
         >
           <SelectTrigger
-            className="w-full">
+            className="w-full md:text-lg">
             <SelectValue placeholder="זמן פנוי" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="md:text-lg">
             {hoursForSelectedDate.map((hour) => (
               <SelectItem key={hour} value={hour}>
                 {hour}
