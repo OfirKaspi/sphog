@@ -10,6 +10,7 @@ const getTipsData = () => {
       video: {
         src: "https://www.youtube.com/embed/QqpkJ1zVeTQ",
         alt: "YouTube Shorts Video",
+        isPortrait: false,
       },
       image: {
         src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1748281656/sphog/laptop-realistic_qugrqv.png",

@@ -20,7 +20,8 @@ const getHomeData = () => {
                                 החוויה מתאימה לכל גיל ולכל אירוע — ימי הולדת, פעילויות זוגיות, גיבוש צוותים ואפילו מתנות מקוריות. 
                                 אנחנו מספקים את כל הציוד, ההנחיה וההשראה. 
                                 הצטרפו אלינו ליצירה טבעית, חווייתית, עם ערך אקולוגי ונגיעה אישית — זה הרבה יותר מסתם סדנה.`,
-            youtubeShortsUrl: "https://www.youtube.com/embed/5WsxxN3fet8"
+            youtubeShortsUrl: "https://www.youtube.com/embed/5WsxxN3fet8",
+            isPortrait: true
         },
         workshopPreviewData: {
             isEnabled: true,
