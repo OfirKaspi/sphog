@@ -14,17 +14,19 @@ const Home = () => {
 
   return (
     <section className="relative w-full">
-      <Hero {...data.hero} />
-      <ShortsShowcase {...data.shortsShowcase} />
-      <WorkshopPreview {...data.workshopPreviewData} />
-      <StoreTeaser {...data.storeTeaser} />
-      <TipsSection {...data.tipsSection} />
-      <AboutUs {...data.aboutUs} />
-      <Testimonials {...data.testimonials}/>
-      <FAQ {...data.faq} />
-      <div className="py-16">
-        <LeaveDetailsOpenForm {...data.openForm} />
-      </div>
+      {data.hero.isEnabled && <Hero {...data.hero} />}
+      {data.shortsShowcase.isEnabled && <ShortsShowcase {...data.shortsShowcase} />}
+      {data.workshopPreviewData.isEnabled && <WorkshopPreview {...data.workshopPreviewData} />}
+      {data.storeTeaser.isEnabled && <StoreTeaser {...data.storeTeaser} />}
+      {data.tipsSection.isEnabled && <TipsSection {...data.tipsSection} />}
+      {data.aboutUs.isEnabled && <AboutUs {...data.aboutUs} />}
+      {data.testimonials.isEnabled && <Testimonials {...data.testimonials} />}
+      {data.faq.isEnabled && <FAQ {...data.faq} />}
+      {data.openForm.isEnabled && (
+        <div className="py-16">
+          <LeaveDetailsOpenForm {...data.openForm} />
+        </div>
+      )}
     </section>
   )
 }

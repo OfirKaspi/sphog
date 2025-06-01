@@ -1,6 +1,7 @@
 const getHomeData = () => {
     const data = {
         hero: {
+            isEnabled: true,
             title: "צור יצירת טבע חיה.",
             subtitle: "סדנאות טרריום",
             description: "הצטרפו לחוויה ירוקה, יצירתית ומהנה. מושלם ליחידים, זוגות, או גיבוש צוותים. אין צורך בניסיון קודם!",
@@ -12,6 +13,7 @@ const getHomeData = () => {
             }
         },
         shortsShowcase: {
+            isEnabled: true,
             title: "הצצה לסדנה שלנו",
             mobileDescription: "רוצים לראות איך זה נראה מקרוב? צפו ברגע קצר מהסדנה הקסומה שלנו.",
             desktopDescription: `בסדנאות הטרריום שלנו, כל משתתף יוצר עולם ירוק ואישי בתוך צנצנת זכוכית. 
@@ -21,6 +23,7 @@ const getHomeData = () => {
             youtubeShortsUrl: "https://www.youtube.com/embed/5WsxxN3fet8"
         },
         workshopPreviewData: {
+            isEnabled: true,
             title: "בחרו את סדנת החלומות שלכם",
             workshops: [
                 {
@@ -51,6 +54,7 @@ const getHomeData = () => {
             ],
         },
         storeTeaser: {
+            isEnabled: true,
             title: "הצצה לחנות",
             link: {
                 text: "מעבר לחנות",
@@ -93,6 +97,7 @@ const getHomeData = () => {
             ]
         },
         tipsSection: {
+            isEnabled: true,
             title: "טיפים לטרריום מושלם",
             link: {
                 text: "לטיפים נוספים",
@@ -122,6 +127,7 @@ const getHomeData = () => {
             ],
         },
         aboutUs: {
+            isEnabled: true,
             title: "מי אנחנו?",
             description:
                 "אנחנו ב-SPHOG מאמינים ביצירה מתוך אהבה לטבע. הסדנאות שלנו נוצרו כדי לאפשר לכל אחד לבטא את היצירתיות שלו באמצעות הטרריום – יצירה טבעית, אישית ומרגיעה.",
@@ -135,14 +141,17 @@ const getHomeData = () => {
             }
         },
         bannerImage: {
+            isEnabled: true,
             src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png",
             alt: "תמונת בית",
         },
         header: {
+            isEnabled: true,
             title: "הבית שלך מתחיל כאן",
             description: "מגוון סדנאות, טיפים ומוצרים לעיצוב הבית והגינה",
         },
         testimonials: {
+            isEnabled: true,
             title: "לקוחות ממליצים",
             testimonials: [
                 {
@@ -175,6 +184,7 @@ const getHomeData = () => {
             ],
         },
         faq: {
+            isEnabled: true,
             title: "שאלות נפוצות",
             questions: [
                 {
@@ -200,6 +210,7 @@ const getHomeData = () => {
             ]
         },
         openForm: {
+            isEnabled: true,
             title: "מעוניינים בסדנה?",
             description: "מלאו את הפרטים וניצור איתכם קשר בהקדם.",
         }
