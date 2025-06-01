@@ -134,8 +134,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           <option value="" disabled>
             בחר סוג סדנה
           </option>
-          <option value="privateWorkshop">סדנה פרטית</option>
-          <option value="publicWorkshop">סדנה ציבורית</option>
+          <option value="סדנה פרטית">סדנה פרטית</option>
+          <option value="סדנה לקבוצה גדולה">סדנה לקבוצה גדולה</option>
         </select>
         {errors.requestedService && (
           <p className="col-span-4 text-red-600 text-base">{errors.requestedService}</p>

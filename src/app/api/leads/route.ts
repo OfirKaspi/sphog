@@ -1,131 +1,127 @@
-// ****************************************
-// MAKE SURE TO CHANGE WEBSITE URL 
-// COMMENT IT AS WELL IN DEV
-// ****************************************
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import axios from "axios";
 
-// ✅ This API route receives new leads from the frontend.
-// It stores the lead in Upstash Redis and pushes the key to `crm:unsynced:list`,
-// so it can be synced to Zoho CRM later by the cron job.
-// It uses manual axios calls instead of @vercel/kv for more control.
+// ✅ Monday config
+const MONDAY_API_KEY = process.env.MONDAY_API_KEY!;
+const MONDAY_BOARD_ID = process.env.MONDAY_BOARD_ID!;
+const MONDAY_GROUP_ID = process.env.MONDAY_GROUP_ID!;
 
-import { NextRequest, NextResponse } from "next/server"
-import { z } from "zod"
-import axios from "axios"
-import { CONFIG } from "@/config/config"
-
-// 🔐 Environment variables for Upstash Redis (set in Vercel or .env)
-const {
-  UPSTASH_REDIS_REST_URL,
-  UPSTASH_REDIS_REST_TOKEN,
-} = CONFIG
-
-// ✅ Zod validation schema to ensure data integrity on the backend
+// ✅ Input validation schema
 const leadSchema = z.object({
   fullName: z.string().nonempty("נדרש שם מלא."),
   phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
-  requestedService: z.enum(["privateWorkshop", "publicWorkshop"]),
+  requestedService: z.enum(["סדנה פרטית", "סדנה לקבוצה גדולה"]),
   additionalDetails: z.string().optional(),
-})
+});
 
-// 🔁 Rate limiting configuration: max 5 requests per 10 minutes per IP
-const RATE_LIMIT_MAX = 5
-const RATE_LIMIT_WINDOW = 600 // seconds (10 minutes)
+// ✅ In-memory IP rate limiter
+const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// 🔁 Helper function to POST to Redis with headers
-const redisRequest = (url: string, data?: any) =>
-  axios.post(`${UPSTASH_REDIS_REST_URL}${url}`, data, {
+// ✅ Sanitize strings
+const sanitize = (val: string) =>
+  val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
+
+// ✅ Send to Monday.com
+async function sendToMonday(itemName: string, values: Record<string, any>) {
+  const columnValues = {
+    "text_mkrg5n7j": values.full_name,               // Full Name
+    "phone_mkrg6e36": {
+      phone: values.phone,
+      countryShortName: "IL",
+    },                                               // Phone (object format)
+    "text_mkrgmb8d": values.requested_service,       // Requested Service
+    "text_mkrg8ae1": values.details,                 // Additional Details
+    "text_mkrgstnp": values.lead_source,             // Lead Source
+  };
+
+  const query = {
+    query: `
+      mutation {
+        create_item(
+          board_id: ${MONDAY_BOARD_ID},
+          item_name: "${itemName}",
+          group_id: "${MONDAY_GROUP_ID}",
+          column_values: "${JSON.stringify(columnValues).replace(/"/g, '\\"')}"
+        ) {
+          id
+        }
+      }
+    `,
+  };
+
+  const res = await axios.post("https://api.monday.com/v2", query, {
     headers: {
-      Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+      Authorization: MONDAY_API_KEY,
       "Content-Type": "application/json",
     },
-  })
+  });
 
+  const responseData = res.data;
+  
+  // ✅ Confirm that the item was actually created
+  if (!responseData?.data?.create_item?.id) {
+    console.error("❌ Monday item creation failed:", responseData);
+    throw new Error("השליחה נכשלה — נסה שוב מאוחר יותר.");
+  }
+
+  console.log("✅ Monday item created:", responseData.data.create_item.id);
+}
+
+// ✅ Main POST handler
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get("x-forwarded-for") || "unknown";
+  const now = Date.now();
+  const rateInfo = rateLimitMap.get(ip);
+
+  // 🛡️ IP-based rate limiting
+  if (rateInfo) {
+    if (now - rateInfo.timestamp < RATE_LIMIT_WINDOW_MS) {
+      if (rateInfo.count >= RATE_LIMIT_MAX) {
+        return NextResponse.json(
+          { success: false, message: "יותר מדי בקשות, נסה שוב בעוד כמה דקות." },
+          { status: 429 }
+        );
+      }
+      rateInfo.count++;
+    } else {
+      rateLimitMap.set(ip, { count: 1, timestamp: now });
+    }
+  } else {
+    rateLimitMap.set(ip, { count: 1, timestamp: now });
+  }
+
   try {
-    // 🌐 Capture user's IP and request origin for security
-    const ip = req.headers.get("x-forwarded-for") || "unknown"
-    // const origin = req.headers.get("origin")
+    // ✅ Parse + validate input
+    const body = await req.json();
+    const data = leadSchema.parse(body);
 
-    // ❌ Block requests that don't come from your domain
-    // if (origin && origin !== "https://thelevelupagency.com") {
-    //   return NextResponse.json(
-    //     { success: false, message: "Unauthorized origin" },
-    //     { status: 403 }
-    //   )
-    // }
+    const fullName = sanitize(data.fullName);
+    const phone = sanitize(data.phoneNumber);
+    const requestedService = sanitize(data.requestedService);
+    const details = sanitize(data.additionalDetails || "");
 
-    // 🔐 Check rate limiting: how many times this IP submitted recently
-    const rateKey = `rate-limit:${ip}`
-    const rateCount = await axios.get(`${UPSTASH_REDIS_REST_URL}/get/${rateKey}`, {
-      headers: {
-        Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
-      },
-    })
-
-    const count = Number(rateCount.data.result || 0)
-
-    // ❌ Block if over limit
-    if (count >= RATE_LIMIT_MAX) {
-      return NextResponse.json(
-        { success: false, message: "Too many requests. Please try again later." },
-        { status: 429 }
-      )
-    }
-
-    // ✅ Otherwise, increase the submission count for this IP
-    await redisRequest(`/incr/${rateKey}`)
-
-    // ⏳ Set a TTL (Time-To-Live) for this IP's key — auto delete after 10 minutes
-    await redisRequest(`/expire/${rateKey}/${RATE_LIMIT_WINDOW}`)
-
-    // ✅ Parse and validate form input from body using Zod
-    const body = await req.json()
-    const validatedLead = leadSchema.parse(body)
-
-    // 🧽 Sanitize input: remove newlines, trim, and limit length
-    const sanitize = (val: string) => val?.replace(/[\n\r]+/g, "").trim().slice(0, 100)
-
-    // 🗃️ Prepare lead data with timestamp for storage
-    const leadWithTimestamp = {
-      fullName: sanitize(validatedLead.fullName),
-      phoneNumber: sanitize(validatedLead.phoneNumber),
-      requestedService: sanitize(validatedLead.requestedService),
-      additionalDetails: sanitize(validatedLead.additionalDetails || ""),
-      createdAt: new Date().toLocaleString("en-IL", { timeZone: "Asia/Jerusalem" }),
-      crmSynced: false,
-      leadSource: "טופס לידים אתר - כללי",
-    }
-
-    const id = crypto.randomUUID()
-    const key = `lead:${id}`
-
-    // 💾 Save the lead to Redis using SET
-    await redisRequest(`/set/${key}`, JSON.stringify(leadWithTimestamp))
-
-    // 📥 Push the lead's key into the CRM sync queue list
-    await redisRequest(`/lpush/crm:unsynced:list`, key)
+    await sendToMonday(fullName, {
+      full_name: fullName,
+      phone: phone,
+      requested_service: requestedService,
+      details: details,
+      lead_source: "טופס לידים אתר - כללי",
+    });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "הפרטים נשלחו בהצלחה, ניצור איתך קשר בהקדם",
-      },
+      { success: true, message: "הפרטים נשלחו בהצלחה!" },
       { status: 201 }
-    )
+    );
   } catch (error: any) {
-    console.error("❌ API Error:", error.message)
-
-    // ❗ Return Zod validation errors if form input is invalid
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ success: false, error: error.format() }, { status: 400 })
+      return NextResponse.json({ success: false, error: error.format() }, { status: 400 });
     }
 
-    // ❗ Catch-all server error
-    return NextResponse.json(
-      { success: false, message: "אירעה שגיאה, אנא נסה שוב מאוחר יותר" },
-      { status: 500 }
-    )
+    console.error("❌ Monday API Error:", error.message);
+    return NextResponse.json({ success: false, message: "שגיאה בשליחה, נסה שוב." }, { status: 500 });
   }
 }

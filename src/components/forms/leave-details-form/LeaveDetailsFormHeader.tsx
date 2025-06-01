@@ -20,10 +20,10 @@ const { header, desc } = {
         </VisuallyHidden>
       ) : (
         <>
-          <DialogTitle className="text-3xl md:text-4xl text-primary leading-relaxed">
+          <DialogTitle className="text-2xl md:text-3xl text-center text-primary leading-relaxed">
             {header}
           </DialogTitle>
-          <DialogDescription className="md:text-lg text-slate-900">
+          <DialogDescription className="md:text-lg text-center text-slate-900">
             {desc}
           </DialogDescription>
         </>
