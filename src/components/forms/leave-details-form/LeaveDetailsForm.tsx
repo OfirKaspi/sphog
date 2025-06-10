@@ -17,8 +17,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
-    requestedService: "",
-    additionalDetails: "",
+    topic: "",
+    details: "",
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
@@ -34,8 +34,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
     if (!formData.fullName.trim()) newErrors.fullName = "נדרש שם מלא";
     if (!formData.phoneNumber.match(/^05\d{8}$/))
       newErrors.phoneNumber = "אנא מלא מספר טלפון תקין";
-    if (!formData.requestedService)
-      newErrors.requestedService = "אנא בחר סוג סדנה";
+    if (!formData.topic) newErrors.topic = "אנא בחר נושא";
 
     return newErrors;
   };
@@ -65,8 +64,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
       setFormData({
         fullName: "",
         phoneNumber: "",
-        requestedService: "",
-        additionalDetails: "",
+        topic: "",
+        details: "",
       });
     } catch (error) {
       console.error(error);
@@ -122,35 +121,37 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
       </div>
 
       <div className="grid grid-cols-4 items-center gap-2">
-        <Label htmlFor="requestedService" className="text-base md:text-lg">סוג סדנה</Label>
+        <Label htmlFor="topic" className="text-base md:text-lg">נושא</Label>
         <select
-          id="requestedService"
+          id="topic"
           className="col-span-3 bg-slate-100 border rounded px-3 py-2 text-base md:text-lg"
-          value={formData.requestedService}
+          value={formData.topic}
           onChange={(e) =>
-            setFormData({ ...formData, requestedService: e.target.value })
+            setFormData({ ...formData, topic: e.target.value })
           }
         >
           <option value="" disabled>
-            בחר סוג סדנה
+            בחר נושא
           </option>
           <option value="סדנה פרטית">סדנה פרטית</option>
-          <option value="סדנה לקבוצה גדולה">סדנה לקבוצה גדולה</option>
+          <option value="הצטרפות לסדנה קבוצתית">הצטרפות לסדנה קבוצתית</option>
+          <option value="קניית טרריום">קניית טרריום</option>
+          <option value="אחר">אחר</option>
         </select>
-        {errors.requestedService && (
-          <p className="col-span-4 text-red-600 text-base">{errors.requestedService}</p>
+        {errors.topic && (
+          <p className="col-span-4 text-red-600 text-base">{errors.topic}</p>
         )}
       </div>
 
       <div className="grid grid-cols-4 items-start gap-2">
-        <Label htmlFor="additionalDetails" className="self-center text-base md:text-lg">פרטים נוספים</Label>
+        <Label htmlFor="details" className="self-center text-base md:text-lg">מה תרצו לדעת</Label>
         <Textarea
-          id="additionalDetails"
-          placeholder="פרטים נוספים (אופציונלי)"
+          id="details"
+          placeholder="מה תרצו לדעת (אופציונלי)"
           className="col-span-3 bg-slate-100 text-base md:text-lg"
-          value={formData.additionalDetails}
+          value={formData.details}
           onChange={(e) =>
-            setFormData({ ...formData, additionalDetails: e.target.value })
+            setFormData({ ...formData, details: e.target.value })
           }
         />
       </div>

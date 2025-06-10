@@ -29,16 +29,16 @@ const sanitize = (val: string) =>
 // ✅ Send the lead into Monday.com
 async function sendToMonday(itemName: string, values: Record<string, any>) {
   const columnValues = {
-    "text_mkrg5n7j": values.full_name,               // Full Name
-    "text_mkrg8ae1": values.details,                 // Additional Details
-    "text_mkrgstnp": values.lead_source,             // Lead Source (e.g. "Website - Workshop")
-    "text_mkrgmb8d": values.requested_service,       // Requested Service (for general leads)
-    "phone_mkrg6e36": {                              // 📞 Phone (must be object format!)
+    "name": values.full_name,                          // Full Name
+    "text__1": values.details,                         // Additional Details
+    "lead_phone": {                                    // 📞 Phone (must be object format!)
       phone: values.phone,
-      countryShortName: "IL",                        // ISO country code for phone format
+      countryShortName: "IL",                          // ISO country code for phone format
     },
-    "text_mkrgx2mq": values.selected_date,           // Selected Date
-    "text_mkrg2s87": values.selected_hour,           // Selected Hour
+    "date_mkpveq7w": values.selected_date,             // Selected Date
+    // "dup__of_date__1": values.selected_hour,        // Selected Hour
+    "dup__of_channel9__1": values.lead_source,         // Lead Source (e.g. "Website - Workshop")
+    "dup__of_channel__1": values.campaign,             // Campaign (e.g. "WS form")
   };
 
   const query = {
@@ -113,9 +113,10 @@ export async function POST(req: NextRequest) {
       full_name: fullName,
       phone: phone,
       details: details,
-      lead_source: "טופס לידים אתר - סדנאות",
       selected_date: selectedDate,
       selected_hour: selectedHour,
+      lead_source: "Website",
+      campaign: "WS form",
     });
 
     return NextResponse.json(

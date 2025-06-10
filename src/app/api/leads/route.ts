@@ -12,8 +12,8 @@ const MONDAY_GROUP_ID = process.env.MONDAY_GROUP_ID!;
 const leadSchema = z.object({
   fullName: z.string().nonempty("נדרש שם מלא."),
   phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
-  requestedService: z.enum(["סדנה פרטית", "סדנה לקבוצה גדולה"]),
-  additionalDetails: z.string().optional(),
+  topic: z.enum(["סדנה פרטית", "הצטרפות לסדנה קבוצתית", "קניית טרריום", "אחר"]),
+  details: z.string().optional(),
 });
 
 // ✅ In-memory IP rate limiter
@@ -25,18 +25,30 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const sanitize = (val: string) =>
   val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
 
+// ✅ Topic mapping
+const topicMapping: Record<string, string> = {
+  "סדנה פרטית": "Private",
+  "הצטרפות לסדנה קבוצתית": "Adults",
+  "קניית טרריום": "Buy",
+  "אחר": "",
+};
+
 // ✅ Send to Monday.com
 async function sendToMonday(itemName: string, values: Record<string, any>) {
-  const columnValues = {
-    "text_mkrg5n7j": values.full_name,               // Full Name
-    "phone_mkrg6e36": {
+  const columnValues: Record<string, any> = {
+    "name": values.full_name,                              // Full Name
+    "lead_phone": {
       phone: values.phone,
       countryShortName: "IL",
-    },                                               // Phone (object format)
-    "text_mkrgmb8d": values.requested_service,       // Requested Service
-    "text_mkrg8ae1": values.details,                 // Additional Details
-    "text_mkrgstnp": values.lead_source,             // Lead Source
+    },                                                     // Phone (object format)
+    "text__1": values.details,                             // What do you want to know
+    "dup__of_channel9__1": values.lead_source,             // Lead Source (e.g. "Website - Workshop")
+    "dup__of_channel__1": values.campaign,                 // Campaign
   };
+
+  if (values.topic) {
+    columnValues["dup__of_channel2__1"] = values.topic;    // Topic (only if not "Other")
+  }
 
   const query = {
     query: `
@@ -61,7 +73,7 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
   });
 
   const responseData = res.data;
-  
+
   // ✅ Confirm that the item was actually created
   if (!responseData?.data?.create_item?.id) {
     console.error("❌ Monday item creation failed:", responseData);
@@ -101,15 +113,17 @@ export async function POST(req: NextRequest) {
 
     const fullName = sanitize(data.fullName);
     const phone = sanitize(data.phoneNumber);
-    const requestedService = sanitize(data.requestedService);
-    const details = sanitize(data.additionalDetails || "");
+    const topic = sanitize(data.topic);
+    const mappedTopic = topicMapping[topic];
+    const details = sanitize(data.details || "");
 
     await sendToMonday(fullName, {
       full_name: fullName,
       phone: phone,
-      requested_service: requestedService,
+      topic: mappedTopic,
       details: details,
-      lead_source: "טופס לידים אתר - כללי",
+      lead_source: "Website",
+      campaign: "General form",
     });
 
     return NextResponse.json(
