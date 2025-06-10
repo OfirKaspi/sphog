@@ -13,14 +13,14 @@ body {
     --text-foreground: 0 0% 98%;
     --cta: 341, 77%, 52%;
     --cta-foreground: 341, 77%, 62.2%;
-    --background: 180, 79%, 95%;
-    --background-overlay: 180, 79%, 95%, 0.8;
+    --background: 192, 100%, 97%;
+    --background-overlay: 192, 100%, 97%, 0.8;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
-    --primary: 142, 75%, 43%;
+    --primary: 142, 79%, 30%;
     --primary-foreground: 113, 100%, 24%;
     --secondary: 82, 100%, 42%;
     --secondary-foreground: 0 0% 9%;
