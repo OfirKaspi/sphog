@@ -9,9 +9,9 @@ const Tips = () => {
 
   return (
     <section>
-      <VideoTip {...data.videoTip} />
       <PageHeader {...data.header} />
-      <div className="p-5">
+      <VideoTip {...data.videoTip} />
+      <div className="pt-16 px-5">
         <TipsGrid tips={data.tips} />
       </div>
       <Testimonials {...data.testimonials} />

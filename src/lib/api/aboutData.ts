@@ -1,7 +1,7 @@
 const getAboutData = () => {
     const data = {
         header: {
-            title: "אודות Sphog",
+            title: "מי אנחנו?",
             description: "סדנאות, טיפים ומוצרים לעיצוב הבית והגינה, בהשראת טבע ויצירתיות.",
         },
         aboutMission: {

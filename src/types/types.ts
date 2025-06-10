@@ -65,6 +65,7 @@ export interface Tip {
   _id: number
   title: string
   description: string
+  paragraphs: string[]
   image: {
     src: string
     alt: string

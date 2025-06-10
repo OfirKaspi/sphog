@@ -40,6 +40,14 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                 <p className="text-slate-900 leading-relaxed text-right px-5">
                   {tip.description}
                 </p>
+                <div className="text-slate-900 leading-relaxed space-y-2">
+                  {tip.paragraphs.map((paragraph, index) => (
+                    <p key={index} className="flex items-start">
+                      <span className="mx-2 text-primary">•</span>
+                      {paragraph}
+                    </p>
+                  ))}
+                </div>
               </div>
             ) : (
               <>
@@ -58,6 +66,14 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                   <p className="text-slate-900 leading-relaxed">
                     {tip.description}
                   </p>
+                  <div className="text-slate-900 leading-relaxed space-y-2">
+                    {tip.paragraphs.map((paragraph, index) => (
+                      <p key={index} className="flex items-start">
+                      <span className="mx-2 text-primary">•</span>
+                      {paragraph}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </>
             )}
