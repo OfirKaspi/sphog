@@ -156,7 +156,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
         />
       </div>
 
-      <Button type="submit" className="w-full bg-cta hover:bg-cta-foreground text-base md:text-lg" disabled={loading}>
+      <Button type="submit" className="w-full bg-cta hover:bg-cta-foreground text-base md:text-lg font-bold" disabled={loading}>
         {loading ? "שולח..." : "שלח"}
       </Button>
     </form>

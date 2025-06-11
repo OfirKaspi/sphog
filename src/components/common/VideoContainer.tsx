@@ -7,11 +7,10 @@ interface VideoContainerProps {
 const VideoContainer = ({ src, title, isPortrait }: VideoContainerProps) => {
   return (
     <div
-      className={`w-full ${
-        isPortrait
+      className={`w-full mx-auto ${isPortrait
           ? "aspect-[9/16] max-w-xs"
           : "aspect-[16/9] max-w-2xl"
-      } rounded-lg overflow-hidden shadow-lg`}
+        } rounded-lg overflow-hidden shadow-lg`}
     >
       <iframe
         className="w-full h-full"

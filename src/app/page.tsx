@@ -23,7 +23,7 @@ const Home = () => {
       {data.testimonials.isEnabled && <Testimonials {...data.testimonials} />}
       {data.faq.isEnabled && <FAQ {...data.faq} />}
       {data.openForm.isEnabled && (
-        <div className="py-16">
+        <div className="pt-16">
           <LeaveDetailsOpenForm {...data.openForm} />
         </div>
       )}

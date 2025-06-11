@@ -18,8 +18,8 @@ export default function FAQ({ questions, title }: FAQProps) {
 
                 <Accordion type="single" collapsible className="space-y-4">
                     {questions.map((question, index) => (
-                        <AccordionItem key={index} value={`question-${index}`} className="border bg-white rounded-lg">
-                            <AccordionTrigger className="md:text-lg font-semibold text-primary-foreground px-4 py-3 text-start">
+                        <AccordionItem key={index} value={`question-${index}`} className="border bg-white rounded-lg text-text">
+                            <AccordionTrigger className="md:text-lg font-bold px-4 py-3 text-start">
                                 {question.question}
                             </AccordionTrigger>
                             <AccordionContent className="text-sm md:text-base px-4 pb-4 leading-relaxed">

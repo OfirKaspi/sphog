@@ -2,7 +2,7 @@ import { LinkType, Tip } from '@/types/types'
 import Link from 'next/link';
 import React from 'react'
 import TipsGrid from '@/components/pages/tips/TipsGrid';
-import { Button } from '@/components/ui/button';
+import CTAButton from '@/components/common/CTAButton';
 
 interface TipsSectionProps {
   title: string
@@ -17,9 +17,9 @@ export default function TipsSection({ tips, link, title }: TipsSectionProps) {
       <TipsGrid tips={tips} />
       <div className="text-center mt-12">
         <Link href={link.href}>
-          <Button className="md:text-base bg-cta hover:bg-cta-foreground transition-all duration-300 rounded-full px-6 py-3 shadow-md">
+        <CTAButton>
             {link.text}
-          </Button>
+        </CTAButton>
         </Link>
       </div>
     </section>

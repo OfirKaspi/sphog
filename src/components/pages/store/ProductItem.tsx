@@ -24,9 +24,9 @@ const ProductItem = ({ product }: ProductItemProps) => {
 				{/* Stock Indicator */}
 				<div className="absolute top-2 left-2 z-30 px-3 py-2 rounded-md overflow-hidden text-sm font-bold">
 					{product.isInStock ? (
-						<span className="bg-green-500 text-white px-2 py-1 rounded-md">במלאי</span>
+						<span className="bg-cta text-white px-2 py-1 rounded-md">במלאי</span>
 					) : (
-						<span className="bg-red-500 text-white px-2 py-1 rounded-md">לא במלאי</span>
+						<span className="bg-gray-500 text-white px-2 py-1 rounded-md">לא במלאי</span>
 					)}
 				</div>
 

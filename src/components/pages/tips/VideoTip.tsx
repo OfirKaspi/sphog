@@ -1,18 +1,15 @@
 "use client";
 
 import VideoContainer from "@/components/common/VideoContainer";
+import { Media } from "@/types/types";
 
 interface VideoTipProps {
   title: string;
   description: string;
-  video: {
-    src: string;
-    alt: string;
-    isPortrait: boolean;
-  };
+  media: Media;
 }
 
-const VideoTip = ({ title, description, video }: VideoTipProps) => {
+const VideoTip = ({ title, description, media }: VideoTipProps) => {
   return (
     <section className="relative w-full bg-primary text-white ">
       <div className="max-w-screen-lg mx-auto py-16 px-5 flex flex-col items-center text-center">
@@ -23,7 +20,7 @@ const VideoTip = ({ title, description, video }: VideoTipProps) => {
         </div>
 
         {/* Video Container */}
-        <VideoContainer src={video.src} title={video.alt} isPortrait={video.isPortrait} />
+        <VideoContainer src={media.src} title={media.alt} isPortrait={media.isPortrait} />
       </div>
     </section>
   );

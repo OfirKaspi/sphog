@@ -20,7 +20,7 @@ const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
                     />
                 )}
                 <div>
-                    <p className="md:text-lg text-primary font-semibold">{testimonial.name}</p>
+                    <p className="md:text-lg text-primary font-bold">{testimonial.name}</p>
                     {testimonial.role && (
                         <p className="text-sm md:text-base text-slate-500 ">
                             {testimonial.role}

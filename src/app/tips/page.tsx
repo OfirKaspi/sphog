@@ -1,5 +1,6 @@
 import PageHeader from "@/components/common/PageHeader"
 import Testimonials from "@/components/common/testimonials/Testimonials"
+import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import TipsGrid from "@/components/pages/tips/TipsGrid"
 import VideoTip from "@/components/pages/tips/VideoTip"
 import getTipsData from "@/lib/api/tipsData"
@@ -15,6 +16,7 @@ const Tips = () => {
         <TipsGrid tips={data.tips} />
       </div>
       <Testimonials {...data.testimonials} />
+      <LeaveDetailsOpenForm {...data.openForm} />
     </section>
   )
 }

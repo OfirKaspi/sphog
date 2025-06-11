@@ -219,7 +219,7 @@ export default function WorkshopRegistrationForm({
 
       <Button
         type="submit"
-        className="w-full bg-cta hover:bg-cta-foreground text-base md:text-lg"
+        className="w-full bg-cta hover:bg-cta-foreground text-base md:text-lg font-bold"
         disabled={loading || !formData.selectedDate || !formData.selectedHour}
       >
         {loading ? "שולח..." : "שלח"}

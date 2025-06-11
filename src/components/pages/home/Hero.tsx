@@ -1,11 +1,11 @@
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { CONFIG } from "@/config/config"
+import CTAButton from "@/components/common/CTAButton"
 
 interface HeroProps {
     title: string
     subtitle: string
-    description: string
+    paragraphs: string[]
     ctaText: string
     ctaLink?: string
     image: {
@@ -14,7 +14,7 @@ interface HeroProps {
     }
 }
 
-const Hero = ({ title, subtitle, description, ctaText, ctaLink = "", image }: HeroProps) => {
+const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: HeroProps) => {
 
     const { whatsappNumber } = CONFIG
     const whatsappUrl = `https://wa.me/${whatsappNumber}`;
@@ -43,18 +43,20 @@ const Hero = ({ title, subtitle, description, ctaText, ctaLink = "", image }: He
                         {title}<br />
                         <span className="text-primary">{subtitle}</span>
                     </h1>
-                    <p className="text-lg md:text-xl text-slate-900 mb-8 max-w-xl mx-auto md:mx-0">
-                        {description}
-                    </p>
+                    <div className="text-lg md:text-xl text-slate-900 mb-8 max-w-xl mx-auto md:mx-0">
+                        {paragraphs.map((paragraph, index) => (
+                            <p key={index}>{paragraph}</p>
+                        ))}
+                    </div>
 
                     <a
                         href={ctaLink ? ctaLink : whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Button className="text-lg px-6 py-3 rounded-full bg-cta hover:bg-cta-foreground text-white transition-all duration-300 shadow-md">
+                        <CTAButton>
                             {ctaText}
-                        </Button>
+                        </CTAButton>
                     </a>
                 </div>
             </div>

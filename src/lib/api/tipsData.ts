@@ -7,7 +7,8 @@ const getTipsData = () => {
     videoTip: {
       title: "כלים בסיסיים להכנת טרריום",
       description: "רוצים להתחיל להכין טרריום ולא בטוחים באיזה כלים להשתמש? בסרטון הזה אני מסביר על הכלים הבסיסיים שכל יוצר טרריום צריך להכיר",
-      video: {
+      media: {
+        type: "video",
         src: "https://www.youtube.com/embed/QqpkJ1zVeTQ",
         alt: "YouTube Shorts Video",
         isPortrait: false,
@@ -99,6 +100,10 @@ const getTipsData = () => {
         },
       ],
     },
+    openForm: {
+      title: "רוצים לשמוע עוד?",
+      description: "שלחו לנו כאן במה אתם מתעניינים ונחזור אליכם ממש מהר.",
+    }
   }
 
   return data

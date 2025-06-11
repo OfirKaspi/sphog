@@ -12,7 +12,6 @@ import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetai
 import { useEffect, useState } from "react";
 
 const Navbar = () => {
-
   const data = {
     _id: "1",
     header: "ברוכים הבאים ל-Sphog!",
@@ -26,13 +25,14 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10); // trigger after scrolling 10px
+      setScrolled(window.scrollY > 10);
     };
+
+    setScrolled(window.scrollY > 10);
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
 
   const closeSheet = () => {
     setIsOpen(false);
@@ -107,7 +107,6 @@ const Navbar = () => {
               </li>
             ))}
           </ul>
-
 
           <LeaveDetailsDialog text={data.buttonText} />
         </>

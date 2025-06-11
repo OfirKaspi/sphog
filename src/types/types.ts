@@ -17,6 +17,11 @@ export interface Image {
   src: string;
 }
 
+export interface Media extends Image {
+ type: string;
+ isPortrait: boolean;
+}
+
 // interface Background extends BaseEntity {
 //   image: Image
 //   color: string;
@@ -39,7 +44,7 @@ export interface Product {
   originalPrice?: number;
   image: Image
   description: string;
-  isInStock: boolean; 
+  isInStock: boolean;
 }
 
 export interface Mission {
@@ -73,8 +78,10 @@ export interface Tip {
 }
 
 export interface WorkshopData {
-  title: string;
+  title?: string;
   description: string;
   image: Image;
-  link: LinkType;
+  links?: LinkType[]; // Optional links for navigation
+  scrollToForm?: boolean; // If true, scrolls to the form on the same page
+  buttonText?: string
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LinkType, Product } from "@/types/types";
 import ProductItem from "@/components/pages/store/ProductItem";
-import { Button } from "@/components/ui/button";
+import CTAButton from "@/components/common/CTAButton";
 
 interface StoreTeaserProps {
     title: string;
@@ -24,9 +24,9 @@ export default function StoreTeaser({ products, title, link }: StoreTeaserProps)
 
                 <div className="text-center mt-12">
                     <Link href={link.href}>
-                        <Button className="md:text-base bg-cta hover:bg-cta-foreground transition-all duration-300 rounded-full px-6 py-3 shadow-md">
+                        <CTAButton>
                             {link.text}
-                        </Button>
+                        </CTAButton>
                     </Link>
                 </div>
             </div>

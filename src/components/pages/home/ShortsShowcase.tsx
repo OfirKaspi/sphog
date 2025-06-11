@@ -1,20 +1,19 @@
 import React from "react";
 import VideoContainer from "@/components/common/VideoContainer";
+import { Media} from "@/types/types";
 
 interface ShortsShowcaseProps {
   title: string;
   mobileDescription: string;
   desktopDescription: string;
-  youtubeShortsUrl: string;
-  isPortrait: boolean;
+  media: Media;
 }
 
 const ShortsShowcase = ({
   title,
   mobileDescription,
   desktopDescription,
-  youtubeShortsUrl,
-  isPortrait,
+  media
 }: ShortsShowcaseProps) => {
   return (
     <section className="w-full bg-primary">
@@ -27,7 +26,7 @@ const ShortsShowcase = ({
         </div>
 
         {/* Video Container */}
-        <VideoContainer src={youtubeShortsUrl} title="YouTube Shorts" isPortrait={isPortrait} />
+        <VideoContainer src={media.src} title={media.alt} isPortrait={media.isPortrait} />
       </div>
     </section>
   );
