@@ -12,7 +12,7 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
   const { isMobile } = useResponsive()
 
   return (
-    <section className="max-w-screen-lg mx-auto space-y-10">
+    <section className="max-w-screen-lg mx-auto space-y-10 md:space-y-24">
       {tips.map((tip, idx) => {
         const isEven = idx % 2 === 0
 

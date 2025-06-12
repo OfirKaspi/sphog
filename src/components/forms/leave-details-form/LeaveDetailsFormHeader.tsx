@@ -6,17 +6,17 @@ interface LeaveDetailsFormDialogHeaderProps {
 }
 
 const LeaveDetailsFormDialogHeader = ({ isSuccess }: LeaveDetailsFormDialogHeaderProps) => {
-const { header, desc } = {
-	header: "נעים להכיר!",
-	desc: "השאירו פרטים ונחזור אליכם עם פתרונות מותאמים אישית לסדנאות ולפעילויות יצירה של טרריומים שיעזרו לכם להעצים וליצור חוויות בלתי נשכחות.",
-};
+  const { header, description } = {
+    header: "נעים להכיר!",
+    description: "השאירו פרטים ונחזור אליכם עם כל המידע על הסדנאות שלנו, טרריומים למכירה וכל דבר נוסף שתרצו לדעת על עולם הטרריום.",
+  };
 
   return (
     <DialogHeader className="relative">
       {isSuccess ? (
         <VisuallyHidden>
           <DialogTitle>{header}</DialogTitle>
-          <DialogDescription>{desc}</DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </VisuallyHidden>
       ) : (
         <>
@@ -24,7 +24,7 @@ const { header, desc } = {
             {header}
           </DialogTitle>
           <DialogDescription className="md:text-lg text-center text-slate-900">
-            {desc}
+            {description}
           </DialogDescription>
         </>
       )}

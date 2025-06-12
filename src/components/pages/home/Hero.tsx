@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { CONFIG } from "@/config/config"
 import CTAButton from "@/components/common/CTAButton"
+import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetailsFormDialog"
 
 interface HeroProps {
     title: string
@@ -48,16 +49,19 @@ const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: Her
                             <p key={index}>{paragraph}</p>
                         ))}
                     </div>
-
-                    <a
-                        href={ctaLink ? ctaLink : whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <CTAButton>
-                            {ctaText}
-                        </CTAButton>
-                    </a>
+                    {ctaLink ? (
+                        <a
+                            href={ctaLink ? ctaLink : whatsappUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <CTAButton>
+                                {ctaText}
+                            </CTAButton>
+                        </a>
+                    ) : (
+                        <LeaveDetailsDialog text={ctaText} />
+                    )}
                 </div>
             </div>
         </section>

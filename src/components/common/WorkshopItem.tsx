@@ -5,7 +5,7 @@ import Image from "next/image";
 import { WorkshopData } from "@/types/types";
 import CTAButton from "@/components/common/CTAButton";
 
-export default function WorkshopItem({ title, description, image, links,buttonText, scrollToForm }: WorkshopData) {
+export default function WorkshopItem({ title, description, image, links, buttonText, scrollToForm }: WorkshopData) {
   const handleScrollToForm = () => {
     const formElement = document.getElementById("workshop-form");
     if (formElement) {
@@ -27,17 +27,19 @@ export default function WorkshopItem({ title, description, image, links,buttonTe
           <h3 className="text-xl md:text-2xl text-primary font-semibold mb-2">{title}</h3>
           <p className="text-sm md:text-base leading-relaxed">{description}</p>
         </div>
-        <div className="flex flex-col gap-3 w-fit">
-          {scrollToForm ? (
+        {scrollToForm ? (
+          <div className="flex flex-col gap-3 w-fit">
             <CTAButton onClick={handleScrollToForm}>{buttonText}</CTAButton>
-          ) : (
-            links?.map((link, index) => (
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-3 md:flex-rox">
+            {(links?.map((link, index) => (
               <Link key={index} href={link.href}>
                 <CTAButton>{link.text}</CTAButton>
               </Link>
-            ))
-          )}
-        </div>
+            )))}
+          </div>
+        )}
       </div>
     </div>
   );

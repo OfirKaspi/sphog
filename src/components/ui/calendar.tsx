@@ -39,13 +39,13 @@ function Calendar({
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 bg-green-100 font-normal hover:bg-green-500 aria-selected:bg-primary aria-selected:text-white"
+          "h-9 w-9 p-0 bg-pink-200 font-normal hover:bg-cta-foreground aria-selected:bg-cta aria-selected:text-white"
         ),
         day_range_end: "day-range-end",
         day_today: "bg-accent text-accent-foreground",
         day_outside:
-          "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
-        day_disabled: "bg-inherit text-muted-foreground opacity-50",
+          "day-outside text-muted-foreground aria-selected:bg-accent/100 aria-selected:text-muted-foreground",
+        day_disabled: "bg-white text-muted-foreground opacity-100", // Ensure disabled days have a white background
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
