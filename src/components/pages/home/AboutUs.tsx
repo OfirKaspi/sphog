@@ -27,11 +27,11 @@ export default function AboutUs({
     <section className={`${isBgPrimary && "bg-primary text-white"}`}>
       <div
         className={`grid gap-5 md:gap-10 items-center max-w-screen-lg mx-auto ${
-          isDesktopColumn ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"
+          isDesktopColumn ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
         } ${isBgPrimary ? "py-16 px-5" : "p-5"}`}
       >
         <div
-          className={`relative min-h-fit w-full ${
+          className={`relative h-full w-full ${
             isDesktopColumn
               ? isImageFirst
                 ? "row-start-1"
@@ -53,7 +53,7 @@ export default function AboutUs({
               alt={media.alt}
               width={1000}
               height={1000}
-              className="w-full h-full rounded-xl object-contain max-w-2xl mx-auto"
+              className="w-full h-full rounded-xl object-cover max-w-2xl mx-auto"
             />
           )}
         </div>

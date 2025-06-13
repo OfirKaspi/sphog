@@ -11,9 +11,10 @@ const About = () => {
   return (
     <section>
       <PageHeader {...data.pageHeader} />
-      <div className="-mb-8">
+      <div className="-mb-8 md:mb-0">
         <AboutUs
           {...data.aboutUs}
+          isDesktopColumn={false}
           isBgPrimary={false}
         />
       </div>
