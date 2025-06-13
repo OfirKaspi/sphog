@@ -20,13 +20,9 @@ const Home = () => {
       {data.storeTeaser.isEnabled && <StoreTeaser {...data.storeTeaser} />}
       {data.tipsSection.isEnabled && <TipsSection {...data.tipsSection} />}
       {data.aboutUs.isEnabled && <AboutUs {...data.aboutUs} />}
-      {data.testimonials.isEnabled && <Testimonials {...data.testimonials} />}
+      {data.testimonials.isEnabled && <Testimonials {...data.testimonials} isBgPrimary={false} />}
       {data.faq.isEnabled && <FAQ {...data.faq} />}
-      {data.openForm.isEnabled && (
-        <div className="pt-16">
-          <LeaveDetailsOpenForm {...data.openForm} />
-        </div>
-      )}
+      {data.openForm.isEnabled && <LeaveDetailsOpenForm {...data.openForm} />}
     </section>
   )
 }

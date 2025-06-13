@@ -12,9 +12,7 @@ const Tips = () => {
     <section>
       <PageHeader {...data.header} />
       <VideoTip {...data.videoTip} />
-      <div className="pt-16 px-5">
-        <TipsGrid tips={data.tips} />
-      </div>
+      <TipsGrid tips={data.tips} />
       <Testimonials {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>

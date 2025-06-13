@@ -12,10 +12,10 @@ interface VideoTipProps {
 const VideoTip = ({ title, description, media }: VideoTipProps) => {
   return (
     <section className="relative w-full bg-primary text-white ">
-      <div className="max-w-screen-lg mx-auto py-16 px-5 flex flex-col items-center text-center">
+      <div className="max-w-screen-lg mx-auto py-16 px-5 flex flex-col items-center">
         {/* Text Section */}
         <div className="mb-8 max-w-2xl">
-          <h2 className="text-4xl md:text-5xl font-bold">{title}</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-center">{title}</h2>
           <p className="md:text-lg mt-4">{description}</p>
         </div>
 

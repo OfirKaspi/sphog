@@ -12,7 +12,7 @@ const LeaveDetailsOpenForm = ({ description, title }: LeaveDetailsOpenFormProps)
 	const [isSuccess, setIsSuccess] = useState(false)
 
 	return (
-		<section className="max-w-screen-sm mx-auto pb-16 px-5">
+		<section className="max-w-screen-sm mx-auto py-16 px-5">
 			<div className="p-5 border rounded-lg shadow-lg bg-white">
 				{!isSuccess && (
 					<div className="mb-3 space-y-2 md:space-y-3 text-center">

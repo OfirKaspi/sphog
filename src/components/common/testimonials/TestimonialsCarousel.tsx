@@ -49,7 +49,7 @@ const TestimonialsCarousel = ({ testimonials }: TestimonialsCarouselProps) => {
                     <button
                         key={index}
                         onClick={() => emblaApi?.scrollTo(index)}
-                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${selectedIndex === index ? "bg-primary" : "bg-white"
+                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${selectedIndex === index ? "bg-cta" : "bg-pink-100"
                             }`}
                     />
                 ))}

@@ -9,20 +9,20 @@ interface TipsGridProps {
 }
 
 const TipsGrid = ({ tips }: TipsGridProps) => {
-  const { isMobile } = useResponsive()
+  const { isMobile, isTablet } = useResponsive()
 
   return (
-    <section className="max-w-screen-lg mx-auto space-y-10 md:space-y-24">
+    <section className="max-w-screen-lg mx-auto space-y-10 md:space-y-24 py-16 px-5">
       {tips.map((tip, idx) => {
         const isEven = idx % 2 === 0
 
         return (
           <div
             key={tip._id}
-            className={`flex flex-col sm:flex-row ${!isEven ? 'sm:flex-row-reverse' : ''} items-center gap-6 sm:gap-12`}
+            className={`flex flex-col md:flex-row ${!isEven ? 'md:flex-row-reverse' : ''} items-center gap-6 md:gap-12`}
           >
             {/* Mobile: Image with overlay and title */}
-            {isMobile ? (
+            {isMobile || isTablet ? (
               <div className="w-full space-y-5 border-b-2 pb-5">
                 <div className="relative w-full h-64 rounded-xl overflow-hidden">
                   <Image
@@ -52,7 +52,7 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
             ) : (
               <>
                 {/* Desktop: Image */}
-                <div className="w-full sm:w-1/2 h-64 sm:h-80 relative rounded-xl overflow-hidden">
+                <div className="w-full md:w-1/2 h-64 md:h-80 relative rounded-xl overflow-hidden">
                   <Image
                     src={tip.image.src}
                     alt={tip.image.alt}
@@ -61,7 +61,7 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                   />
                 </div>
                 {/* Desktop: Text */}
-                <div className="w-full sm:w-1/2 text-right space-y-4">
+                <div className="w-full md:w-1/2 text-right space-y-4">
                   <h3 className="text-4xl text-primary">{tip.title}</h3>
                   <p className="text-slate-900 leading-relaxed">
                     {tip.description}

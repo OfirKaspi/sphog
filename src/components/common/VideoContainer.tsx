@@ -9,7 +9,7 @@ const VideoContainer = ({ src, title, isPortrait }: VideoContainerProps) => {
     <div
       className={`w-full mx-auto ${isPortrait
           ? "aspect-[9/16] max-w-xs"
-          : "aspect-[16/9] max-w-2xl"
+          : "aspect-[16/9] md:max-w-4xl 2xl:max-w-screen-lg"
         } rounded-lg overflow-hidden shadow-lg`}
     >
       <iframe

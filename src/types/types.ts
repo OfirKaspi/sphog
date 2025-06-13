@@ -79,7 +79,7 @@ export interface Tip {
 
 export interface WorkshopData {
   title?: string;
-  description: string;
+  paragraphs: string[];
   image: Image;
   links?: LinkType[]; // Optional links for navigation
   scrollToForm?: boolean; // If true, scrolls to the form on the same page

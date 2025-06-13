@@ -1,9 +1,8 @@
 import PageHeader from "@/components/common/PageHeader";
 import Testimonials from "@/components/common/testimonials/Testimonials";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
-// import AboutMission from "@/components/pages/about/AboutMission";
-// import AboutValues from "@/components/pages/about/AboutValues";
 import AboutUs from "@/components/pages/home/AboutUs";
+import ShortsShowcase from "@/components/pages/home/ShortsShowcase";
 import getAboutData from "@/lib/api/aboutData";
 
 const About = () => {
@@ -11,10 +10,14 @@ const About = () => {
 
   return (
     <section>
-      <PageHeader {...data.header} />
-      <AboutUs {...data.aboutUs}/>
-      {/* <AboutMission {...data.aboutMission} />
-      <AboutValues {...data.aboutValues} /> */}
+      <PageHeader {...data.pageHeader} />
+      <div className="-mb-8">
+        <AboutUs
+          {...data.aboutUs}
+          isBgPrimary={false}
+        />
+      </div>
+      <ShortsShowcase {...data.shortsShowcase} isBgPrimary={false} />
       <Testimonials {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>
