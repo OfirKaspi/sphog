@@ -11,7 +11,7 @@ const getHomeData = () => {
             ctaText: "אני רוצה לשמוע עוד! ",
             // ctaLink: "https://wa.me/972526855222",
             image: {
-                src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747997793/sphog/glass-terrarium-with-succulents-and-greenery-free-png_hprg6n.webp",
+                src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%93%D7%A3_%D7%94%D7%91%D7%99%D7%AA_%D7%9B%D7%95%D7%AA%D7%A8%D7%AA_zq71wk.webp",
                 alt: "תמונה ראשית - טרריום"
             }
         },
@@ -32,7 +32,7 @@ const getHomeData = () => {
             media: {
                 type: "video",
                 alt: "YouTube Shorts",
-                src: "https://www.youtube.com/embed/5WsxxN3fet8",
+                src: "https://www.youtube.com/embed/Pk9U9fmXw88",
                 isPortrait: true
             }
         },
@@ -45,7 +45,7 @@ const getHomeData = () => {
                     "אז איזו סדנא מתאימה לכם?",
                 ],
                 image: {
-                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824381/sphog/5_qjkatd.jpg",
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%A1%D7%93%D7%A0%D7%90%D7%95%D7%AA_%D7%A7%D7%91%D7%95%D7%A6%D7%AA%D7%99%D7%95%D7%AA_%D7%A1%D7%93%D7%A0%D7%90_%D7%9E%D7%AA%D7%A7%D7%93%D7%9E%D7%AA_pdep3p.webp",
                     alt: "תמונה של סדנה פרטית"
                 },
                 links: [
@@ -198,6 +198,7 @@ const getHomeData = () => {
             isEnabled: true,
             title: "לקוחות ממליצים",
             testimonials: [
+                // NEED TO BE REPLACED 
                 {
                     name: "רוני אבירם",
                     quote: "האתר שלכם כל כך מזמין ונעים, ישר גורם לרצות להירשם לסדנה. אני לא זוכרת מתי בפעם האחרונה נתקלתי באתר כל כך מושקע, עם עיצוב שמרגיש אישי ומחבק. זה פשוט נותן תחושה של בית, וזה בדיוק מה שחיפשתי. תודה רבה לכם על ההשקעה והאכפתיות!",
@@ -207,6 +208,7 @@ const getHomeData = () => {
                         alt: "תמונה של רוני אבירם",
                     },
                 },
+                // NEED TO BE REPLACED 
                 {
                     name: "דניאל כהן",
                     quote: "אהבתי את הסדר והעיצוב. מרגיש מושקע ונגיש. כל פרט באתר הזה נראה כאילו הושקעה בו מחשבה רבה, וזה פשוט מדהים. אני חושב שזה אחד האתרים הכי טובים שראיתי מבחינת חוויית משתמש. כל כך קל למצוא את מה שאני מחפש, וזה פשוט תענוג. תודה על החוויה הנהדרת!",
@@ -216,6 +218,7 @@ const getHomeData = () => {
                         alt: "תמונה של דניאל כהן",
                     },
                 },
+                // NEED TO BE REPLACED 
                 {
                     name: "אנה טולדנו",
                     quote: "ברגע שנכנסתי הבנתי שזה המקום הנכון לי. אהבתי את האנרגיה! האתר הזה פשוט מדהים, ואני לא יכולה להפסיק להתרשם מהעיצוב ומהתוכן. זה מרגיש כאילו כל פרט כאן נוצר במיוחד בשבילי. אני כל כך שמחה שמצאתי אתכם, ואני בטוחה שאחזור שוב ושוב. תודה על הכל!",

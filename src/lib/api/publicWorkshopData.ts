@@ -17,18 +17,18 @@ const getPublicWorkshopData = () => {
                     "נצלול לעולם הירוק והקטיפתי של הטחב ונלמד כיצד לשלב אותו בטרריום שלנו ושישגשג לאורך זמן, יחד עם מגוון צמחים מיוחדים נלמד לעצב מיקרו-נוף ייחודי ונשלב מיניאטורות עבודת יד ליצירת פסל בוטני מלא בחיים שימלא אתכם ביופי, השראה ורוגע ויישאר איתכם לאורך זמן. מספר המקומות מוגבל ל-10 אנשים בסדנא.",
                 ],
                 image: {
-                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824381/sphog/5_qjkatd.jpg",
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%A1%D7%93%D7%A0%D7%90%D7%95%D7%AA_%D7%A7%D7%91%D7%95%D7%A6%D7%AA%D7%99%D7%95%D7%AA_%D7%A1%D7%93%D7%A0%D7%90_%D7%9E%D7%AA%D7%A7%D7%93%D7%9E%D7%AA_pdep3p.webp",
                     alt: "תמונה של סדנה פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
             },
             {
                 title: "טכניקות ייחודיות לעיצוב טרריום",
-                paragraphs:[
+                paragraphs: [
                     "הסדנאות מיועדות למי שרוצה להעמיק בטכניקות העיצוב של הטרריום ולקחת את היצירה שלו לרמה הבאה. בכל סדנא נצלול לטכניקה אחרת: טראסות ירוקות בהשראת שדות האורז של המזרח הרחוק, קיר צומח וירוק שמטפס על דופן הטרריום, עמוד אבנים פראי שממנו משתרגת צמחייה שופעת ועוד. מספר המקומות מוגבל ל-6 אנשים בסדנא.",
                 ],
                 image: {
-                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824381/sphog/5_qjkatd.jpg",
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893916/sphog/%D7%A1%D7%93%D7%A0%D7%90%D7%95%D7%AA_%D7%A7%D7%91%D7%95%D7%A6%D7%AA%D7%99%D7%95%D7%AA_%D7%98%D7%9B%D7%A0%D7%99%D7%A7%D7%95%D7%AA_%D7%99%D7%97%D7%95%D7%93%D7%99%D7%95%D7%AA_j6dihu.webp",
                     alt: "תמונה של סדנה פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
@@ -40,7 +40,7 @@ const getPublicWorkshopData = () => {
                     "מחפשים פעילות משפחתית מהנה ויצירתית? זאת ההזדמנות המושלמת לבלות זמן איכות עם הילדים והנכדים, להעשיר את הידע על עולם הצמחים, לבטא את היצירתיות המשפחתית ובסוף גם לקחת הביתה מזכרת ירוקה. בסדנא נעצב טרריום אישי ונשלב בו טחבים, צמחים ומיניאטורות עבודת יד. מספר המקומות מוגבל ל-10 אנשים בסדנא.",
                 ],
                 image: {
-                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747824381/sphog/5_qjkatd.jpg",
+                    src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%A1%D7%93%D7%A0%D7%90%D7%95%D7%AA_%D7%A7%D7%91%D7%95%D7%A6%D7%AA%D7%99%D7%95%D7%AA_%D7%A1%D7%93%D7%A0%D7%90_%D7%9E%D7%A9%D7%A4%D7%97%D7%AA%D7%99%D7%AA_%D7%A4%D7%A0%D7%99%D7%9D2_aicezg.webp",
                     alt: "תמונה של סדנה פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
@@ -75,30 +75,30 @@ const getPublicWorkshopData = () => {
             title: "לקוחות ממליצים",
             testimonials: [
                 {
-                    name: "רונית ברנס",
-                    quote: "האנרגיה במקום הייתה מדהימה, וגם למדתי המון על טרריום. האנרגיה במקום הייתה מדהימה, וגם למדתי המון על טרריום. האנרגיה במקום הייתה מדהימה, וגם למדתי המון על טרריום. האנרגיה במקום הייתה מדהימה, וגם למדתי המון על טרריום.",
-                    role: "משתתפת",
+                    name: "אריק מ.",
+                    quote: "היה מושלם! הסדנא הייתה מעניינת מאוד עניינית ומובנית. אייל מקסים, הסביר יפה מאוד על הכל. סה\"כ הייתה חוויה מטורפת שאנחנו עדיין לא מעכלים, ממש אוהבים את התוצאה שיצאה זה באמת מכניס את הטבע לבית ואנחנו ממש נהננו. תודה רבה לך על הסדנא המושלמת הזו 🙏",
+                    role: "3 חברים בסדנא קבוצתית",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379392/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.39_pugj7r.jpg",
-                        alt: "רונית ברנס",
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747934925/sphog/pngimg.com_-_calvin_klein_PNG19_wq3nnx.png",
+                        alt: "אריק מ.",
                     },
                 },
                 {
-                    name: "אלעד כהן",
-                    quote: "הגעתי לבד ויצאתי עם חברים חדשים וחוויה מיוחדת. הגעתי לבד ויצאתי עם חברים חדשים וחוויה מיוחדת. הגעתי לבד ויצאתי עם חברים חדשים וחוויה מיוחדת. הגעתי לבד ויצאתי עם חברים חדשים וחוויה מיוחדת.",
-                    role: "סטודנט",
+                    name: "דניאלה",
+                    quote: "היתה לנו סדנה מעולה! מאד מאד נהנינו ללמוד עם אייל את הבסיס פלוס פלוס וליצור איתו טרריומים שיצאו נפלא, ממש כמו שרצינו. אייל השקיע בנו והיה ממש כיף לעבוד איתו! מומלץ מאד מאד!",
+                    role: "זוג בסדנא קבוצתית",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379389/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.48.48_hajf4e.jpg",
-                        alt: "אלעד כהן",
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747934396/sphog/coco-cola_z07zef.avif",
+                        alt: "דניאלה",
                     },
                 },
                 {
-                    name: "שלי פרידמן",
-                    quote: "כל כך נהניתי, חוויה שמשאירה טעם של עוד! כל כך נהניתי, חוויה שמשאירה טעם של עוד! כל כך נהניתי, חוויה שמשאירה טעם של עוד! כל כך נהניתי, חוויה שמשאירה טעם של עוד!",
-                    role: "משתתפת בסדנה פתוחה",
+                    name: "אביעד",
+                    quote: "הסדנה הכי כיפית, מעשירה, אמנותית ובוטנית בכפפה אחת - תודה אייל על הידע, התשוקה לתחום המטריף הזה והטרריומים המופלאים שזכינו לחזור איתם, לביא לא מפסיק ללטף אותם 🤣. היה כיף, מחכים ויצירתי!",
+                    role: "אבא בסדנא משפחתית",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379391/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.25_exulqi.jpg",
-                        alt: "שלי פרידמן",
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747935364/sphog/download_kmg8nz.jpg",
+                        alt: "אביעד",
                     },
                 },
             ],

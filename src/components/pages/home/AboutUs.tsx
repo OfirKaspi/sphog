@@ -53,7 +53,7 @@ export default function AboutUs({
               alt={media.alt}
               width={1000}
               height={1000}
-              className="w-full h-full rounded-xl object-cover max-w-2xl mx-auto"
+              className="w-fit h-fit rounded-xl object-contain max-w-2xl max-h-[500px] mx-auto"
             />
           )}
         </div>
