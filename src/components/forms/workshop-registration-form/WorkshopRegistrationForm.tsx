@@ -136,7 +136,7 @@ export default function WorkshopRegistrationForm({
 
       <div className="grid gap-2">
         <Label htmlFor="calendar" className="text-base md:text-lg">
-          בחר תאריך
+          תאריך
         </Label>
         <Calendar
           mode="single"
@@ -153,7 +153,7 @@ export default function WorkshopRegistrationForm({
 
       <div className="grid gap-2">
         <Label htmlFor="selectedHour" className="text-base md:text-lg">
-          בחר שעה
+          שעה
         </Label>
         <Select
           dir="rtl"
@@ -165,7 +165,7 @@ export default function WorkshopRegistrationForm({
         >
           <SelectTrigger
             className="w-full md:text-lg">
-            <SelectValue placeholder="זמן פנוי" />
+            <SelectValue placeholder="זמן פעילות" />
           </SelectTrigger>
           <SelectContent className="md:text-lg">
             {hoursForSelectedDate.map((hour) => (

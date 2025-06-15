@@ -1,6 +1,6 @@
 import PageHeader from "@/components/common/PageHeader";
 import Testimonials from "@/components/common/testimonials/Testimonials";
-import WorkshopList from "@/components/common/WorkshopList";
+import VideoContainer from "@/components/common/VideoContainer";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
 import WorkshopRegistrationOpenForm from "@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm";
 import AboutUs from "@/components/pages/home/AboutUs";
@@ -12,18 +12,15 @@ const PrivateWorkshop = () => {
   return (
     <section>
       <PageHeader {...data.header} />
-      <AboutUs {...data.aboutUs} isBgPrimary={false} />
-      <WorkshopList workshops={data.workshopItems.map((workshop) => ({
-        ...workshop,
-        scrollToForm: true, // Enable scrollToForm for workshops on this page
-      }))} />
-      <div id="workshop-form">
-        <WorkshopRegistrationOpenForm
-          title={data.workshopFormData.header.title}
-          description={data.workshopFormData.header.description}
-          availableDates={data.workshopFormData.availableDates}
-        />
+      <div className="md:max-w-4xl 2xl:max-w-screen-lg px-5 pb-16 mx-auto">
+        <VideoContainer {...data.videoContainer} />
       </div>
+      <AboutUs {...data.aboutUs}/>
+      <WorkshopRegistrationOpenForm
+        title={data.workshopFormData.header.title}
+        description={data.workshopFormData.header.description}
+        availableDates={data.workshopFormData.availableDates}
+      />
       <Testimonials {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>

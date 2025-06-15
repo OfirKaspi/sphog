@@ -10,14 +10,10 @@ export interface AboutUsProps {
   media: Media;
   link?: LinkType;
   isBgPrimary?: boolean;
-  isDesktopColumn?: boolean; // New prop to control layout
-  isImageFirst?: boolean; // New prop to control image position
 }
 
 export default function AboutUs({
   isBgPrimary = true,
-  isDesktopColumn = true,
-  isImageFirst = true,
   title,
   paragraphs,
   media,
@@ -26,21 +22,11 @@ export default function AboutUs({
   return (
     <section className={`${isBgPrimary && "bg-primary text-white"}`}>
       <div
-        className={`grid gap-5 md:gap-10 items-center max-w-screen-lg mx-auto ${
-          isDesktopColumn ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"
-        } ${isBgPrimary ? "py-16 px-5" : "p-5"}`}
+        className={`grid gap-10 items-center max-w-screen-lg mx-auto md:grid-cols-[auto_1fr] ${
+          isBgPrimary ? "py-16 px-5" : "p-5"
+        }`}
       >
-        <div
-          className={`relative h-full w-full ${
-            isDesktopColumn
-              ? isImageFirst
-                ? "row-start-1"
-                : "row-start-2"
-              : isImageFirst
-              ? "md:col-start-1 md:row-start-1"
-              : "md:col-start-2 md:row-start-1"
-          }`}
-        >
+        <div className="relative h-full w-full order-last md:order-first">
           {media.type === "video" ? (
             <VideoContainer
               src={media.src}
@@ -57,17 +43,7 @@ export default function AboutUs({
             />
           )}
         </div>
-        <div
-          className={`flex flex-col justify-center max-w-2xl mx-auto ${
-            isDesktopColumn
-              ? isImageFirst
-                ? "row-start-2"
-                : "row-start-1"
-              : isImageFirst
-              ? "md:col-start-2 md:row-start-1"
-              : "md:col-start-1 md:row-start-1"
-          }`}
-        >
+        <div className="flex flex-col justify-center mx-auto">
           {title && (
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center md:text-start">
               {title}

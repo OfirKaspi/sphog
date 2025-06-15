@@ -8,7 +8,7 @@ export default function AboutMission({ title, subtitle, points }: Mission) {
       <div className="relative w-full h-72 md:h-96 rounded-xl overflow-hidden shadow-lg">
         <Image
           src="https://res.cloudinary.com/dudwjf2pu/image/upload/v1747811095/sphog/workshop1_xqufgq.jpg"
-          alt="סדנה עם אנשים יוצרים"
+          alt="סדנא עם אנשים יוצרים"
           fill
           className="object-cover"
         />

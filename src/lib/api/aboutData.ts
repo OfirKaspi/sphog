@@ -10,7 +10,7 @@ const getAboutData = () => {
         //         "ליצור חוויות יצירתיות ושקטות שמאפשרות לאנשים להתנתק מהשגרה.",
         //         "לחבר בין אנשים דרך עשייה משותפת, חיבור לטבע ויצירה אישית.",
         //         "להנגיש כלים פשוטים שמזמינים ביטוי עצמי, רוגע וצמיחה אישית.",
-        //         "לקדם תרבות של קהילה, מקצועיות, איכות ויחס אישי בכל סדנה."
+        //         "לקדם תרבות של קהילה, מקצועיות, איכות ויחס אישי בכל סדנא."
         //     ]
         // },
         // aboutValues: {
@@ -30,46 +30,43 @@ const getAboutData = () => {
         //         },
         //         {
         //             title: "מקצועיות",
-        //             description: "הצוות שלנו מלווה כל סדנה בידע, ניסיון ותשומת לב אישית."
+        //             description: "הצוות שלנו מלווה כל סדנא בידע, ניסיון ותשומת לב אישית."
         //         }
         //     ]
         // },
         openForm: {
-            title: "מעוניינים בסדנה מותאמת אישית?",
+            title: "מעוניינים בסדנא מותאמת אישית?",
             description: "מלאו את הפרטים ונחזור אליכם בהקדם.",
         },
         testimonials: {
             title: "לקוחות ממליצים",
             testimonials: [
-                // NEED TO BE REPLACED 
                 {
-                    name: "דנה לוי",
-                    quote: "הסדנה הייתה מדהימה! התחברתי לטבע, הרגשתי חופשית ויצירתית. חוויה מרגיעה ובלתי נשכחת. זו הייתה הזדמנות להתחבר לעצמי ולסביבה בצורה שלא חוויתי בעבר. כל רגע היה מלא בהשראה, והצוות היה קשוב ומקצועי. אני ממליצה לכל אחד לנסות את החוויה הזו, כי היא באמת משנה חיים. תודה על רגעים קסומים של יצירה, חיבור ושקט פנימי.",
-                    role: "משתתפת בסדנת טרריום",
+                    name: "אריק מ.",
+                    quote: "היה מושלם! הסדנא הייתה מעניינת מאוד עניינית ומובנית. אייל מקסים, הסביר יפה מאוד על הכל. סה\"כ הייתה חוויה מטורפת שאנחנו עדיין לא מעכלים, ממש אוהבים את התוצאה שיצאה זה באמת מכניס את הטבע לבית ואנחנו ממש נהננו. תודה רבה לך על הסדנא המושלמת הזו 🙏",
+                    role: "3 חברים בסדנא קבוצתית",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379392/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.39_pugj7r.jpg",
-                        alt: "תמונה של דנה לוי"
-                    }
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
+                        alt: "אריק מ.",
+                    },
                 },
-                // NEED TO BE REPLACED 
                 {
-                    name: "נועה ברק",
-                    quote: "חוויה מרגשת עם צוות מקצועי ומקום קסום. ממליצה בחום לכל מי שמחפש רגע של שקט. הסדנה הייתה מעבר לציפיות שלי, עם אווירה מיוחדת שמזמינה רוגע ויצירתיות. הרגשתי שאני יכולה להתנתק מהשגרה ולהתחבר לעצמי בצורה עמוקה. הצוות היה מדהים, והחומרים היו איכותיים ומעוררי השראה. אני בטוחה שאחזור שוב לחוות את הקסם הזה.",
-                    role: "מנהלת משאבי אנוש",
+                    name: "יועד",
+                    quote: "אייל מקצוען וספוג מדהימים תודה רבה על סדנא מארץ האגדות לכל חובב טבע!!! הצוות נהנה מאוד.",
+                    role: "סדנת צוות",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379392/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.49_zblyoi.jpg",
-                        alt: "תמונה של נועה ברק"
-                    }
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749924324/sphog/%D7%9E%D7%9E%D7%9C%D7%99%D7%A6%D7%99%D7%9D_pqpcve.webp",
+                        alt: "יועד",
+                    },
                 },
-                // NEED TO BE REPLACED 
                 {
-                    name: "גלית כהן",
-                    quote: "לא ציפיתי שזה ישפיע עליי כל כך. סדנה מושקעת ומרגיעה שהשפיעה עליי גם אחרי שהסתיימה. זו הייתה חוויה יוצאת דופן שהשאירה בי תחושה של שלווה והשראה. כל פרט היה מתוכנן בקפידה, והאווירה הייתה כל כך נעימה ומרגיעה. אני מרגישה שהסדנה הזו נתנה לי כלים להתמודדות עם השגרה בצורה טובה יותר. תודה על חוויה בלתי נשכחת שממשיכה ללוות אותי גם היום.",
-                    role: "מטפלת רגשית",
+                    name: "דניאלה",
+                    quote: "היתה לנו סדנא מעולה! מאד מאד נהנינו ללמוד עם אייל את הבסיס פלוס פלוס וליצור איתו טרריומים שיצאו נפלא, ממש כמו שרצינו. אייל השקיע בנו והיה ממש כיף לעבוד איתו! מומלץ מאד מאד!",
+                    role: "זוג בסדנא קבוצתית",
                     image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1734379391/Let%27s%20Garden/WhatsApp_Image_2024-12-16_at_21.49.25_exulqi.jpg",
-                        alt: "תמונה של גלית כהן"
-                    }
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
+                        alt: "דניאלה",
+                    },
                 },
             ]
         },
@@ -84,7 +81,7 @@ const getAboutData = () => {
             media: {
                 type: "image",
                 src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893918/sphog/%D7%A9%D7%9E%D7%97%D7%99%D7%9D_%D7%9C%D7%94%D7%9B%D7%99%D7%A8_%D7%90%D7%AA%D7%9B%D7%9D_%D7%9E%D7%99_%D7%90%D7%A0%D7%97%D7%A0%D7%95_ngbq8s.webp",
-                alt: "צוות SPHOG בסדנה",
+                alt: "צוות SPHOG בסדנא",
                 isPortrait: false,
             },
         },

@@ -12,7 +12,7 @@ const MONDAY_GROUP_ID = process.env.MONDAY_GROUP_ID!;
 const leadSchema = z.object({
   fullName: z.string().nonempty("נדרש שם מלא."),
   phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
-  topic: z.enum(["סדנה פרטית", "הצטרפות לסדנה קבוצתית", "קניית טרריום", "אחר"]),
+  topic: z.enum(["סדנא פרטית", "הצטרפות לסדנא קבוצתית", "קניית טרריום", "אחר"]),
   details: z.string().optional(),
 });
 
@@ -27,8 +27,8 @@ const sanitize = (val: string) =>
 
 // ✅ Topic mapping
 const topicMapping: Record<string, string> = {
-  "סדנה פרטית": "Private",
-  "הצטרפות לסדנה קבוצתית": "Adults",
+  "סדנא פרטית": "Private",
+  "הצטרפות לסדנא קבוצתית": "Adults",
   "קניית טרריום": "Buy",
   "אחר": "",
 };

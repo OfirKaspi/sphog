@@ -32,7 +32,7 @@ const ShortsShowcase = ({
                   <ul className="space-y-2 py-4">
                     {points && points.map((point, idx) => (
                       <li key={idx} className="flex items-start gap-3">
-                        <LucideLeaf className="text-cta-foreground w-5 h-5 mt-1 shrink-0 stroke-[3px]" />
+                        <LucideLeaf className="w-5 h-5 mt-1 shrink-0 stroke-[3px]" />
                         <span>{point}</span>
                       </li>
                     ))}

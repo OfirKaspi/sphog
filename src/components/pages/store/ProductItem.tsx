@@ -68,11 +68,11 @@ const ProductItem = ({ product }: ProductItemProps) => {
 						<div>
 							{product.originalPrice && (
 								<span className="text-lg font-medium text-gray-500 line-through block">
-									₪{product.originalPrice.toFixed(2)}
+									₪{product.originalPrice.toFixed(0)}
 								</span>
 							)}
 							<span className="text-xl font-bold text-cta">
-								₪{product.price.toFixed(2)}
+								₪{product.price.toFixed(0)}
 							</span>
 						</div>
 					</div>
