@@ -29,6 +29,7 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                     src={tip.image.src}
                     alt={tip.image.alt}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -57,6 +58,7 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                     src={tip.image.src}
                     alt={tip.image.alt}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
                   />
                 </div>

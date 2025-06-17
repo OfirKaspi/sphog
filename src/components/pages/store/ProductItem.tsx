@@ -20,13 +20,14 @@ const ProductItem = ({ product }: ProductItemProps) => {
 			<div
 				className="flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow duration-200 bg-white dark:bg-gray-900 cursor-pointer overflow-hidden"
 				onClick={() => setSelectedImage(product.image.src)}
+				aria-label={`View details for ${product.name}`}
 			>
 				{/* Stock Indicator */}
 				<div className="absolute top-2 left-2 z-30 px-3 py-2 rounded-md overflow-hidden text-sm font-bold">
 					{product.isInStock ? (
-						<span className="bg-cta text-white px-2 py-1 rounded-md">במלאי</span>
+						<span className="bg-cta text-white px-2 py-1 rounded-md" aria-label="In stock">במלאי</span>
 					) : (
-						<span className="bg-gray-500 text-white px-2 py-1 rounded-md">לא במלאי</span>
+						<span className="bg-gray-500 text-white px-2 py-1 rounded-md" aria-label="Out of stock">לא במלאי</span>
 					)}
 				</div>
 
@@ -67,24 +68,29 @@ const ProductItem = ({ product }: ProductItemProps) => {
 					<div className="mt-4 flex justify-between items-center">
 						<div>
 							{product.originalPrice && (
-								<span className="text-lg font-medium text-gray-500 line-through block">
+								<span
+									className="text-lg font-medium text-gray-500 line-through block"
+									aria-label={`Original price: ₪${product.originalPrice.toFixed(0)}`}
+								>
 									₪{product.originalPrice.toFixed(0)}
 								</span>
 							)}
-							<span className="text-xl font-bold text-cta">
+							<span
+								className="text-xl font-bold text-cta"
+								aria-label={`Current price: ₪${product.price.toFixed(0)}`}
+							>
 								₪{product.price.toFixed(0)}
 							</span>
 						</div>
 					</div>
 				</div>
-
-				{/* CUSTOM MODAL */}
 			</div>
 			{selectedImage && (
 				<CustomModal isOpen={!!selectedImage} onClose={() => setSelectedImage(null)}>
 					<button
-						className="absolute top-2 left-2 text-white bg-black/50 hover:bg-black/80 rounded-full p-1 z-10"
+						className="absolute top-2 left-2 text-white bg-black/50 hover:bg-black/80 rounded-full p-3 z-10"
 						onClick={() => setSelectedImage(null)}
+						aria-label="Close image preview"
 					>
 						<X className="w-5 h-5" />
 					</button>

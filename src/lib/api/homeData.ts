@@ -32,7 +32,7 @@ const getHomeData = () => {
             media: {
                 type: "video",
                 alt: "YouTube Shorts",
-                src: "https://www.youtube.com/embed/Pk9U9fmXw88",
+                src: "https://www.youtube-nocookie.com/embed/Pk9U9fmXw88",
                 isPortrait: true
             }
         },

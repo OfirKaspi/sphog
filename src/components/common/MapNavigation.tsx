@@ -38,7 +38,9 @@ const MapNavigation = () => {
 						src={`/maps/${button.image.src}`}
 						alt={button.image.alt}
 						className="object-contain"
-						fill
+						height={40}
+						width={40}
+						sizes="40px"
 					/>
 				</button>
 			))}

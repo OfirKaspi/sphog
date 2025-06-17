@@ -1,12 +1,13 @@
-import "@/styles/globals.css";
+import '@/styles/globals.css'
 import { Analytics } from '@vercel/analytics/react';
 import Footer from "@/components/layout/Footer";
 import AccessibilityWidget from "@/components/legal/AccessibilityWidget";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
-import { CONFIG } from "@/config/config";
-import Script from "next/script";
+// import { CONFIG } from "@/config/config";
+// import Script from "next/script";
 import GAListener from "@/components/common/GAListener";
 import Navbar from "@/components/layout/Navbar";
+import CookieNotice from "@/components/legal/CookieNotice";
 
 // MUST CHANGE DETAILS, IMAGES, OR ANYTHING RELEVANT + FONTS
 const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
@@ -36,11 +37,11 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
         <meta property="og:locale" content="he_IL" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
-        <meta property="og:url" content="https://sphog.vercel.app" />
-        <meta name="twitter:card" content="https://sphog.vercel.app/og-image.png" />
+        <meta property="og:url" content="https://sphogmoss.com" />
+        <meta name="twitter:card" content="https://sphogmoss.com/og-image.png" />
         
         {/* NEED TO BE CHANGED IN PRODUCTION */}
-        <link rel="canonical" href="https://sphog.vercel.app" />
+        <link rel="canonical" href="https://sphogmoss.com" />
         <link
           rel="icon"
           href="/logo.png"
@@ -51,7 +52,7 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
           href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap"
           rel="stylesheet"
         /> */}
-        <Script
+        {/* <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${CONFIG.GOOGLE_ANALYTICS_ID}`}
           strategy="afterInteractive"
         />
@@ -62,15 +63,16 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
             gtag('js', new Date());
             gtag('config', '${CONFIG.GOOGLE_ANALYTICS_ID}');
           `}
-        </Script>
+        </Script> */}
       </head>
-      <body className="antialiased bg-background text-text">
+      <body className="antialiased bg-background text-text font-fredoka">
         <Navbar />
         {children}
         <Footer />
         <WhatsAppButton />
         <AccessibilityWidget />
 
+        <CookieNotice/> 
         <GAListener />
         <Analytics />
       </body>

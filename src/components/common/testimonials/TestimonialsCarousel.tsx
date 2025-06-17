@@ -44,13 +44,14 @@ const TestimonialsCarousel = ({ testimonials }: TestimonialsCarouselProps) => {
             </div>
 
             {/* Dots */}
-            <div className="flex justify-center mt-4 gap-2">
+            <div className="flex justify-center mt-4 gap-4">
                 {testimonials.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => emblaApi?.scrollTo(index)}
-                        className={`w-3 h-3 rounded-full transition-colors duration-300 ${selectedIndex === index ? "bg-cta" : "bg-pink-100"
+                        className={`w-6 h-6 rounded-full transition-colors duration-300 ${selectedIndex === index ? "bg-cta" : "bg-pink-100"
                             }`}
+                        aria-label={`Go to testimonial ${index + 1}`}
                     />
                 ))}
             </div>

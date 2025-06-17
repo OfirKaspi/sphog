@@ -36,7 +36,7 @@ const getPrivateWorkshopData = () => {
             ],
         },
         videoContainer: {
-            src: "https://www.youtube.com/embed/CxigKY9VeDo",
+            src: "https://www.youtube-nocookie.com/embed/CxigKY9VeDo",
             title: "YouTube Shorts Video",
             isPortrait: false,
         },

@@ -12,7 +12,7 @@ const getTipsData = () => {
       description: "רוצים להתחיל להכין טרריום ולא בטוחים באיזה כלים להשתמש? בסרטון הזה אני מסביר על הכלים הבסיסיים שכל יוצר טרריום צריך להכיר",
       media: {
         type: "video",
-        src: "https://www.youtube.com/embed/hU1ATfaRyQg",
+        src: "https://www.youtube-nocookie.com/embed/hU1ATfaRyQg",
         alt: "YouTube Shorts Video",
         isPortrait: false,
       },

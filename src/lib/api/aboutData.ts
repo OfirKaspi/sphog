@@ -92,7 +92,7 @@ const getAboutData = () => {
             ],
             media: {
                 type: "video",
-                src: "https://www.youtube.com/embed/5WsxxN3fet8",
+                src: "https://www.youtube-nocookie.com/embed/5WsxxN3fet8",
                 alt: "YouTube Shorts Video",
                 isPortrait: true,
             },
