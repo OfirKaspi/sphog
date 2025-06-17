@@ -85,7 +85,6 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
 
   return (
     <form className="grid gap-4 py-4 text-base md:text-lg" onSubmit={handleSubmit}>
-      {responseError && <p className="text-red-600 text-base">{responseError}</p>}
 
       <div className="grid grid-cols-4 items-center gap-2">
         <Label htmlFor="fullName" className="text-base md:text-lg">שם מלא</Label>
@@ -133,8 +132,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           <option value="" disabled>
             בחר נושא
           </option>
-          <option value="סדנא פרטית">סדנא פרטית</option>
-          <option value="הצטרפות לסדנא קבוצתית">הצטרפות לסדנא קבוצתית</option>
+          <option value="סדנה פרטית">סדנה פרטית</option>
+          <option value="הצטרפות לסדנה קבוצתית">הצטרפות לסדנה קבוצתית</option>
           <option value="קניית טרריום">קניית טרריום</option>
           <option value="אחר">אחר</option>
         </select>
@@ -155,6 +154,11 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           }
         />
       </div>
+
+
+      {responseError &&
+        <p className="text-red-600 font-bold">{responseError}</p>
+      }
 
       <Button type="submit" className="w-full bg-cta hover:bg-cta-foreground text-base md:text-lg font-bold" disabled={loading}>
         {loading ? "שולח..." : "שלח"}

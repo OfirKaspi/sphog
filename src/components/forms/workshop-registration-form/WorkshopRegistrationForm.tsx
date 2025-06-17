@@ -130,10 +130,6 @@ export default function WorkshopRegistrationForm({
       onSubmit={handleSubmit}
       className="grid gap-4 py-4 text-base md:text-lg"
     >
-      {responseError && (
-        <p className="text-red-600 text-base">{responseError}</p>
-      )}
-
       <div className="grid gap-2">
         <Label htmlFor="calendar" className="text-base md:text-lg">
           תאריך
@@ -146,9 +142,6 @@ export default function WorkshopRegistrationForm({
           }
           disabled={disableUnlistedDates}
         />
-        {errors.selectedDate && (
-          <p className="text-red-600 text-base">{errors.selectedDate}</p>
-        )}
       </div>
 
       <div className="grid gap-2">
@@ -216,6 +209,10 @@ export default function WorkshopRegistrationForm({
           <p className="text-red-600 text-base">{errors.phoneNumber}</p>
         )}
       </div>
+
+      {responseError && (
+        <p className="text-red-600 font-bold">{responseError}</p>
+      )}
 
       <Button
         type="submit"
