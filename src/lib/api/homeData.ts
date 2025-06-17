@@ -80,28 +80,6 @@ const getHomeData = () => {
                     },
                     description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
                 },
-                {
-                    _id: 10,
-                    name: "טרריום למכירה",
-                    price: 1000,
-                    isInStock: true,
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg",
-                        alt: "תמונה של טרריום"
-                    },
-                    description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
-                },
-                {
-                    _id: 110,
-                    name: "טרריום למכירה",
-                    price: 1000,
-                    isInStock: true,
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg",
-                        alt: "תמונה של טרריום"
-                    },
-                    description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
-                },
             ]
         },
         tipsSection: {
