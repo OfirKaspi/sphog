@@ -5,7 +5,7 @@ import CTAButton from "@/components/common/CTAButton";
 
 interface StoreTeaserProps {
     title: string;
-    link: LinkType,
+    link?: LinkType,
     products: Product[];
 }
 
@@ -22,13 +22,15 @@ export default function StoreTeaser({ products, title, link }: StoreTeaserProps)
                     ))}
                 </div>
 
-                <div className="text-center mt-12">
-                    <Link href={link.href}>
-                        <CTAButton>
-                            {link.text}
-                        </CTAButton>
-                    </Link>
-                </div>
+                {link && (
+                    <div className="text-center mt-12">
+                        <Link href={link.href}>
+                            <CTAButton>
+                                {link.text}
+                            </CTAButton>
+                        </Link>
+                    </div>
+                )}
             </div>
         </section>
     );

@@ -8,7 +8,7 @@ const getHomeData = () => {
                 "הצטרפו לעולם הקסום של הטרריום! ",
                 "בואו לחוויה יצירתית, מרגיעה ומהנה ותבראו עולם ירוק שהוא כולו שלכם. וגם מבחר של טרריומים בעיצוב אמן לרכישה.",
             ],
-            ctaText: "אני רוצה לשמוע עוד! ",
+            // ctaText: "אני רוצה לשמוע עוד! ",
             // ctaLink: "https://wa.me/972526855222",
             image: {
                 src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%93%D7%A3_%D7%94%D7%91%D7%99%D7%AA_%D7%9B%D7%95%D7%AA%D7%A8%D7%AA_zq71wk.webp",
@@ -64,13 +64,35 @@ const getHomeData = () => {
         storeTeaser: {
             isEnabled: true,
             title: "הצצה לחנות",
-            link: {
-                text: "מעבר לחנות",
-                href: "/store"
-            },
+            // link: {
+            //     text: "מעבר לחנות",
+            //     href: "/store"
+            // },
             products: [
                 {
                     _id: 9,
+                    name: "טרריום למכירה",
+                    price: 1000,
+                    isInStock: false,
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg",
+                        alt: "תמונה של טרריום"
+                    },
+                    description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
+                },
+                {
+                    _id: 10,
+                    name: "טרריום למכירה",
+                    price: 1000,
+                    isInStock: true,
+                    image: {
+                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg",
+                        alt: "תמונה של טרריום"
+                    },
+                    description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
+                },
+                {
+                    _id: 110,
                     name: "טרריום למכירה",
                     price: 1000,
                     isInStock: true,
@@ -180,7 +202,7 @@ const getHomeData = () => {
                 {
                     name: "קרן",
                     quote: "איזה חוויה מדהימה! אחת החוויות הכי מרתקות ויצירתיות שעברתי. סדנא מקצועית, מושקעת ומלאה באווירה נעימה ומפרגנת. כל שלב לווה בהסברים ברורים וטיפים קטנים שעושים הבדל גדול. תשומת הלב האישית והאווירה האינטימית איפשרה שפע של זמן לשאלות והתנסות מעשית אמיתית כשאייל מדריך ומכוון לאורך כל הדרך. חזרתי הביתה עם טרריום עוצר נשימה ועם כלים ורעיונות חדשים להמשך היצירה. ממליצה בחום!",
-                    role: "סדנא מקצועית",
+                    role: "משתתפת בסדנא קבוצתית",
                     image: {
                         src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
                         alt: "תמונה של קרן",

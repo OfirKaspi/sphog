@@ -1,4 +1,31 @@
 const getPrivateWorkshopData = () => {
+    const generateDates = () => {
+        const excludedDates = ["2025-06-27", "2025-07-11", "2025-08-01"];
+        const dates = [];
+        const startDate = new Date("2025-06-19");
+        const endDate = new Date("2025-12-31");
+
+        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+            const day = d.getDay(); // 0 = Sunday, 6 = Saturday
+            const formattedDate = d.toISOString().split("T")[0];
+
+            if (day !== 6 && !excludedDates.includes(formattedDate)) {
+                if (day === 5) {
+                    // Fridays
+                    dates.push({ date: new Date(formattedDate), hours: ["11:00-14:00"] });
+                } else {
+                    // Weekdays
+                    dates.push({
+                        date: new Date(formattedDate),
+                        hours: ["11:00-14:00", "14:30-17:30", "18:30-21:30"],
+                    });
+                }
+            }
+        }
+
+        return dates;
+    };
+
     const data = {
         header: {
             title: "רוצים לתאם סדנא רק עבורכם?",
@@ -70,25 +97,7 @@ const getPrivateWorkshopData = () => {
                 title: "סדנא פרטית",
                 description: "בחר תאריך ושעה לסדנא פרטית מותאמת אישית.",
             },
-            availableDates: [
-                { date: new Date("2025-06-12"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-13"), hours: ["09:00-10:00", "13:00-14:00"] },
-                { date: new Date("2025-06-15"), hours: ["11:00-12:00", "15:00-16:00"] },
-                { date: new Date("2025-06-16"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-17"), hours: ["09:00-10:00", "13:00-14:00"] },
-                { date: new Date("2025-06-18"), hours: ["11:00-12:00", "15:00-16:00"] },
-                { date: new Date("2025-06-19"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-20"), hours: ["09:00-10:00", "13:00-14:00"] },
-                { date: new Date("2025-06-21"), hours: ["11:00-12:00", "15:00-16:00"] },
-                { date: new Date("2025-06-22"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-23"), hours: ["09:00-10:00", "13:00-14:00"] },
-                { date: new Date("2025-06-24"), hours: ["11:00-12:00", "15:00-16:00"] },
-                { date: new Date("2025-06-25"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-26"), hours: ["09:00-10:00", "13:00-14:00"] },
-                { date: new Date("2025-06-27"), hours: ["11:00-12:00", "15:00-16:00"] },
-                { date: new Date("2025-06-28"), hours: ["10:00-11:00", "14:00-15:00"] },
-                { date: new Date("2025-06-29"), hours: ["09:00-10:00", "13:00-14:00"] },
-            ],
+            availableDates: generateDates(),
         },
         testimonials: {
             title: "לקוחות ממליצים",
@@ -131,4 +140,4 @@ const getPrivateWorkshopData = () => {
     return data
 }
 
-export default getPrivateWorkshopData
+export default getPrivateWorkshopData;

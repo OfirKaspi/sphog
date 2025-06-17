@@ -25,7 +25,7 @@ export const CONFIG = {
   phoneNumber: "0547256800",
   contactEmail: "sphogmoss@gmail.com",
   contactAddress: "התחייה 16, תל אביב, ישראל",
-  lat: 32.050030,
-  lng: 34.763215,
+  lat: 32.0498611,
+  lng: 34.7628056,
   year: 2025,
 };

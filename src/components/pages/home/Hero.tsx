@@ -1,13 +1,13 @@
 import Image from "next/image"
-import { CONFIG } from "@/config/config"
 import CTAButton from "@/components/common/CTAButton"
 import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetailsFormDialog"
+import { getWhatsappLink } from "@/utils/getWhatsappLink"
 
 interface HeroProps {
     title: string
     subtitle: string
     paragraphs: string[]
-    ctaText: string
+    ctaText?: string
     ctaLink?: string
     image: {
         src: string
@@ -17,8 +17,7 @@ interface HeroProps {
 
 const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: HeroProps) => {
 
-    const { whatsappNumber } = CONFIG
-    const whatsappUrl = `https://wa.me/${whatsappNumber}`;
+    const whatsappUrl = getWhatsappLink();
 
     return (
         <section dir="rtl" className="w-full -mt-20 px-5 pt-32 md:pt-36 pb-12 md:pb-16 bg-gradient-to-tr from-green-100 via-background to-green-50 text-slate-900 relative overflow-hidden">
@@ -49,18 +48,20 @@ const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: Her
                             <p key={index}>{paragraph}</p>
                         ))}
                     </div>
-                    {ctaLink ? (
-                        <a
-                            href={ctaLink ? ctaLink : whatsappUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <CTAButton>
-                                {ctaText}
-                            </CTAButton>
-                        </a>
-                    ) : (
-                        <LeaveDetailsDialog text={ctaText} />
+                    {ctaText && (
+                        ctaLink ? (
+                            <a
+                                href={ctaLink ? ctaLink : whatsappUrl || "/"}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <CTAButton>
+                                    {ctaText}
+                                </CTAButton>
+                            </a>
+                        ) : (
+                            <LeaveDetailsDialog text={ctaText} />
+                        )
                     )}
                 </div>
             </div>

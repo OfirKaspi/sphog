@@ -31,8 +31,8 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <h3 className="text-white text-xl text-center mx-4 pb-2 leading-snug border-b-2 w-fit">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <h3 className="text-white text-xl text-center rounded-lg px-4 py-2 leading-snug w-fit bg-black/70">
                       {tip.title}
                     </h3>
                   </div>

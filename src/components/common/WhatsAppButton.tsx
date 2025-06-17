@@ -3,15 +3,14 @@
 import { useEffect, useState } from "react";
 import { useDraggable } from "@/hooks/useDraggable";
 import { MessageCircle, Phone } from "lucide-react";
-import { CONFIG } from "@/config/config";
 import useResponsive from "@/hooks/useResponsive";
 import { redirectToPlatform } from "@/utils/redirectToPlatform";
+import { getWhatsappLink } from "@/utils/getWhatsappLink";
 
 const WhatsAppButton = () => {
   const size = 48;
 
-  const phoneNumber = CONFIG.whatsappNumber;
-  const whatsappUrl = `https://wa.me/${phoneNumber}`;
+  const whatsappUrl = getWhatsappLink();
 
   /**
    * Initial position of the button (bottom-right corner).
@@ -44,6 +43,7 @@ const WhatsAppButton = () => {
   if (!position) return null;
 
   const handleClick = () => {
+    if (!whatsappUrl) return;
     redirectToPlatform(whatsappUrl, wasDragged.current)
   };
 
