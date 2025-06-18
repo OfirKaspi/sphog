@@ -25,8 +25,7 @@ export function useDraggable({
 
   useEffect(() => {
     if (!initialPosition) return;
-    const safeY = window.innerHeight - size - padding;
-    setPosition({ x: initialPosition.x, y: safeY });
+    setPosition(initialPosition)
   }, [initialPosition, size, padding]);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLElement>) => {

@@ -8,22 +8,26 @@ import { redirectToPlatform } from "@/utils/redirectToPlatform";
 import { getWhatsappLink } from "@/utils/getWhatsappLink";
 
 const WhatsAppButton = () => {
-  const size = 48;
+  const size = 52;
 
   const whatsappUrl = getWhatsappLink();
 
   /**
    * Initial position of the button (bottom-right corner).
    * Set only on client after layout is ready.
-  */
+   */
   const [initialPosition, setInitialPosition] = useState<{ x: number; y: number } | null>(null);
 
-  const { isDesktop } = useResponsive()
+  const { isDesktop } = useResponsive();
 
   useEffect(() => {
     const padding = isDesktop ? 16 : 8;
+    const cookieNoticeHeight = localStorage.getItem("cookie-consent")
+      ? 0 // If cookie consent is already accepted, no adjustment needed
+      : document.querySelector(".cookie-notice")?.clientHeight || 0; // Get the height of the CookieNotice if visible
+
     const x = window.innerWidth - size - padding;
-    const y = window.innerHeight - size - 8;
+    const y = window.innerHeight - size - cookieNoticeHeight - 8; // Adjust position based on CookieNotice height
     setInitialPosition({ x, y });
   }, [isDesktop]);
 
@@ -44,7 +48,7 @@ const WhatsAppButton = () => {
 
   const handleClick = () => {
     if (!whatsappUrl) return;
-    redirectToPlatform(whatsappUrl, wasDragged.current)
+    redirectToPlatform(whatsappUrl, wasDragged.current);
   };
 
   return (
@@ -52,8 +56,8 @@ const WhatsAppButton = () => {
       onMouseDown={handleMouseDown}
       onTouchStart={handleTouchStart}
       className={`fixed z-50 rounded-full 
-        ${isDragging ? "" : "transition-all duration-500 ease-out"
-        } ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        ${isDragging ? "" : "transition-all duration-500 ease-out"} 
+        ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
       style={{
         left: position.x,
         top: position.y,

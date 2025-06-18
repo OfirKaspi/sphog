@@ -39,10 +39,6 @@ const nextConfig: NextConfig = {
           {
             key: "X-Frame-Options",
             value: "DENY"
-          },
-          {
-            key: "Cache-Control", // Add Cache-Control header
-            value: "public, max-age=31536000, immutable"
           }
         ]
       }

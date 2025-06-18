@@ -40,7 +40,7 @@ const toggleSettings = [
 ] as const;
 
 export default function AccessibilityWidget() {
-	const size = 48;
+	const size = 52;
 	const [initialPosition, setInitialPosition] = useState<{ x: number; y: number } | null>(null);
 	const [settings, setSettings] = useState<AccessibilitySettings>(() => {
 		if (typeof window !== "undefined") {
@@ -54,11 +54,24 @@ export default function AccessibilityWidget() {
 	const overlayRef = useRef<HTMLDivElement>(null);
 
 	// Set initial position of the draggable button (bottom-left)
+	// Set initial position of the draggable button (bottom-left)
 	useEffect(() => {
-		const x = 8;
-		const y = window.innerHeight - size - 8;
-		setInitialPosition({ x, y });
-	}, []);
+		const timeout = setTimeout(() => {
+		  const cookieNoticeHeight = localStorage.getItem("cookie-consent")
+			? 0
+			: document.querySelector(".cookie-notice")?.clientHeight || 0;
+	  
+		  const x = 8;
+		  const y = window.innerHeight - size - cookieNoticeHeight - 8;
+		  setInitialPosition({ x, y });
+	  
+		  console.log("Final Y:", y);
+		}, 0); // next tick
+	  
+		return () => clearTimeout(timeout);
+	  }, []);
+	  
+
 
 	const { position, handleMouseDown, handleTouchStart, wasDragged, isDragging } = useDraggable({
 		size,
