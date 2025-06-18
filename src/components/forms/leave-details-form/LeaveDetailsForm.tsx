@@ -132,8 +132,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
           <option value="" disabled>
             בחר נושא
           </option>
-          <option value="סדנה פרטית">סדנה פרטית</option>
-          <option value="הצטרפות לסדנה קבוצתית">הצטרפות לסדנה קבוצתית</option>
+          <option value="סדנא פרטית">סדנא פרטית</option>
+          <option value="הצטרפות לסדנא קבוצתית">הצטרפות לסדנא קבוצתית</option>
           <option value="קניית טרריום">קניית טרריום</option>
           <option value="אחר">אחר</option>
         </select>
