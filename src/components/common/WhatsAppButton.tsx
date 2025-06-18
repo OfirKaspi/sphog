@@ -21,15 +21,21 @@ const WhatsAppButton = () => {
   const { isDesktop } = useResponsive();
 
   useEffect(() => {
-    const padding = isDesktop ? 16 : 8;
-    const cookieNoticeHeight = localStorage.getItem("cookie-consent")
-      ? 0 // If cookie consent is already accepted, no adjustment needed
-      : document.querySelector(".cookie-notice")?.clientHeight || 0; // Get the height of the CookieNotice if visible
+    const timeout = setTimeout(() => {
 
-    const x = window.innerWidth - size - padding;
-    const y = window.innerHeight - size - cookieNoticeHeight - 8; // Adjust position based on CookieNotice height
-    setInitialPosition({ x, y });
+      const padding = isDesktop ? 16 : 8;
+      const cookieNoticeHeight = localStorage.getItem("cookie-consent")
+        ? 0 // If cookie consent is already accepted, no adjustment needed
+        : document.querySelector(".cookie-notice")?.clientHeight || 0; // Get the height of the CookieNotice if visible
+
+      const x = window.innerWidth - size - padding;
+      const y = window.innerHeight - size - cookieNoticeHeight - 8; // Adjust position based on CookieNotice height
+      setInitialPosition({ x, y });
+    }, 0); // next tick
+
+    return () => clearTimeout(timeout);
   }, [isDesktop]);
+
 
   const { position, handleMouseDown, handleTouchStart, wasDragged, isDragging } = useDraggable({
     size,
