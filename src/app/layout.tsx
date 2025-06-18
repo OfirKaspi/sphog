@@ -5,7 +5,7 @@ import AccessibilityWidget from "@/components/legal/AccessibilityWidget";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
 // import { CONFIG } from "@/config/config";
 // import Script from "next/script";
-import GAListener from "@/components/common/GAListener";
+// import GAListener from "@/components/common/GAListener";
 import Navbar from "@/components/layout/Navbar";
 import CookieNotice from "@/components/legal/CookieNotice";
 
@@ -73,7 +73,7 @@ const RootLayout = ({ children, }: Readonly<{ children: React.ReactNode }>) => {
         <AccessibilityWidget />
 
         <CookieNotice/> 
-        <GAListener />
+        {/* <GAListener /> */}
         <Analytics />
       </body>
     </html>
