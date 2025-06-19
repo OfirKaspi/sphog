@@ -10,20 +10,26 @@ export interface AboutUsProps {
   media: Media;
   link?: LinkType;
   isBgPrimary?: boolean;
+  isNonePaddingBottom?: boolean;
 }
 
 export default function AboutUs({
   isBgPrimary = true,
+  isNonePaddingBottom = false,
   title,
   paragraphs,
   media,
   link,
 }: AboutUsProps) {
   return (
-    <section className={`${isBgPrimary && "bg-primary text-white"}`}>
+    <section className={`${isBgPrimary && "bg-primary text-white"} w-full overflow-hidden`}>
       <div
         className={`grid gap-10 items-center max-w-screen-lg mx-auto md:grid-cols-[auto_1fr] ${
-          isBgPrimary ? "py-16 px-5" : "p-5"
+          isBgPrimary ? (
+            "py-16 px-5" 
+          ) : (
+            isNonePaddingBottom ? "px-5 pt-5" : "p-5"
+          )
         }`}
       >
         <div className="relative h-full w-full order-last md:order-first">
