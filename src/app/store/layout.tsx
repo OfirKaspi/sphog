@@ -13,9 +13,9 @@ export const metadata: Metadata = {
     url: 'https://sphogmoss.com/store',
     images: [
       {
-        url: 'https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg',
-        width: 1080,
-        height: 1080,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: 'טרריום למכירה',
       },
     ],
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sphog | טרריום בעיצוב אישי',
     description: 'גלו את הטרריומים האמנותיים שלנו – כל טרריום סגור נבנה באהבה, עובר הסתגלות ומוכן לשגשוג.',
-    images: ['https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg'],
+    images: ["og-image.png"],
   },
   alternates: {
     canonical: 'https://sphogmoss.com/store',

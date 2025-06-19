@@ -20,9 +20,9 @@ export const metadata = {
     siteName: "Sphog",
     images: [
       {
-        url: "https://sphogmoss.com/og-image.png",
-        width: 1024,
-        height: 576,
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
         alt: "Sphog Terrarium Workshop",
       },
     ],
@@ -33,7 +33,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Sphog | סדנאות טרריום",
     description: "סדנאות טרריום בהתאמה אישית, חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
-    images: ["https://sphogmoss.com/og-image.png"],
+    images: ["og-image.png"],
   },
   icons: {
     icon: "/logo.png",

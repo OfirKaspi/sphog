@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     url: "https://sphogmoss.com/private-workshop",
     images: [
       {
-        url: "https://sphogmoss.com/og-private-workshop.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "סדנאות פרטיות טרריום SPHOG",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "סדנאות פרטיות ליצירת טרריום | SPHOG",
     description:
       "חוויה ירוקה קסומה ואישית – סדנא פרטית ליצירת טרריום. מתאימה ליחידים, זוגות וצוותים.",
-    images: ["https://sphogmoss.com/og-private-workshop.png"],
+    images: ["og-image.png"],
   },
   alternates: {
     canonical: "https://sphogmoss.com/private-workshop",

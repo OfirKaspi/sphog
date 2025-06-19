@@ -20,7 +20,7 @@ export const metadata: Metadata = {
         siteName: "Sphog",
         images: [
             {
-                url: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893918/sphog/%D7%98%D7%99%D7%A4_%D7%90%D7%99%D7%9A_%D7%9C%D7%A9%D7%9E%D7%95%D7%A8_%D7%A2%D7%9C_%D7%94%D7%98%D7%A8%D7%A8%D7%99%D7%95%D7%9D_-_%D7%98%D7%A8%D7%A8%D7%99%D7%95%D7%9D_%D7%90%D7%A7%D7%93%D7%9E%D7%99_dp1rzt.webp",
+                url: "/og-image.png",
                 width: 1200,
                 height: 630,
                 alt: "טיפים לשמירה על טרריום בבית"
@@ -34,9 +34,8 @@ export const metadata: Metadata = {
         title: "טיפים לטרריום - Sphog",
         description:
             "סדרת טיפים מקצועיים להכנת טרריום – כל מה שצריך לדעת במקום אחד.",
-        images: [
-            "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893918/sphog/%D7%98%D7%99%D7%A4_%D7%90%D7%99%D7%9A_%D7%9C%D7%A9%D7%9E%D7%95%D7%A8_%D7%A2%D7%9C_%D7%94%D7%98%D7%A8%D7%A8%D7%99%D7%95%D7%9D_-_%D7%98%D7%A8%D7%A8%D7%99%D7%95%D7%9D_%D7%90%D7%A7%D7%93%D7%9E%D7%99_dp1rzt.webp"
-        ]
+        images: ["og-image.png"],
+
     },
     icons: {
         icon: "/logo.png"
