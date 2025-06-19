@@ -32,7 +32,7 @@ export default function AboutUs({
           )
         }`}
       >
-        <div className="relative h-full w-full order-last md:order-first">
+        <div className="relative h-full w-full max-w-full order-last md:order-first">
           {media.type === "video" ? (
             <VideoContainer
               src={media.src}
@@ -49,7 +49,7 @@ export default function AboutUs({
             />
           )}
         </div>
-        <div className="flex flex-col justify-center mx-auto">
+        <div className="flex flex-col justify-center mx-auto max-w-full">
           {title && (
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center md:text-start">
               {title}
