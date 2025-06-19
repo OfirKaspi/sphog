@@ -24,7 +24,7 @@ export default function AboutUs({
   return (
     <section className={`${isBgPrimary && "bg-primary text-white"} w-full overflow-hidden`}>
       <div
-        className={`grid gap-10 items-center max-w-screen-lg mx-auto md:grid-cols-[auto_1fr] ${
+        className={`grid gap-10 items-center w-full max-w-screen-lg mx-auto grid-cols-1 md:grid-cols-[auto_1fr] ${
           isBgPrimary ? (
             "py-16 px-5" 
           ) : (
