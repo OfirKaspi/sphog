@@ -24,13 +24,12 @@ export default function AboutUs({
   return (
     <section className={`${isBgPrimary && "bg-primary text-white"} w-full overflow-hidden`}>
       <div
-        className={`grid gap-10 items-center w-full max-w-screen-lg mx-auto grid-cols-1 md:grid-cols-[auto_1fr] ${
-          isBgPrimary ? (
-            "py-16 px-5" 
-          ) : (
-            isNonePaddingBottom ? "px-5 pt-5" : "p-5"
-          )
-        }`}
+        className={`grid gap-10 items-center w-full max-w-screen-lg mx-auto grid-cols-1 md:grid-cols-[auto_1fr] ${isBgPrimary ? (
+          "py-16 px-5"
+        ) : (
+          isNonePaddingBottom ? "px-5 pt-5" : "p-5"
+        )
+          }`}
       >
         <div className="relative h-full w-full max-w-full order-last md:order-first">
           {media.type === "video" ? (
@@ -40,13 +39,15 @@ export default function AboutUs({
               isPortrait={media.isPortrait || false}
             />
           ) : (
-            <Image
-              src={media.src}
-              alt={media.alt}
-              width={500}
-              height={500}
-              className="w-full h-full rounded-xl object-cover max-w-2xl max-h-[500px] mx-auto"
-            />
+            <div className="relative h-full w-full">
+              <Image
+                src={media.src}
+                alt={media.alt}
+                width={350}
+                height={500}
+                className="object-contain rounded-xl mx-auto"
+              />
+            </div>
           )}
         </div>
         <div className="flex flex-col justify-center mx-auto max-w-full">
