@@ -61,7 +61,7 @@ const Navbar = () => {
             </button>
           </SheetTrigger>
           <SheetContent className="w-fit bg-white">
-            <SheetTitle className="text-primary pt-5">{data.header}</SheetTitle>
+            <SheetTitle className="text-primary pt-5 font-bold">{data.header}</SheetTitle>
             <Separator className="my-5" />
             <SheetDescription asChild>
               <div className="space-y-5">

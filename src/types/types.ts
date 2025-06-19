@@ -1,12 +1,3 @@
-interface BaseEntity {
-  _id: string;
-}
-
-interface Paragraph extends BaseEntity {
-  header: string;
-  desc: string;
-}
-
 export interface LinkType {
   text: string;
   href: string;
@@ -31,11 +22,6 @@ export interface Media extends Image {
 //   text: string
 //   href: string
 // }
-
-
-export interface ImageSectionType extends Image, Paragraph {
-  buttonText?: string; // Optional field for button text
-}
 
 export interface Product {
   _id: number;

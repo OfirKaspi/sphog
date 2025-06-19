@@ -1,13 +1,17 @@
+"use client"
+
+import dynamic from "next/dynamic"
 import FAQ from "@/components/common/FAQ"
-import Testimonials from "@/components/common/testimonials/Testimonials"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import AboutUs from "@/components/pages/home/AboutUs"
 import Hero from "@/components/pages/home/Hero"
-import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
 import StoreTeaser from "@/components/pages/home/StoreTeaser"
 import TipsSection from "@/components/pages/home/TipsSection"
 import WorkshopPreview from "@/components/pages/home/WorkshopPreview"
 import getHomeData from "@/lib/api/homeData"
+import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
+
+const Testimonials = dynamic(() => import("@/components/common/testimonials/Testimonials"), {ssr: false})
 
 const Home = () => {
   const data = getHomeData()

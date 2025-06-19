@@ -27,22 +27,22 @@ export default function WorkshopItemNew({
       className="max-w-screen-lg text-white overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-8 mx-auto min-h-[400px]"
     >
       <div
-        className={`relative w-full ${
-          index % 2 === 0 ? "md:col-start-1 md:row-start-1" : "md:col-start-2 md:row-start-1"
-        }`}
+        className={`relative w-full ${index % 2 === 0 ? "md:col-start-1 md:row-start-1" : "md:col-start-2 md:row-start-1"
+          }`}
       >
         <Image
           src={image.src}
           alt={image.alt}
-          width={800}
-          height={400}
-          className="w-full h-full object-cover rounded-xl"
+          fill
+          className="object-cover rounded-xl"
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          priority={true} 
+          decoding="async"
         />
       </div>
       <div
-        className={`p-6 flex flex-col justify-center gap-6 w-full border-2 border-white rounded-xl ${
-          index % 2 === 0 ? "md:col-start-2 md:row-start-1" : "md:col-start-1 md:row-start-1"
-        }`}
+        className={`p-6 flex flex-col justify-center gap-6 w-full border-2 border-white rounded-xl ${index % 2 === 0 ? "md:col-start-2 md:row-start-1" : "md:col-start-1 md:row-start-1"
+          }`}
       >
         <div>
           <h3 className="text-xl md:text-2xl text-white font-bold mb-2">

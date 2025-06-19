@@ -15,16 +15,18 @@ export default function WorkshopItemOld({ title, paragraphs, image, links, butto
 
   return (
     <div className="max-w-2xl bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all border flex flex-col mx-auto">
-      <Image
-        src={image.src}
-        alt={image.alt}
-        width={800}
-        height={400}
-        className="w-full h-full object-cover"
-      />
+      <div className="relative w-full h-[250px] sm:h-[300px]">
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          priority={true}
+          className="object-cover"
+        />
+      </div>
       <div className="p-6 flex flex-col justify-between gap-6">
         <div>
-          <h3 className="text-xl md:text-2xl text-primary font-semibold mb-2">{title}</h3>
+          <h2 className="text-xl md:text-2xl text-primary font-semibold mb-2">{title}</h2>
           <p className="text-sm md:text-base leading-relaxed">
             {paragraphs.map((paragraph, index) => (
               <span key={index}>

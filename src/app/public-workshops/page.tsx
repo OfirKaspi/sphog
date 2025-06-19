@@ -1,9 +1,13 @@
-import PageHeader from "@/components/common/PageHeader";
-import Testimonials from "@/components/common/testimonials/Testimonials";
-import WorkshopRegistrationOpenForm from "@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm";
+"use client"
+
 import getPublicWorkshopData from "@/lib/api/publicWorkshopData";
-import WorkshopList from "@/components/common/WorkshopList";
+import PageHeader from "@/components/common/PageHeader";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
+import WorkshopList from "@/components/common/WorkshopList";
+import dynamic from "next/dynamic";
+
+const WorkshopRegistrationOpenForm = dynamic(() => import("@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm"), {ssr: false})
+const Testimonials = dynamic(() => import("@/components/common/testimonials/Testimonials"), {ssr: false})
 
 const PublicWorkshop = () => {
   const data = getPublicWorkshopData();

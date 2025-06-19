@@ -157,7 +157,9 @@ export default function WorkshopRegistrationForm({
           }
         >
           <SelectTrigger
-            className="w-full md:text-lg">
+            className="w-full md:text-lg"
+            aria-label="בחר שעה"
+          >
             <SelectValue placeholder="זמן פעילות" />
           </SelectTrigger>
           <SelectContent className="md:text-lg">
