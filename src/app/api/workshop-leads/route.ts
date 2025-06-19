@@ -36,7 +36,7 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
       countryShortName: "IL",                          // ISO country code for phone format
     },
     "date_mkpveq7w": values.selected_date,             // Selected Date
-    // "dup__of_date__1": values.selected_hour,        // Selected Hour
+    "text_mks28kgr": values.selected_hour,              // Selected Hour
     "dup__of_channel9__1": values.lead_source,         // Lead Source (e.g. "Website - Workshop")
     "dup__of_channel__1": values.campaign,             // Campaign (e.g. "WS form")
   };
