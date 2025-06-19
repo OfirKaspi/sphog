@@ -10,7 +10,7 @@ const SocialMedia = () => {
   const whatsappUrl = `https://wa.me/${whatsappNumber}`;
   const facebookUrl = `https://www.facebook.com/${facebookUsername}`;
   const instagramUrl = `https://www.instagram.com/${instagramUsername}`;
-  const youtubeUrl = `https://www.youtube-nocookie.com/@${youtubeUsername}`;
+  const youtubeUrl = `https://www.youtube.com/@${youtubeUsername}`;
   const tiktokUrl = `https://www.tiktok.com/@${tiktokUsername}`;
   
 
