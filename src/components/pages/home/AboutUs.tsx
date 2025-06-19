@@ -45,7 +45,7 @@ export default function AboutUs({
                 alt={media.alt}
                 width={350}
                 height={500}
-                className="object-contain rounded-xl mx-auto"
+                className="object-contain rounded-xl max-h-[500px] w-fit mx-auto"
               />
             </div>
           )}
