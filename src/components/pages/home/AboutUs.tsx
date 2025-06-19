@@ -43,9 +43,9 @@ export default function AboutUs({
             <Image
               src={media.src}
               alt={media.alt}
-              width={250}
+              width={500}
               height={500}
-              className="rounded-xl object-contain max-w-2xl max-h-[500px] mx-auto"
+              className="w-full h-full rounded-xl object-cover max-w-2xl max-h-[500px] mx-auto"
             />
           )}
         </div>
