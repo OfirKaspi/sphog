@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "סדנאות קבוצתיות ליצירת טרריום | SPHOG",
     description:
       "חוויה יצירתית עם קבוצת משתתפים באווירה ירוקה ונעימה – כולל ידע, כלים, טחבים וצמחים מיוחדים.",
-    images: ["og-image.png"],
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://sphogmoss.com/public-workshop",

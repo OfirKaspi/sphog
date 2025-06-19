@@ -34,7 +34,7 @@ export const metadata: Metadata = {
         title: "טיפים לטרריום - Sphog",
         description:
             "סדרת טיפים מקצועיים להכנת טרריום – כל מה שצריך לדעת במקום אחד.",
-        images: ["og-image.png"],
+        images: ["/og-image.png"],
 
     },
     icons: {

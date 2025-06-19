@@ -33,7 +33,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Sphog | סדנאות טרריום",
     description: "סדנאות טרריום בהתאמה אישית, חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
-    images: ["og-image.png"],
+    images: ["/og-image.png"],
   },
   icons: {
     icon: "/logo.png",

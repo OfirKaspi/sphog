@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         title: "על SPHOG | הטרריום שעושה קסמים בבית",
         description:
             "סיפור ההשראה מאחורי סדנאות הטרריום של SPHOG – למי שמחפש קסם בתוך זכוכית.",
-        images: ["og-image.png"],
+        images: ["/og-image.png"],
     },
     alternates: {
         canonical: "https://sphogmoss.com/about",

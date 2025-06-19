@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Sphog | טרריום בעיצוב אישי',
     description: 'גלו את הטרריומים האמנותיים שלנו – כל טרריום סגור נבנה באהבה, עובר הסתגלות ומוכן לשגשוג.',
-    images: ["og-image.png"],
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: 'https://sphogmoss.com/store',

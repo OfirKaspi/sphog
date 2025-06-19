@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "סדנאות פרטיות ליצירת טרריום | SPHOG",
     description:
       "חוויה ירוקה קסומה ואישית – סדנא פרטית ליצירת טרריום. מתאימה ליחידים, זוגות וצוותים.",
-    images: ["og-image.png"],
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: "https://sphogmoss.com/private-workshop",
