@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://sphogmoss.com/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://sphogmoss.com/about</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sphogmoss.com/public-workshops</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sphogmoss.com/private-workshops</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sphogmoss.com/tips</loc>
+    <priority>0.7</priority>
+  </url>
+  <!-- Store route excluded since it's blocked -->
+</urlset>
