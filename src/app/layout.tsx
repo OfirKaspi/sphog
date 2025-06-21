@@ -14,13 +14,13 @@ export const metadata = {
   keywords: ["סדנאות טרריום", "טרריום", "עיצוב טרריום", "סדנאות יצירה", "Sphog"],
   metadataBase: new URL("https://sphogmoss.com"),
   openGraph: {
-    title: "Sphog | סדנאות טרריום",
-    description: "סדנאות טרריום בהתאמה אישית, חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
+    title: "Sphog | סדנת טרריום ייחודית - חוויה ירוקה, עיצובית ויצירתית",
+    description: "זמן איכות זוגי, צוותי או עם חברים בסטודיו קסום בתל אביב. תעצבו טרריום אישי ומרהיב - ותיקחו הביתה מזכרת יפה שממשיכה לצמוח ולהתפתח.",
     url: "https://sphogmoss.com",
     siteName: "Sphog",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1750500843/sphog/og_image_y1cltf.jpg",
         width: 1200,
         height: 630,
         alt: "Sphog Terrarium Workshop",
@@ -33,7 +33,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Sphog | סדנאות טרריום",
     description: "סדנאות טרריום בהתאמה אישית, חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
-    images: ["/og-image.png"],
+    images: ["https://res.cloudinary.com/dudwjf2pu/image/upload/v1750500843/sphog/og_image_y1cltf.jpg"],
   },
   icons: {
     icon: "/logo.png",
