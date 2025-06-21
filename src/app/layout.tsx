@@ -36,7 +36,8 @@ export const metadata = {
     images: ["https://res.cloudinary.com/dudwjf2pu/image/upload/v1750500843/sphog/og_image_y1cltf.jpg"],
   },
   icons: {
-    icon: "/logo.png",
+    icon: '/favicon.ico',
+    apple: '/logo.png',
   },
 };
 
@@ -68,12 +69,12 @@ export default function RootLayout({
               name: "Sphog",
               url: "https://sphogmoss.com",
               logo: "https://sphogmoss.com/logo.png",
-              description:
-                "סדנאות טרריום ייחודיות בהתאמה אישית - חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
+              image: "https://sphogmoss.com/logo.png",
+              description: "סדנאות טרריום ייחודיות בהתאמה אישית - חוויה ירוקה ומרגיעה לכל גיל ואירוע.",
               sameAs: [
                 "https://www.instagram.com/sphogmoss",
-                "https://www.facebook.com/sphogmoss",
-              ],
+                "https://www.facebook.com/sphogmoss"
+              ]
             }),
           }}
         />
