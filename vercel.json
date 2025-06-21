@@ -1,0 +1,16 @@
+{
+    "redirects": [
+      {
+        "source": "/(.*)",
+        "has": [
+          {
+            "type": "host",
+            "value": "sphog.vercel.app"
+          }
+        ],
+        "destination": "https://sphogmoss.com/$1",
+        "statusCode": 301
+      }
+    ]
+  }
+  
