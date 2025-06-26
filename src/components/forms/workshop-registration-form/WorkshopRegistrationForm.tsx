@@ -2,7 +2,7 @@
 "use client";
 
 import { useMemo, useState, useRef } from "react";
-import { format } from "date-fns";
+import { format, isBefore, startOfDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Select,
@@ -53,11 +53,17 @@ export default function WorkshopRegistrationForm({
   const [loading, setLoading] = useState(false);
   const [responseError, setResponseError] = useState<string | null>(null);
 
+  // Filter out past dates
+  const filteredDates = useMemo(() => {
+    const today = startOfDay(new Date());
+    return availableDates.filter((d) => !isBefore(startOfDay(d.date), today));
+  }, [availableDates]);
+
   const dateMap = useMemo(() => {
     const map = new Map<string, AvailableDate>();
-    availableDates.forEach((d) => map.set(format(d.date, "yyyy-MM-dd"), d));
+    filteredDates.forEach((d) => map.set(format(d.date, "yyyy-MM-dd"), d));
     return map;
-  }, [availableDates]);
+  }, [filteredDates]);
 
   const hoursForSelectedDate = formData.selectedDate
     ? dateMap.get(format(formData.selectedDate, "yyyy-MM-dd"))?.hours || []

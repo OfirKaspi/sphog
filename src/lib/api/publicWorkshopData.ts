@@ -62,6 +62,10 @@ const getPublicWorkshopData = () => {
                 { date: new Date("2025-07-14"), hours: ["18:00-21:00"] },
                 { date: new Date("2025-07-24"), hours: ["18:00-21:00"] },
                 { date: new Date("2025-08-01"), hours: ["11:00-14:00"] },
+                { date: new Date("2025-08-06"), hours: ["18:00-21:00"] },
+                { date: new Date("2025-08-14"), hours: ["18:00-21:00"] },
+                { date: new Date("2025-08-18"), hours: ["18:00-21:00"] },
+                { date: new Date("2025-08-22"), hours: ["11:00-14:00"] },
             ],
         },
         testimonials: {
