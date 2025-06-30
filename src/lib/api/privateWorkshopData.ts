@@ -1,8 +1,8 @@
 const getPrivateWorkshopData = () => {
     const generateDates = () => {
-        const excludedDates = ["2025-06-27", "2025-07-04", "2025-07-11", "2025-08-01", "2025-08-22"];
+        const excludedDates = ["2025-07-04", "2025-07-11", "2025-07-18", "2025-08-01", "2025-08-22"];
         const dates = [];
-        const startDate = new Date("2025-06-19");
+        const startDate = new Date(); // Start from the current date
         const endDate = new Date("2025-12-31");
 
         for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
