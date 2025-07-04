@@ -2,17 +2,22 @@
 "use client";
 
 import { he } from "date-fns/locale";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { WorkshopType } from "@/types/types";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  dateMap?: Map<string, { workshop: string }>;
+};
 
-function Calendar({
+export function Calendar({
   className,
   classNames,
-  showOutsideDays = true,
+  showOutsideDays = false,
+  dateMap,
   ...props
 }: CalendarProps) {
   return (
@@ -36,33 +41,44 @@ function Calendar({
         head_cell:
           "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
         row: "flex w-full mt-2 gap-1",
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+
+        cell:
+          "h-9 w-9 p-0 relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 bg-pink-200 font-normal hover:bg-cta-foreground aria-selected:bg-cta aria-selected:text-white"
+          "h-9 w-9 p-0 font-normal transition-colors duration-150",
+          "aria-selected:border-2 aria-selected:border-primary",
         ),
         day_range_end: "day-range-end",
         day_today: "bg-accent text-accent-foreground",
-        day_outside:
-          "day-outside text-muted-foreground aria-selected:bg-accent/100 aria-selected:text-muted-foreground",
-        day_disabled: "bg-white text-muted-foreground opacity-100", // Ensure disabled days have a white background
+        day_outside: "day-outside text-muted-foreground pointer-events-none",
+        day_disabled: "pointer-events-none",
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
         ...classNames,
       }}
+      modifiers={{
+        family: (date) =>
+          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.FAMILY,
+        advanced: (date) =>
+          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.ADVANCED,
+        tech: (date) =>
+          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.TECH,
+        unavailable: (date) =>
+          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.UNAVAILABLE,
+      }}
+      modifiersClassNames={{
+        tech: "bg-green-200 hover:bg-green-300",
+        family: "bg-sky-200 hover:bg-sky-300",
+        advanced: "bg-pink-200 hover:bg-pink-300",
+        unavailable:"bg-gray-300 hover:bg-gray-300",
+      }}
       components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("h-4 w-4", className)} {...props} />
-        ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("h-4 w-4", className)} {...props} />
-        ),
+        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+        IconRight: () => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
     />
-  )
+  );
 }
-Calendar.displayName = "Calendar"
-
-export { Calendar }

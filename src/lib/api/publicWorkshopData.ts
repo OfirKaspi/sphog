@@ -1,3 +1,5 @@
+import { WorkshopType, CTAColorType } from "@/types/types";
+
 const getPublicWorkshopData = () => {
     const data = {
         header: {
@@ -22,6 +24,7 @@ const getPublicWorkshopData = () => {
                     alt: "תמונה של סדנא פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
+                ctaColor: CTAColorType.DEFAULT,
             },
             {
                 title: "טכניקות ייחודיות לעיצוב טרריום",
@@ -34,7 +37,7 @@ const getPublicWorkshopData = () => {
                     alt: "תמונה של סדנא פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
-
+                ctaColor: CTAColorType.GREEN,
             },
             {
                 title: "סדנאות משפחתיות מותאמות לילדים",
@@ -47,6 +50,7 @@ const getPublicWorkshopData = () => {
                     alt: "תמונה של סדנא פרטית"
                 },
                 buttonText: "למידע מתי הסדנאות הבאות",
+                ctaColor: CTAColorType.BLUE,
             },
         ],
         workshopFormData: {
@@ -55,17 +59,17 @@ const getPublicWorkshopData = () => {
                 description: "ספרו לנו באיזה תאריך אתם מתעניינים ונשלח לכם את כל הפרטים.",
             },
             availableDates: [
-                { date: new Date("2025-06-19"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-06-27"), hours: ["12:00-15:00"] },
-                { date: new Date("2025-07-03"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-07-11"), hours: ["11:00-14:00"] },
-                { date: new Date("2025-07-14"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-07-24"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-08-01"), hours: ["11:00-14:00"] },
-                { date: new Date("2025-08-06"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-08-14"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-08-18"), hours: ["18:00-21:00"] },
-                { date: new Date("2025-08-22"), hours: ["11:00-14:00"] },
+                { date: new Date("2025-07-11"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-07-14"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-07-24"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-01"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-06"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-14"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-18"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-22"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-08-24"), hours: ["11:00-14:00"], workshop: WorkshopType.FAMILY },
+                { date: new Date("2025-08-27"), hours: ["14:30-17:00"], workshop: WorkshopType.FAMILY },
+                { date: new Date("2025-08-29"), hours: ["11:00-14:00"], workshop: WorkshopType.FAMILY },
             ],
         },
         testimonials: {
@@ -109,4 +113,4 @@ const getPublicWorkshopData = () => {
     return data
 }
 
-export default getPublicWorkshopData
+export default getPublicWorkshopData;

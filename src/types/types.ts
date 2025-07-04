@@ -9,8 +9,8 @@ export interface Image {
 }
 
 export interface Media extends Image {
- type: string;
- isPortrait: boolean;
+  type: string;
+  isPortrait: boolean;
 }
 
 // interface Background extends BaseEntity {
@@ -63,11 +63,27 @@ export interface Tip {
   }
 }
 
+// CTA button color enum
+export enum CTAColorType {
+  DEFAULT = "default",
+  BLUE = "blue",
+  GREEN = "green",
+}
+
 export interface WorkshopData {
   title?: string;
   paragraphs: string[];
   image: Image;
   links?: LinkType[]; // Optional links for navigation
   scrollToForm?: boolean; // If true, scrolls to the form on the same page
-  buttonText?: string
+  buttonText?: string;
+  ctaColor?: CTAColorType; // Updated to use the enum
+  index?: number; // Optional index for styling purposes
+}
+// Workshop type enum for consistent use across the application
+export enum WorkshopType {
+  FAMILY = "family",
+  TECH = "tech",
+  ADVANCED = "advanced",
+  UNAVAILABLE = "unavailable",
 }

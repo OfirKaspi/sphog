@@ -7,6 +7,14 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
+import { useAppToast } from "@/hooks/useAppToast";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 interface LeaveDetailsFormProps {
   isSuccess: boolean;
@@ -25,6 +33,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
   const [loading, setLoading] = useState(false);
   const [responseError, setResponseError] = useState<string | null>(null);
   const successMessageRef = useRef<HTMLDivElement>(null);
+
+  const toast = useAppToast();
 
   useScrollToCenter(isSuccess, successMessageRef);
 
@@ -67,9 +77,11 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
         topic: "",
         details: "",
       });
+      toast.success("הטופס נשלח בהצלחה!");
     } catch (error) {
       console.error(error);
       setResponseError("אופס, משהו קרה. אנא נסה שנית.");
+      toast.error("אופס, משהו קרה. אנא נסה שנית.");
     } finally {
       setLoading(false);
     }
@@ -121,22 +133,21 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
 
       <div className="grid grid-cols-4 items-center gap-2">
         <Label htmlFor="topic" className="text-base md:text-lg">נושא</Label>
-        <select
-          id="topic"
-          className="col-span-3 bg-slate-100 border rounded px-3 py-2 text-base md:text-lg"
+        <Select
+          dir="rtl"
           value={formData.topic}
-          onChange={(e) =>
-            setFormData({ ...formData, topic: e.target.value })
-          }
+          onValueChange={(value) => setFormData({ ...formData, topic: value })}
         >
-          <option value="" disabled>
-            בחר נושא
-          </option>
-          <option value="סדנא פרטית">סדנא פרטית</option>
-          <option value="הצטרפות לסדנא קבוצתית">הצטרפות לסדנא קבוצתית</option>
-          <option value="קניית טרריום">קניית טרריום</option>
-          <option value="אחר">אחר</option>
-        </select>
+          <SelectTrigger className="col-span-3 text-right bg-slate-100 text-base md:text-lg">
+            <SelectValue placeholder="בחר נושא" />
+          </SelectTrigger>
+          <SelectContent className="text-right text-base md:text-lg">
+            <SelectItem value="סדנא פרטית">סדנא פרטית</SelectItem>
+            <SelectItem value="הצטרפות לסדנא קבוצתית">הצטרפות לסדנא קבוצתית</SelectItem>
+            <SelectItem value="קניית טרריום">קניית טרריום</SelectItem>
+            <SelectItem value="אחר">אחר</SelectItem>
+          </SelectContent>
+        </Select>
         {errors.topic && (
           <p className="col-span-4 text-red-600 text-base">{errors.topic}</p>
         )}

@@ -1,9 +1,10 @@
-// components/WorkshopRegistrationForm.tsx
 "use client";
 
 import { useMemo, useState, useRef } from "react";
 import { format, isBefore, startOfDay } from "date-fns";
+import { useAppToast } from "@/hooks/useAppToast";
 import { Calendar } from "@/components/ui/calendar";
+import { WorkshopType } from "@/types/types";
 import {
   Select,
   SelectTrigger,
@@ -16,10 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
+import Legend from "./Legend";
 
 export interface AvailableDate {
   date: Date;
   hours: string[];
+  workshop: WorkshopType;
 }
 
 interface WorkshopRegistrationFormProps {
@@ -60,17 +63,30 @@ export default function WorkshopRegistrationForm({
   }, [availableDates]);
 
   const dateMap = useMemo(() => {
-    const map = new Map<string, AvailableDate>();
-    filteredDates.forEach((d) => map.set(format(d.date, "yyyy-MM-dd"), d));
+    const map = new Map<string, { workshop: string }>();
+    filteredDates.forEach((d) =>
+      map.set(format(d.date, "yyyy-MM-dd"), { workshop: d.workshop })
+    );
     return map;
   }, [filteredDates]);
 
+  const toast = useAppToast();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDayClick = (date: Date, modifiers: any) => {
+    if (modifiers.unavailable) {
+      toast.info("מצטערים, לא נשארו מקומות פנויים בסדנא.");
+    }
+  };
+
   const hoursForSelectedDate = formData.selectedDate
-    ? dateMap.get(format(formData.selectedDate, "yyyy-MM-dd"))?.hours || []
+    ? filteredDates.find(
+      (d) => formData.selectedDate && format(d.date, "yyyy-MM-dd") === format(formData.selectedDate, "yyyy-MM-dd")
+    )?.hours || []
     : [];
 
   const disableUnlistedDates = (date: Date) =>
-    !dateMap.has(format(date, "yyyy-MM-dd"));
+    !dateMap.has(format(date, "yyyy-MM-dd")) 
 
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
@@ -115,9 +131,11 @@ export default function WorkshopRegistrationForm({
         fullName: "",
         phoneNumber: "",
       });
+      toast.success("הטופס נשלח בהצלחה!");
     } catch (error) {
       console.error("Error submitting form:", error);
       setResponseError("אופס, משהו קרה. אנא נסה שנית.");
+      toast.error("אופס, משהו קרה. אנא נסה שנית.");
     } finally {
       setLoading(false);
     }
@@ -137,6 +155,7 @@ export default function WorkshopRegistrationForm({
       className="grid gap-4 py-4 text-base md:text-lg"
     >
       <div className="grid gap-2">
+        <Legend />
         <Label htmlFor="calendar" className="text-base md:text-lg">
           תאריך
         </Label>
@@ -144,9 +163,15 @@ export default function WorkshopRegistrationForm({
           mode="single"
           selected={formData.selectedDate}
           onSelect={(date) =>
-            setFormData({ ...formData, selectedDate: date, selectedHour: null })
+            setFormData({
+              ...formData,
+              selectedDate: date,
+              selectedHour: null,
+            })
           }
           disabled={disableUnlistedDates}
+          dateMap={dateMap}
+          onDayClick={handleDayClick}
         />
       </div>
 

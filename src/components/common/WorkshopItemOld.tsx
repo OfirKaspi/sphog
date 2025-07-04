@@ -2,10 +2,18 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { WorkshopData } from "@/types/types";
+import { WorkshopData, CTAColorType } from "@/types/types";
 import CTAButton from "@/components/common/CTAButton";
 
-export default function WorkshopItemOld({ title, paragraphs, image, links, buttonText, scrollToForm }: WorkshopData) {
+export default function WorkshopItemOld({ 
+  title, 
+  paragraphs, 
+  image, 
+  links, 
+  buttonText, 
+  scrollToForm, 
+  ctaColor = CTAColorType.DEFAULT
+}: WorkshopData) {
   const handleScrollToForm = () => {
     const formElement = document.getElementById("workshop-form");
     if (formElement) {
@@ -38,13 +46,13 @@ export default function WorkshopItemOld({ title, paragraphs, image, links, butto
         </div>
         {scrollToForm ? (
           <div className="flex flex-col gap-3 w-fit">
-            <CTAButton onClick={handleScrollToForm}>{buttonText}</CTAButton>
+            <CTAButton color={ctaColor || "default"} onClick={handleScrollToForm}>{buttonText}</CTAButton>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
             {(links?.map((link, index) => (
               <Link key={index} href={link.href}>
-                <CTAButton>{link.text}</CTAButton>
+                <CTAButton color={ctaColor || "default"}>{link.text}</CTAButton>
               </Link>
             )))}
           </div>

@@ -1,3 +1,5 @@
+import { WorkshopType } from "@/types/types";
+
 const getPrivateWorkshopData = () => {
     const generateDates = () => {
         const excludedDates = ["2025-07-04", "2025-07-11", "2025-07-18", "2025-08-01", "2025-08-22"];
@@ -10,14 +12,24 @@ const getPrivateWorkshopData = () => {
             const formattedDate = d.toISOString().split("T")[0];
 
             if (day !== 6 && !excludedDates.includes(formattedDate)) {
+                // Use WorkshopType enum instead of string literals
+                const workshopType = excludedDates.includes(formattedDate) 
+                    ? WorkshopType.UNAVAILABLE 
+                    : WorkshopType.FAMILY;
+                    
                 if (day === 5) {
                     // Fridays
-                    dates.push({ date: new Date(formattedDate), hours: ["11:00-14:00"] });
+                    dates.push({ 
+                        date: new Date(formattedDate), 
+                        hours: ["11:00-14:00"], 
+                        workshop: workshopType 
+                    });
                 } else {
                     // Weekdays
                     dates.push({
                         date: new Date(formattedDate),
                         hours: ["11:00-14:00", "14:30-17:30", "18:30-21:30"],
+                        workshop: workshopType
                     });
                 }
             }

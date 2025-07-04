@@ -7,6 +7,7 @@ import AccessibilityWidget from "@/components/legal/AccessibilityWidget";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
 import Navbar from "@/components/layout/Navbar";
 import CookieNotice from "@/components/legal/CookieNotice";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -86,6 +87,7 @@ export default function RootLayout({
       <body className="antialiased bg-background text-text font-fredoka">
         <Navbar />
         {children}
+        <Toaster />
         <Footer />
         <WhatsAppButton />
         <AccessibilityWidget />

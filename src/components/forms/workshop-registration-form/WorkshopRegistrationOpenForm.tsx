@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import WorkshopRegistrationForm from "@/components/forms/workshop-registration-form/WorkshopRegistrationForm";
+import WorkshopRegistrationForm, { AvailableDate } from "@/components/forms/workshop-registration-form/WorkshopRegistrationForm";
 
 interface WorkshopRegistrationOpenFormProps {
   title: string;
   description: string;
-  availableDates: { date: Date; hours: string[] }[];
+  availableDates: AvailableDate[];
 }
 
 const WorkshopRegistrationOpenForm = ({
