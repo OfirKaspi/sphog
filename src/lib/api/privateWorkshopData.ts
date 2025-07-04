@@ -15,7 +15,7 @@ const getPrivateWorkshopData = () => {
                 // Use WorkshopType enum instead of string literals
                 const workshopType = excludedDates.includes(formattedDate) 
                     ? WorkshopType.UNAVAILABLE 
-                    : WorkshopType.FAMILY;
+                    : WorkshopType.ADVANCED;
                     
                 if (day === 5) {
                     // Fridays
