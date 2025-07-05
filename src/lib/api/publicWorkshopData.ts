@@ -59,7 +59,7 @@ const getPublicWorkshopData = () => {
                 description: "ספרו לנו באיזה תאריך אתם מתעניינים ונשלח לכם את כל הפרטים.",
             },
             availableDates: [
-                { date: new Date("2025-07-11"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
+                { date: new Date("2025-07-11"), hours: ["11:00-14:00"], workshop: WorkshopType.UNAVAILABLE },
                 { date: new Date("2025-07-14"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
                 { date: new Date("2025-07-24"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
                 { date: new Date("2025-08-01"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },

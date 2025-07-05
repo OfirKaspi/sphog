@@ -19,18 +19,21 @@ import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-for
 import useScrollToCenter from "@/hooks/useScrollToCenter";
 import Legend from "./Legend";
 
+// Define the interface for available dates
 export interface AvailableDate {
   date: Date;
   hours: string[];
   workshop: WorkshopType;
 }
 
+// Define the props for the WorkshopRegistrationForm component
 interface WorkshopRegistrationFormProps {
   availableDates: AvailableDate[];
   isSuccess: boolean;
   setIsSuccess: (value: boolean) => void;
 }
 
+// Main component for workshop registration form
 export default function WorkshopRegistrationForm({
   availableDates,
   isSuccess,
@@ -38,8 +41,10 @@ export default function WorkshopRegistrationForm({
 }: WorkshopRegistrationFormProps) {
   const successMessageRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to center when form submission is successful
   useScrollToCenter(isSuccess, successMessageRef);
 
+  // State for form data
   const [formData, setFormData] = useState<{
     selectedDate: Date | undefined;
     selectedHour: string | null;
@@ -52,6 +57,7 @@ export default function WorkshopRegistrationForm({
     phoneNumber: "",
   });
 
+  // State for form errors
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [responseError, setResponseError] = useState<string | null>(null);
@@ -62,6 +68,7 @@ export default function WorkshopRegistrationForm({
     return availableDates.filter((d) => !isBefore(startOfDay(d.date), today));
   }, [availableDates]);
 
+  // Map dates to workshop information
   const dateMap = useMemo(() => {
     const map = new Map<string, { workshop: string }>();
     filteredDates.forEach((d) =>
@@ -72,22 +79,67 @@ export default function WorkshopRegistrationForm({
 
   const toast = useAppToast();
 
+  // Get available hours for the selected date
+  const hoursForSelectedDate = useMemo(() => {
+    if (!formData.selectedDate) return [];
+    
+    const selectedDateStr = format(formData.selectedDate, "yyyy-MM-dd");
+    const selectedDateData = filteredDates.find(
+      (d) => format(d.date, "yyyy-MM-dd") === selectedDateStr
+    );
+    
+    // If the workshop is unavailable or not found, return empty array
+    if (!selectedDateData || selectedDateData.workshop === WorkshopType.UNAVAILABLE) {
+      return [];
+    }
+    
+    // Otherwise return the available hours
+    return selectedDateData.hours;
+  }, [formData.selectedDate, filteredDates]);
+
+  // Handle day click with special handling for unavailable dates
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDayClick = (date: Date, modifiers: any) => {
     if (modifiers.unavailable) {
+      // Show toast but don't select the date
       toast.info("מצטערים, לא נשארו מקומות פנויים בסדנא.");
+      return;
     }
+
+    // Check if this date has an unavailable workshop type
+    const dateKey = format(date, "yyyy-MM-dd");
+    const workshopType = dateMap.get(dateKey)?.workshop;
+
+    if (workshopType === WorkshopType.UNAVAILABLE) {
+      // Show toast but don't select the date
+      toast.info("מצטערים, לא נשארו מקומות פנויים בסדנא.");
+      return;
+    }
+
+    // For available dates, update the selection
+    setFormData({
+      ...formData,
+      selectedDate: date,
+      selectedHour: null,
+    });
   };
 
-  const hoursForSelectedDate = formData.selectedDate
-    ? filteredDates.find(
-      (d) => formData.selectedDate && format(d.date, "yyyy-MM-dd") === format(formData.selectedDate, "yyyy-MM-dd")
-    )?.hours || []
-    : [];
+  // Create a special disabled function to handle dates with workshop: unavailable
+  const disableUnlistedDates = (date: Date) => {
+    const dateKey = format(date, "yyyy-MM-dd");
+    const workshopInfo = dateMap.get(dateKey);
 
-  const disableUnlistedDates = (date: Date) =>
-    !dateMap.has(format(date, "yyyy-MM-dd")) 
+    if (!workshopInfo) {
+      // Date not in our list at all
+      return true;
+    }
 
+    // Don't disable dates with workshop: unavailable so they can receive clicks
+    // But they won't actually be selectable due to our handleDayClick logic
+    return false;
+  };
+
+  // Validate form data
   const validate = () => {
     const newErrors: { [key: string]: string } = {};
     if (!formData.selectedDate) newErrors.selectedDate = "אנא בחר תאריך";
@@ -98,6 +150,7 @@ export default function WorkshopRegistrationForm({
     return newErrors;
   };
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -141,6 +194,7 @@ export default function WorkshopRegistrationForm({
     }
   };
 
+  // Render success message if form submission is successful
   if (isSuccess) {
     return (
       <div ref={successMessageRef}>
@@ -149,6 +203,7 @@ export default function WorkshopRegistrationForm({
     );
   }
 
+  // Render the form
   return (
     <form
       onSubmit={handleSubmit}
@@ -162,13 +217,6 @@ export default function WorkshopRegistrationForm({
         <Calendar
           mode="single"
           selected={formData.selectedDate}
-          onSelect={(date) =>
-            setFormData({
-              ...formData,
-              selectedDate: date,
-              selectedHour: null,
-            })
-          }
           disabled={disableUnlistedDates}
           dateMap={dateMap}
           onDayClick={handleDayClick}
