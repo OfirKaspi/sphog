@@ -1,4 +1,7 @@
+import { toZonedTime } from "date-fns-tz";
 import { WorkshopType } from "@/types/types";
+
+const ISRAEL_TZ = "Asia/Jerusalem";
 
 // Define a type for excluded time slots
 interface ExcludedTimeSlot {
@@ -13,6 +16,7 @@ const getPrivateWorkshopData = () => {
 
         // Define partially excluded time slots
         const partiallyExcludedSlots: ExcludedTimeSlot[] = [
+            { date: "2025-07-08", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-07-14", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-07-18", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-07-23", hours: ["11:00-14:00"] },
@@ -26,12 +30,17 @@ const getPrivateWorkshopData = () => {
         const startDate = new Date(); // Start from the current date
         const endDate = new Date("2025-12-31");
 
-        for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-            const day = d.getDay(); // 0 = Sunday, 6 = Saturday
+        for (
+            let d = new Date(startDate);
+            d <= endDate;
+            d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)
+        ) {
+            const zonedDate = toZonedTime(d, ISRAEL_TZ);
+            const day = zonedDate.getDay();
             const formattedDate = d.toISOString().split("T")[0];
 
             // Skip Saturdays (day 6) completely
-            if (day === 6) {
+            if (day === 0) {
                 continue;
             }
 
@@ -49,7 +58,7 @@ const getPrivateWorkshopData = () => {
             // Find any partial exclusions for this date
             const exclusion = partiallyExcludedSlots.find(slot => slot.date === formattedDate);
 
-            if (day === 5) { // Friday - only morning slot
+            if (day === 6) { // Friday - only morning slot
                 const fridayHours = ["11:00-14:00"];
 
                 // Check if this Friday's only slot is excluded
