@@ -12,20 +12,17 @@ interface ExcludedTimeSlot {
 const getPrivateWorkshopData = () => {
     const generateDates = () => {
         // Define completely excluded dates (no availability at all)
-        const fullyExcludedDates = ["2025-07-11","2025-07-18","2025-07-25","2025-08-15"];
+        const fullyExcludedDates = ["2025-08-15","2025-09-12","2025-09-26"];
 
         // Define partially excluded time slots
         const partiallyExcludedSlots: ExcludedTimeSlot[] = [
-            { date: "2025-07-08", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-07-10", hours: ["11:00-14:00"] },
-            { date: "2025-07-14", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-07-18", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-07-22", hours: ["11:00-14:00"] },
-            { date: "2025-07-23", hours: ["11:00-14:00"] },
-            { date: "2025-07-24", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-08-06", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-08-14", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-08-18", hours: ["14:30-17:30", "18:30-21:30"] },
+            { date: "2025-09-03", hours: ["14:30-17:30", "18:30-21:30"] },
+            { date: "2025-09-08", hours: ["14:30-17:30", "18:30-21:30"] },
+            { date: "2025-09-18", hours: ["14:30-17:30", "18:30-21:30"] },
+            { date: "2025-09-29", hours: ["14:30-17:30", "18:30-21:30"] },
         ];
 
         const dates = [];
