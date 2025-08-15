@@ -163,11 +163,6 @@ const getHomeData = () => {
                 href: "/about",
             }
         },
-        bannerImage: {
-            isEnabled: true,
-            src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/2_kqpsha.png",
-            alt: "תמונת בית",
-        },
         header: {
             isEnabled: true,
             title: "הבית שלך מתחיל כאן",

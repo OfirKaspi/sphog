@@ -1,7 +1,7 @@
-import Image from "next/image"
 import CTAButton from "@/components/common/CTAButton"
 import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetailsFormDialog"
 import { getWhatsappLink } from "@/utils/getWhatsappLink"
+import OptimizedImage from "@/components/common/OptimizedImage"
 
 interface HeroProps {
     title: string
@@ -28,11 +28,14 @@ const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: Her
 
                 {/* Image */}
                 <div className="flex-1 relative w-full max-w-md aspect-square drop-shadow-xl">
-                    <Image
+                    <OptimizedImage
                         src={image.src}
                         alt={image.alt}
-                        fill
-                        className="object-cover"
+                        width={720}
+                        height={720}
+                        crop="fit"
+                        quality={100}
+                        format="auto"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         priority
                     />

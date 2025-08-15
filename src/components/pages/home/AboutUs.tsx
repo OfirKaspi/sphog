@@ -1,8 +1,8 @@
 import CTAButton from "@/components/common/CTAButton";
 import { Media, LinkType } from "@/types/types";
-import Image from "next/image";
 import VideoContainer from "@/components/common/VideoContainer";
 import Link from "next/link";
+import OptimizedImage from "@/components/common/OptimizedImage";
 
 export interface AboutUsProps {
   title?: string;
@@ -40,11 +40,13 @@ export default function AboutUs({
             />
           ) : (
             <div className="relative h-full w-full">
-              <Image
+              <OptimizedImage
                 src={media.src}
                 alt={media.alt}
-                width={350}
-                height={500}
+                width={700}
+                height={1000}
+                crop="fit"
+                quality={100}
                 className="object-contain rounded-xl max-h-[500px] w-fit mx-auto"
               />
             </div>

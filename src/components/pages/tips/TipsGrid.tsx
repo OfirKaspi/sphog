@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import { Tip } from "@/types/types"
 import useResponsive from "@/hooks/useResponsive"
+import OptimizedImage from "@/components/common/OptimizedImage"
 
 interface TipsGridProps {
   tips: Tip[]
@@ -25,12 +25,13 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
             {isMobile || isTablet ? (
               <div className="w-full space-y-5 border-b-2 pb-5">
                 <div className="relative w-full h-64 rounded-xl overflow-hidden">
-                  <Image
+                  <OptimizedImage
                     src={tip.image.src}
                     alt={tip.image.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
+                    width={720}
+                    height={720}
+                    crop="fill"
+                    quality={90}
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <h3 className="text-white text-xl text-center rounded-lg px-4 py-2 leading-snug w-fit bg-black/70">
@@ -54,12 +55,13 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
               <>
                 {/* Desktop: Image */}
                 <div className="w-full md:w-1/2 h-64 md:h-80 relative rounded-xl overflow-hidden">
-                  <Image
+                  <OptimizedImage
                     src={tip.image.src}
                     alt={tip.image.alt}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
+                    width={720}
+                    height={720}
+                    crop="fill"
+                    quality={90}
                   />
                 </div>
                 {/* Desktop: Text */}
@@ -71,8 +73,8 @@ const TipsGrid = ({ tips }: TipsGridProps) => {
                   <div className="text-slate-900 leading-relaxed space-y-2">
                     {tip.paragraphs.map((paragraph, index) => (
                       <p key={index} className="flex items-start">
-                      <span className="mx-2 text-primary">•</span>
-                      {paragraph}
+                        <span className="mx-2 text-primary">•</span>
+                        {paragraph}
                       </p>
                     ))}
                   </div>

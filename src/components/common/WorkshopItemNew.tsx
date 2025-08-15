@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { WorkshopData, CTAColorType } from "@/types/types";
 import CTAButton from "@/components/common/CTAButton";
+import OptimizedImage from "./OptimizedImage";
 
 export default function WorkshopItemNew({
   title,
@@ -31,13 +31,16 @@ export default function WorkshopItemNew({
         className={`relative w-full ${index % 2 === 0 ? "md:col-start-1 md:row-start-1" : "md:col-start-2 md:row-start-1"
           }`}
       >
-        <Image
+        <OptimizedImage
           src={image.src}
           alt={image.alt}
-          fill
-          className="object-cover rounded-xl"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          priority={true} 
+          crop="fill"
+          quality={90}
+          format="auto"
+          width={480}
+          height={400}
+          className="rounded-xl h-full w-full object-cover"
+          priority={true}
           decoding="async"
         />
       </div>

@@ -1,11 +1,11 @@
 "use client"
 
-import Image from "next/image"
 import { Product } from "@/types/types"
 import useResponsive from "@/hooks/useResponsive"
 import { useState } from "react"
 import { X } from "lucide-react"
 import CustomModal from "@/components/common/CustomModal"
+import OptimizedImage from "@/components/common/OptimizedImage"
 
 interface ProductItemProps {
 	product: Product
@@ -34,24 +34,27 @@ const ProductItem = ({ product }: ProductItemProps) => {
 				{/* Image Section */}
 				<div className="relative w-full overflow-hidden">
 					{isMobile ? (
-						<Image
+						<OptimizedImage
 							src={product.image.src}
 							alt={product.image.alt}
 							width={800}
 							height={600}
-							className="object-cover w-full h-auto"
-							sizes="100vw"
+							crop="fill"
+							quality={100}
+							format="auto"
+							className="w-full h-auto"
 						/>
 					) : (
-						<div className="relative w-full aspect-square">
-							<Image
-								src={product.image.src}
-								alt={product.image.alt}
-								fill
-								className="object-cover"
-								sizes="33vw"
-							/>
-						</div>
+						<OptimizedImage
+							src={product.image.src}
+							alt={product.image.alt}
+							width={800}
+							height={800}
+							crop="fill"
+							quality={100}
+							format="auto"
+							className="object-cover h-full w-full aspect-square"
+						/>
 					)}
 				</div>
 
@@ -95,13 +98,15 @@ const ProductItem = ({ product }: ProductItemProps) => {
 						<X className="w-5 h-5" />
 					</button>
 
-					<Image
+					<OptimizedImage
 						src={selectedImage}
 						alt="Full preview"
 						width={800}
 						height={800}
+						crop="fill"
+						quality={100}
+						format="auto"
 						className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
-						priority
 					/>
 				</CustomModal>
 			)}

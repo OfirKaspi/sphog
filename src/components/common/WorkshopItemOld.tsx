@@ -1,17 +1,17 @@
 "use client"
 
 import Link from "next/link";
-import Image from "next/image";
 import { WorkshopData, CTAColorType } from "@/types/types";
 import CTAButton from "@/components/common/CTAButton";
+import OptimizedImage from "./OptimizedImage";
 
-export default function WorkshopItemOld({ 
-  title, 
-  paragraphs, 
-  image, 
-  links, 
-  buttonText, 
-  scrollToForm, 
+export default function WorkshopItemOld({
+  title,
+  paragraphs,
+  image,
+  links,
+  buttonText,
+  scrollToForm,
   ctaColor = CTAColorType.DEFAULT
 }: WorkshopData) {
   const handleScrollToForm = () => {
@@ -23,15 +23,17 @@ export default function WorkshopItemOld({
 
   return (
     <div className="max-w-2xl bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-all border flex flex-col mx-auto">
-      <div className="relative w-full h-[250px] sm:h-[300px]">
-        <Image
-          src={image.src}
-          alt={image.alt}
-          fill
-          priority={true}
-          className="object-cover"
-        />
-      </div>
+      <OptimizedImage
+        src={image.src}
+        alt={image.alt}
+        width={720}
+        height={450}
+        crop="fill"
+        quality={90}
+        format="auto"
+        priority={true}
+        className="object-cover w-full h-[250px] sm:h-[300px]"
+      />
       <div className="p-6 flex flex-col justify-between gap-6">
         <div>
           <h2 className="text-xl md:text-2xl text-primary font-semibold mb-2">{title}</h2>
