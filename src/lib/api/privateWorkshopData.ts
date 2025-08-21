@@ -12,11 +12,10 @@ interface ExcludedTimeSlot {
 const getPrivateWorkshopData = () => {
     const generateDates = () => {
         // Define completely excluded dates (no availability at all)
-        const fullyExcludedDates = ["2025-08-22","2025-09-12","2025-09-26"];
+        const fullyExcludedDates = ["2025-08-22","2025-09-12","2025-09-19","2025-09-26"];
 
         // Define partially excluded time slots
         const partiallyExcludedSlots: ExcludedTimeSlot[] = [
-            { date: "2025-08-18", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-08-24", hours: ["14:30-17:30"] },
             { date: "2025-09-03", hours: ["14:30-17:30", "18:30-21:30"] },
             { date: "2025-09-08", hours: ["14:30-17:30", "18:30-21:30"] },
