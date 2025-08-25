@@ -1,17 +1,15 @@
-"use client"
+"use server"
 
 import PageHeader from "@/components/common/PageHeader";
+import Testimonials from "@/components/common/testimonials/Testimonials";
 import VideoContainer from "@/components/common/VideoContainer";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
+import WorkshopRegistrationOpenForm from "@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm";
 import AboutUs from "@/components/pages/home/AboutUs";
 import getPrivateWorkshopData from "@/lib/api/privateWorkshopData";
-import dynamic from "next/dynamic";
 
-const WorkshopRegistrationOpenForm = dynamic(() => import("@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm"), {ssr: false})
-const Testimonials = dynamic(() => import("@/components/common/testimonials/Testimonials"), {ssr: false})
-
-const PrivateWorkshop = () => {
-  const data = getPrivateWorkshopData();
+const PrivateWorkshop = async () => {
+  const data = await getPrivateWorkshopData();
 
   return (
     <section>

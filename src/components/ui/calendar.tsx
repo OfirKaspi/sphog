@@ -59,20 +59,36 @@ export function Calendar({
         ...classNames,
       }}
       modifiers={{
-        family: (date) =>
-          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.FAMILY,
-        advanced: (date) =>
-          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.ADVANCED,
-        tech: (date) =>
-          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.TECH,
-        unavailable: (date) =>
-          dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop === WorkshopType.UNAVAILABLE,
+        family: (date) => {
+          const workshop = dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop;
+          return workshop === WorkshopType.FAMILY ||
+            workshop === 'FAMILY' ||
+            workshop === 'family';
+        },
+        advanced: (date) => {
+          const workshop = dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop;
+          return workshop === WorkshopType.ADVANCED ||
+            workshop === 'ADVANCED' ||
+            workshop === 'advanced';
+        },
+        tech: (date) => {
+          const workshop = dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop;
+          return workshop === WorkshopType.TECH ||
+            workshop === 'TECH' ||
+            workshop === 'tech';
+        },
+        unavailable: (date) => {
+          const workshop = dateMap?.get(format(date, "yyyy-MM-dd"))?.workshop;
+          return workshop === WorkshopType.UNAVAILABLE ||
+            workshop === 'UNAVAILABLE' ||
+            workshop === 'unavailable';
+        },
       }}
       modifiersClassNames={{
         tech: "bg-green-200 hover:bg-green-300",
         family: "bg-sky-200 hover:bg-sky-300",
         advanced: "bg-pink-200 hover:bg-pink-300",
-        unavailable:"bg-gray-300 hover:bg-gray-300",
+        unavailable: "bg-gray-300 hover:bg-gray-300",
       }}
       components={{
         IconLeft: () => <ChevronLeft className="h-4 w-4" />,

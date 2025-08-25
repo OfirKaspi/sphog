@@ -1,108 +1,113 @@
-import { toZonedTime } from "date-fns-tz";
-import { WorkshopType } from "@/types/types";
+// import { toZonedTime } from "date-fns-tz";
+// import { WorkshopType } from "@/types/types";
 
-const ISRAEL_TZ = "Asia/Jerusalem";
+import { getPrivateSchedules } from "../schedules";
 
-// Define a type for excluded time slots
-interface ExcludedTimeSlot {
-    date: string; // Date in YYYY-MM-DD format
-    hours: string[]; // Hours to exclude, e.g. ["11:00-14:00"]
-}
+// const ISRAEL_TZ = "Asia/Jerusalem";
 
-const getPrivateWorkshopData = () => {
-    const generateDates = () => {
-        // Define completely excluded dates (no availability at all)
-        const fullyExcludedDates = ["2025-08-22","2025-09-12","2025-09-19","2025-09-26"];
+// // Define a type for excluded time slots
+// interface ExcludedTimeSlot {
+//     date: string; // Date in YYYY-MM-DD format
+//     hours: string[]; // Hours to exclude, e.g. ["11:00-14:00"]
+// }
 
-        // Define partially excluded time slots
-        const partiallyExcludedSlots: ExcludedTimeSlot[] = [
-            { date: "2025-08-24", hours: ["14:30-17:30"] },
-            { date: "2025-09-03", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-09-08", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-09-17", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-09-18", hours: ["14:30-17:30", "18:30-21:30"] },
-            { date: "2025-09-29", hours: ["14:30-17:30", "18:30-21:30"] },
-        ];
+const getPrivateWorkshopData = async () => {
 
-        const dates = [];
-        const startDate = new Date(); // Start from the current date
-        const endDate = new Date("2025-12-31");
+    const availableDates = await getPrivateSchedules()
 
-        for (
-            let d = new Date(startDate);
-            d <= endDate;
-            d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)
-        ) {
-            const zonedDate = toZonedTime(d, ISRAEL_TZ);
-            const day = zonedDate.getDay();
-            const formattedDate = d.toISOString().split("T")[0];
+    // const generateDates = () => {
+    //     // Define completely excluded dates (no availability at all)
+    //     const fullyExcludedDates = ["2025-08-22","2025-09-12","2025-09-19","2025-09-26"];
 
-            // Skip Saturdays (day 6) completely
-            if (day === 0) {
-                continue;
-            }
+    //     // Define partially excluded time slots
+    //     const partiallyExcludedSlots: ExcludedTimeSlot[] = [
+    //         { date: "2025-08-24", hours: ["14:30-17:30"] },
+    //         { date: "2025-09-03", hours: ["14:30-17:30", "18:30-21:30"] },
+    //         { date: "2025-09-08", hours: ["14:30-17:30", "18:30-21:30"] },
+    //         { date: "2025-09-17", hours: ["14:30-17:30", "18:30-21:30"] },
+    //         { date: "2025-09-18", hours: ["14:30-17:30", "18:30-21:30"] },
+    //         { date: "2025-09-29", hours: ["14:30-17:30", "18:30-21:30"] },
+    //     ];
 
-            // Skip fully excluded dates
-            if (fullyExcludedDates.includes(formattedDate)) {
-                // Add them as unavailable for display in the calendar
-                dates.push({
-                    date: new Date(formattedDate),
-                    hours: [],
-                    workshop: WorkshopType.UNAVAILABLE
-                });
-                continue;
-            }
+    //     const dates = [];
+    //     const startDate = new Date(); // Start from the current date
+    //     const endDate = new Date("2025-12-31");
 
-            // Find any partial exclusions for this date
-            const exclusion = partiallyExcludedSlots.find(slot => slot.date === formattedDate);
+    //     for (
+    //         let d = new Date(startDate);
+    //         d <= endDate;
+    //         d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1)
+    //     ) {
+    //         const zonedDate = toZonedTime(d, ISRAEL_TZ);
+    //         const day = zonedDate.getDay();
+    //         const formattedDate = d.toISOString().split("T")[0];
 
-            if (day === 6) { // Friday - only morning slot
-                const fridayHours = ["11:00-14:00"];
+    //         // Skip Saturdays (day 6) completely
+    //         if (day === 0) {
+    //             continue;
+    //         }
 
-                // Check if this Friday's only slot is excluded
-                if (exclusion && exclusion.hours.includes(fridayHours[0])) {
-                    // If the only available slot is excluded, mark as unavailable
-                    dates.push({
-                        date: new Date(formattedDate),
-                        hours: [],
-                        workshop: WorkshopType.UNAVAILABLE
-                    });
-                } else {
-                    // Friday with available slot
-                    dates.push({
-                        date: new Date(formattedDate),
-                        hours: fridayHours,
-                        workshop: WorkshopType.ADVANCED
-                    });
-                }
-            } else { // Weekdays (Sunday-Thursday) - all three slots
-                const weekdayHours = ["11:00-14:00", "14:30-17:30", "18:30-21:30"];
+    //         // Skip fully excluded dates
+    //         if (fullyExcludedDates.includes(formattedDate)) {
+    //             // Add them as unavailable for display in the calendar
+    //             dates.push({
+    //                 date: new Date(formattedDate),
+    //                 hours: [],
+    //                 workshop: WorkshopType.UNAVAILABLE
+    //             });
+    //             continue;
+    //         }
 
-                // Filter out excluded hours if any
-                const availableHours = exclusion
-                    ? weekdayHours.filter(hour => !exclusion.hours.includes(hour))
-                    : [...weekdayHours];
+    //         // Find any partial exclusions for this date
+    //         const exclusion = partiallyExcludedSlots.find(slot => slot.date === formattedDate);
 
-                if (availableHours.length === 0) {
-                    // If all hours are excluded, mark the date as unavailable
-                    dates.push({
-                        date: new Date(formattedDate),
-                        hours: [],
-                        workshop: WorkshopType.UNAVAILABLE
-                    });
-                } else {
-                    // Regular day with some available hours
-                    dates.push({
-                        date: new Date(formattedDate),
-                        hours: availableHours,
-                        workshop: WorkshopType.ADVANCED
-                    });
-                }
-            }
-        }
+    //         if (day === 6) { // Friday - only morning slot
+    //             const fridayHours = ["11:00-14:00"];
 
-        return dates;
-    };
+    //             // Check if this Friday's only slot is excluded
+    //             if (exclusion && exclusion.hours.includes(fridayHours[0])) {
+    //                 // If the only available slot is excluded, mark as unavailable
+    //                 dates.push({
+    //                     date: new Date(formattedDate),
+    //                     hours: [],
+    //                     workshop: WorkshopType.UNAVAILABLE
+    //                 });
+    //             } else {
+    //                 // Friday with available slot
+    //                 dates.push({
+    //                     date: new Date(formattedDate),
+    //                     hours: fridayHours,
+    //                     workshop: WorkshopType.ADVANCED
+    //                 });
+    //             }
+    //         } else { // Weekdays (Sunday-Thursday) - all three slots
+    //             const weekdayHours = ["11:00-14:00", "14:30-17:30", "18:30-21:30"];
+
+    //             // Filter out excluded hours if any
+    //             const availableHours = exclusion
+    //                 ? weekdayHours.filter(hour => !exclusion.hours.includes(hour))
+    //                 : [...weekdayHours];
+
+    //             if (availableHours.length === 0) {
+    //                 // If all hours are excluded, mark the date as unavailable
+    //                 dates.push({
+    //                     date: new Date(formattedDate),
+    //                     hours: [],
+    //                     workshop: WorkshopType.UNAVAILABLE
+    //                 });
+    //             } else {
+    //                 // Regular day with some available hours
+    //                 dates.push({
+    //                     date: new Date(formattedDate),
+    //                     hours: availableHours,
+    //                     workshop: WorkshopType.ADVANCED
+    //                 });
+    //             }
+    //         }
+    //     }
+
+    //     return dates;
+    // };
 
     const data = {
         header: {
@@ -175,7 +180,7 @@ const getPrivateWorkshopData = () => {
                 title: "סדנא פרטית",
                 description: "בחר תאריך ושעה לסדנא פרטית מותאמת אישית.",
             },
-            availableDates: generateDates(),
+            availableDates,
         },
         testimonials: {
             title: "לקוחות ממליצים",

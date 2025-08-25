@@ -1,6 +1,9 @@
-import { WorkshopType, CTAColorType } from "@/types/types";
+import { CTAColorType } from "@/types/types";
+import { getPublicSchedules } from "../schedules";
 
-const getPublicWorkshopData = () => {
+const getPublicWorkshopData = async () => {
+    const availableDates = await getPublicSchedules()
+
     const data = {
         header: {
             title: "מוזמנים לאחת מהסדנאות הקבוצתיות שלנו",
@@ -58,18 +61,7 @@ const getPublicWorkshopData = () => {
                 title: "הסדנאות הבאות שלנו",
                 description: "ספרו לנו באיזה תאריך אתם מתעניינים ונשלח לכם את כל הפרטים.",
             },
-            availableDates: [
-                { date: new Date("2025-08-22"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-08-24"), hours: ["11:00-14:00"], workshop: WorkshopType.UNAVAILABLE },
-                { date: new Date("2025-08-27"), hours: ["14:30-17:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-08-29"), hours: ["11:00-14:00"], workshop: WorkshopType.UNAVAILABLE },
-                { date: new Date("2025-09-03"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-09-08"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-09-12"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-09-18"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-09-26"), hours: ["11:00-14:00"], workshop: WorkshopType.ADVANCED },
-                { date: new Date("2025-09-29"), hours: ["18:00-21:00"], workshop: WorkshopType.ADVANCED },
-            ],
+            availableDates
         },
         testimonials: {
             title: "לקוחות ממליצים",
