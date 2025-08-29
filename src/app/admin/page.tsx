@@ -8,7 +8,10 @@ import { Calendar, Clock, Users, Settings, LogOut, Shield, Plus, Trash2 } from '
 import { WorkshopSchedule } from '@/types/workshop'
 import { useAppToast } from '@/hooks/useAppToast'
 
-const AVAILABLE_HOURS = ['11:00-14:00', '14:30-17:30', '18:30-21:30']
+// const AVAILABLE_HOURS = ['11:00-14:00', '14:30-17:30', '18:30-21:30']
+const PRIVATE_HOURS = ['11:00-14:00', '14:30-17:30', '18:30-21:30']
+const PUBLIC_HOURS = ['11:00-14:00', '17:30-20:30', '18:00-21:00']
+
 const WORKSHOP_TYPES = {
   family: 'משפחתית',
   tech: 'טכניקות',
@@ -464,10 +467,24 @@ function ScheduleEditor({
   }
 
   const handleSave = () => {
+    // Check if no hours are selected - if so, force unavailable
+    const hasHours = hours.length > 0
+    const finalAvailable = isAvailable && hasHours
+
+    // Determine correct workshop type
+    let workshopType
+    if (!finalAvailable) {
+      workshopType = 'unavailable'
+    } else if (viewType === 'private') {
+      workshopType = 'advanced'
+    } else {
+      workshopType = workshop === 'unavailable' ? 'advanced' : workshop
+    }
+
     onSave({
       date,
-      hours: isAvailable ? hours : [],
-      workshop: viewType === 'private' ? 'advanced' : (isAvailable ? workshop : 'unavailable')
+      hours: finalAvailable ? hours : [],
+      workshop: workshopType
     })
   }
 
@@ -543,10 +560,12 @@ function ScheduleEditor({
             )}
 
             {/* Hours */}
+            {/* Hours */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">שעות זמינות</label>
               <div className="space-y-3">
-                {AVAILABLE_HOURS.map(hour => (
+                {/* Default hours */}
+                {(viewType === 'private' ? PRIVATE_HOURS : PUBLIC_HOURS).map(hour => (
                   <label
                     key={hour}
                     className={`flex items-center p-3 rounded-xl border-2 cursor-pointer transition-all ${hours.includes(hour)
@@ -563,9 +582,39 @@ function ScheduleEditor({
                     <div className="flex items-center">
                       <Clock className="w-4 h-4 text-gray-400 ml-2" />
                       <span className="font-medium">{hour}</span>
+                      <span className="text-xs text-gray-500 mr-2">(ברירת מחדל)</span>
                     </div>
                   </label>
                 ))}
+
+                {/* Custom hours (hours that exist in data but aren't in defaults) */}
+                {hours.filter(hour =>
+                  !(viewType === 'private' ? PRIVATE_HOURS : PUBLIC_HOURS).includes(hour)
+                ).map(hour => (
+                  <label
+                    key={hour}
+                    className="flex items-center p-3 rounded-xl border-2 border-blue-300 bg-blue-50 cursor-pointer transition-all"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={true}
+                      onChange={() => handleHourToggle(hour)}
+                      className="rounded text-blue-600 ml-3"
+                    />
+                    <div className="flex items-center">
+                      <Clock className="w-4 h-4 text-blue-400 ml-2" />
+                      <span className="font-medium">{hour}</span>
+                      <span className="text-xs text-blue-600 mr-2">(מותאם אישית)</span>
+                    </div>
+                  </label>
+                ))}
+
+                {/* Add custom hour */}
+                <CustomHourAdder onAddHour={(hour) => {
+                  if (!hours.includes(hour)) {
+                    setHours([...hours, hour].sort())
+                  }
+                }} />
               </div>
             </div>
           </>
@@ -583,6 +632,109 @@ function ScheduleEditor({
           {saving ? 'שומר...' : 'שמור שינויים'}
         </button>
       </div>
+    </div>
+  )
+}
+
+// Custom Hour Adder Component
+function CustomHourAdder({ onAddHour }: { onAddHour: (hour: string) => void }) {
+  const [startTime, setStartTime] = useState('08:00')
+  const [endTime, setEndTime] = useState('11:00')
+  const [showForm, setShowForm] = useState(false)
+  const toast = useAppToast();
+
+
+  // Generate time options in 30-minute intervals from 8:00 to 23:00
+  const generateTimeOptions = () => {
+    const times = []
+    for (let hour = 8; hour <= 23; hour++) {
+      times.push(`${hour.toString().padStart(2, '0')}:00`)
+      if (hour < 23) times.push(`${hour.toString().padStart(2, '0')}:30`)
+    }
+    return times
+  }
+
+  const timeOptions = generateTimeOptions()
+
+  const handleAddHour = () => {
+    const customHour = `${startTime}-${endTime}`
+    
+    // Convert times to minutes for comparison
+    const [startH, startM] = startTime.split(':').map(Number)
+    const [endH, endM] = endTime.split(':').map(Number)
+    const startMinutes = startH * 60 + startM
+    const endMinutes = endH * 60 + endM
+    
+    // Validation: Start time cannot be greater than or equal to end time
+    if (startMinutes >= endMinutes) {
+      toast.error('שעת התחלה חייבת להיות קודם לשעת הסיום')
+      return
+    }
+    
+    onAddHour(customHour)
+    setShowForm(false)
+    setStartTime('08:00')
+    setEndTime('11:00')
+  }
+
+  if (!showForm) {
+    return (
+      <button
+        onClick={() => setShowForm(true)}
+        className="w-full p-3 border-2 border-dashed border-gray-300 rounded-xl hover:border-gray-400 transition-colors flex items-center justify-center text-gray-600 hover:text-gray-800"
+      >
+        <Plus className="w-4 h-4 ml-2" />
+        הוסף שעות מותאמות אישית
+      </button>
+    )
+  }
+
+  return (
+    <div className="border-2 border-gray-300 rounded-xl p-4 bg-gray-50">
+      <div className="flex items-center justify-between mb-3">
+        <span className="font-medium text-gray-700">הוסף שעות חדשות</span>
+        <button
+          onClick={() => setShowForm(false)}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <label className="block text-xs text-gray-600 mb-1">שעת התחלה</label>
+          <select
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            className="w-full border border-gray-300 p-2 rounded text-sm"
+          >
+            {timeOptions.map(time => (
+              <option key={time} value={time}>{time}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-xs text-gray-600 mb-1">שעת סיום</label>
+          <select
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
+            className="w-full border border-gray-300 p-2 rounded text-sm"
+          >
+            {timeOptions.map(time => (
+              <option key={time} value={time}>{time}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <button
+        onClick={handleAddHour}
+        className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+      >
+        הוסף {startTime}-{endTime}
+      </button>
     </div>
   )
 }
@@ -620,7 +772,7 @@ function QuickActionsPanel({
         if (!shouldSkip) {
           const hours = day === 5
             ? ['11:00-14:00']
-            : ['11:00-14:00', '14:30-17:30', '18:30-21:30']
+            : (viewType === 'private' ? PRIVATE_HOURS : PUBLIC_HOURS)
 
           promises.push(onSave({
             date: format(d, 'yyyy-MM-dd'),
