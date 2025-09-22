@@ -166,7 +166,9 @@ export default function WorkshopRegistrationForm({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          selectedDate: formData.selectedDate?.toISOString().split("T")[0],
+          selectedDate: formData.selectedDate
+            ? format(formData.selectedDate, "yyyy-MM-dd") // <-- Use local date format
+            : undefined,
           selectedHour: formData.selectedHour,
           fullName: formData.fullName,
           phoneNumber: formData.phoneNumber,
