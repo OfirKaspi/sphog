@@ -16,8 +16,12 @@ const ProductList = ({ products, className, itemClassName }: ProductListProps) =
         )
     }
 
+    const gridClassName = className
+        ? `mx-auto grid gap-4 px-4 pb-12 sm:gap-5 sm:px-5 ${className}`
+        : "mx-auto grid max-w-screen-xl grid-cols-1 gap-4 px-4 pb-12 sm:grid-cols-2 sm:gap-5 sm:px-5 lg:grid-cols-3 xl:grid-cols-4"
+
     return (
-        <div className={`mx-auto grid max-w-screen-xl grid-cols-1 gap-4 px-4 pb-12 sm:grid-cols-2 sm:gap-5 sm:px-5 lg:grid-cols-3 xl:grid-cols-4 ${className ?? ""}`}>
+        <div className={gridClassName}>
             {products.map((product) => (
                 <ProductItem key={product._id} product={product} className={itemClassName ?? "min-h-full"} />
             ))}

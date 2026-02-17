@@ -189,6 +189,7 @@ function AdminCatalogContent() {
   const filteredProducts = useMemo(() => products.filter((product) => inTab(product, activeTab)), [activeTab, products])
   const sortableIds = filteredProducts.map((product) => product.id)
   const previewSrc = catalogImagePreview || catalogForm.image_url
+  const formFieldClassName = "bg-white"
 
   const validationErrors = useMemo(() => {
     const errors: Partial<Record<FormErrorKey, string>> = {}
@@ -561,28 +562,28 @@ function AdminCatalogContent() {
           <div className="space-y-3">
             <div className="space-y-2">
               <Label htmlFor="catalog-name">שם מוצר *</Label>
-              <Input id="catalog-name" value={catalogForm.name} onChange={(event) => updateCatalogForm("name", event.target.value)} />
+              <Input id="catalog-name" className={formFieldClassName} value={catalogForm.name} onChange={(event) => updateCatalogForm("name", event.target.value)} />
               {fieldErrors.name ? <p className="text-xs text-red-600">{fieldErrors.name}</p> : null}
             </div>
             <div className="space-y-2">
               <Label htmlFor="catalog-description">תיאור מוצר / הערה</Label>
-              <Textarea id="catalog-description" value={catalogForm.description} onChange={(event) => updateCatalogForm("description", event.target.value)} />
+              <Textarea id="catalog-description" className={formFieldClassName} value={catalogForm.description} onChange={(event) => updateCatalogForm("description", event.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">
                 <Label htmlFor="catalog-price">מחיר *</Label>
-                <Input id="catalog-price" type="number" min={0} value={catalogForm.price} onChange={(event) => updateCatalogForm("price", event.target.value)} />
+                <Input id="catalog-price" className={formFieldClassName} type="number" min={0} value={catalogForm.price} onChange={(event) => updateCatalogForm("price", event.target.value)} />
                 {fieldErrors.price ? <p className="text-xs text-red-600">{fieldErrors.price}</p> : null}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="catalog-original-price">מחיר מקורי</Label>
-                <Input id="catalog-original-price" type="number" min={0} value={catalogForm.original_price} onChange={(event) => updateCatalogForm("original_price", event.target.value)} />
+                <Input id="catalog-original-price" className={formFieldClassName} type="number" min={0} value={catalogForm.original_price} onChange={(event) => updateCatalogForm("original_price", event.target.value)} />
                 {fieldErrors.original_price ? <p className="text-xs text-red-600">{fieldErrors.original_price}</p> : null}
               </div>
             </div>
             <div className="rounded-xl border bg-slate-50 p-3 space-y-3">
               <Label htmlFor="catalog-image">תמונת מוצר (עד 5MB) *</Label>
-              <Input id="catalog-image" type="file" accept="image/*" onChange={(event) => void onCatalogImageSelected(event.target.files?.[0] ?? null)} className="bg-white" />
+              <Input id="catalog-image" type="file" accept="image/*" onChange={(event) => void onCatalogImageSelected(event.target.files?.[0] ?? null)} className={formFieldClassName} />
               {previewSrc ? (
                 <div className="relative h-52 w-full overflow-hidden rounded-lg border bg-white">
                   <CatalogImage src={previewSrc} alt={catalogForm.name || "תצוגה מקדימה"} />
