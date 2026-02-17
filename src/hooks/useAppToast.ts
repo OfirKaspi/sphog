@@ -45,7 +45,7 @@ export function useAppToast(): AppToast {
                 {
                     variant: "default",
                     duration: 3000,
-                    className: "border border-primary text-primary",
+                    className: "border border-green-800 bg-green-700 text-white [&_*]:text-white",
                 },
                 opts
             ),

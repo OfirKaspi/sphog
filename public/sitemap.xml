@@ -20,5 +20,8 @@
     <loc>https://sphogmoss.com/tips</loc>
     <priority>0.7</priority>
   </url>
-  <!-- Store route excluded since it's blocked -->
+  <url>
+    <loc>https://sphogmoss.com/store</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>

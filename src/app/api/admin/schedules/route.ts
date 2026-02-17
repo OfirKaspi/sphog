@@ -1,28 +1,9 @@
 // app/api/admin/schedules/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { jwtVerify } from 'jose'
 import { revalidatePath } from 'next/cache'
 import { getAllSchedulesForAdmin, upsertSchedule, deleteSchedule } from '@/lib/schedules'
 import { supabase } from '@/lib/supabase'
-
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!)
-
-async function checkAuth(request: NextRequest): Promise<boolean> {
-  try {
-    const authorization = request.headers.get('authorization')
-    
-    if (!authorization || !authorization.startsWith('Bearer ')) {
-      return false
-    }
-
-    const token = authorization.split(' ')[1]
-    await jwtVerify(token, JWT_SECRET)
-    return true
-  } catch (error) {
-    console.error('Auth verification failed:', error)
-    return false
-  }
-}
+import { requireAdminAuth } from '@/lib/adminAuth'
 
 // Cleanup function for old schedules
 async function cleanupOldSchedules(): Promise<number> {
@@ -53,8 +34,9 @@ async function cleanupOldSchedules(): Promise<number> {
 }
 
 export async function GET(request: NextRequest) {
-  if (!await checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const auth = await requireAdminAuth(request)
+  if (!auth.ok) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
   try {
@@ -73,8 +55,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!await checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const auth = await requireAdminAuth(request)
+  if (!auth.ok) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
   try {
@@ -132,8 +115,9 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-  if (!await checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const auth = await requireAdminAuth(request)
+  if (!auth.ok) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
   try {
@@ -180,8 +164,9 @@ export async function DELETE(request: NextRequest) {
 
 // New endpoint for manual cleanup
 export async function PATCH(request: NextRequest) {
-  if (!await checkAuth(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  const auth = await requireAdminAuth(request)
+  if (!auth.ok) {
+    return NextResponse.json({ error: auth.error }, { status: auth.status })
   }
 
   try {

@@ -1,4 +1,38 @@
-const getHomeData = () => {
+import { getPublicCatalogProducts } from "@/lib/api/catalogData"
+
+export const homeTestimonials = [
+    {
+        name: "קרן",
+        quote: "איזה חוויה מדהימה! אחת החוויות הכי מרתקות ויצירתיות שעברתי. סדנא מקצועית, מושקעת ומלאה באווירה נעימה ומפרגנת. כל שלב לווה בהסברים ברורים וטיפים קטנים שעושים הבדל גדול. תשומת הלב האישית והאווירה האינטימית איפשרה שפע של זמן לשאלות והתנסות מעשית אמיתית כשאייל מדריך ומכוון לאורך כל הדרך. חזרתי הביתה עם טרריום עוצר נשימה ועם כלים ורעיונות חדשים להמשך היצירה. ממליצה בחום!",
+        role: "משתתפת בסדנא קבוצתית",
+        image: {
+            src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
+            alt: "תמונה של קרן",
+        },
+    },
+    {
+        name: "בר",
+        quote: "ממש נהננו! אייל מאוד חיובי, קליל וכיפי, ובאמת שהיה מדהים. כולנו נהננו מאוד ויצאנו עם טרריומים יפיפיים ותחושת סיפוק מטורפת. אני ממליצה ממש בחום, סדנה מדהימה, שווה כל אגורה. גם בשלב של קביעת התאריך כל מי שדיברתי איתם היו ממש נחמדים, ומצאו פתרונות מעולים לכל הצרכים שלנו.",
+        role: "סדנא לצוות",
+        image: {
+            src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
+            alt: "תמונה של בר",
+        },
+    },
+    {
+        name: "יפתח",
+        quote: "תודה על ערב משגע, מיוחד, מרגיע וכייפי לאללה. נהניתי מכל רגע 🙏🏻",
+        role: "סדנא זוגית",
+        image: {
+            src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
+            alt: "תמונה של יפתח",
+        },
+    },
+]
+
+const getHomeData = async () => {
+    const storeTeaserProducts = await getPublicCatalogProducts({ showOnHomeOnly: true })
+
     const data = {
         hero: {
             isEnabled: true,
@@ -62,25 +96,13 @@ const getHomeData = () => {
             },
         },
         storeTeaser: {
-            isEnabled: true,
+            isEnabled: storeTeaserProducts.length > 0,
             title: "הצצה לחנות",
-            // link: {
-            //     text: "מעבר לחנות",
-            //     href: "/store"
-            // },
-            products: [
-                {
-                    _id: 9,
-                    name: "טרריום למכירה",
-                    price: 1000,
-                    isInStock: false,
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749929963/sphog/2-min_1_u7ojgq.jpg",
-                        alt: "תמונה של טרריום"
-                    },
-                    description: "מבחר טרריומים מעוצבים, עם סוגי טחב, פיטוניות, שרכים מגוונים, סלגינלה יהודי נודד ועוד."
-                },
-            ]
+            link: {
+                text: "מעבר לחנות",
+                href: "/store"
+            },
+            products: storeTeaserProducts
         },
         tipsSection: {
             isEnabled: false,
@@ -171,35 +193,7 @@ const getHomeData = () => {
         testimonials: {
             isEnabled: true,
             title: "לקוחות ממליצים",
-            testimonials: [
-                {
-                    name: "קרן",
-                    quote: "איזה חוויה מדהימה! אחת החוויות הכי מרתקות ויצירתיות שעברתי. סדנא מקצועית, מושקעת ומלאה באווירה נעימה ומפרגנת. כל שלב לווה בהסברים ברורים וטיפים קטנים שעושים הבדל גדול. תשומת הלב האישית והאווירה האינטימית איפשרה שפע של זמן לשאלות והתנסות מעשית אמיתית כשאייל מדריך ומכוון לאורך כל הדרך. חזרתי הביתה עם טרריום עוצר נשימה ועם כלים ורעיונות חדשים להמשך היצירה. ממליצה בחום!",
-                    role: "משתתפת בסדנא קבוצתית",
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
-                        alt: "תמונה של קרן",
-                    },
-                },
-                {
-                    name: "בר",
-                    quote: "ממש נהננו! אייל מאוד חיובי, קליל וכיפי, ובאמת שהיה מדהים. כולנו נהננו מאוד ויצאנו עם טרריומים יפיפיים ותחושת סיפוק מטורפת. אני ממליצה ממש בחום, סדנה מדהימה, שווה כל אגורה. גם בשלב של קביעת התאריך כל מי שדיברתי איתם היו ממש נחמדים, ומצאו פתרונות מעולים לכל הצרכים שלנו.",
-                    role: "סדנא לצוות",
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
-                        alt: "תמונה של בר",
-                    },
-                },
-                {
-                    name: "יפתח",
-                    quote: "תודה על ערב משגע, מיוחד, מרגיע וכייפי לאללה. נהניתי מכל רגע 🙏🏻",
-                    role: "סדנא זוגית",
-                    image: {
-                        src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1747765974/sphog/1_kawtgf.png",
-                        alt: "תמונה של יפתח",
-                    },
-                },
-            ],
+            testimonials: homeTestimonials,
         },
         faq: {
             isEnabled: true,

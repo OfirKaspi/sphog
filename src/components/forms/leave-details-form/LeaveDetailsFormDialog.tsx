@@ -61,7 +61,7 @@ const LeaveDetailsDialog = ({ text, isFancyWrapper = true, isDark = true }: Leav
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="bg-white max-w-[350px] sm:max-w-[450px] rounded-lg">
+      <DialogContent className="bg-white max-w-[350px] sm:max-w-[450px] rounded-lg" dir="rtl">
         <LeaveDetailsFormHeader isSuccess={isSuccess} />
         <LeaveDetailsForm isSuccess={isSuccess} setIsSuccess={setIsSuccess} />
       </DialogContent>

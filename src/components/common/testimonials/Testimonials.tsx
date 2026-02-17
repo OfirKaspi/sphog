@@ -13,6 +13,9 @@ interface TestimonialProps {
 
 const Testimonials = ({ testimonials, title, isBgPrimary = true }: TestimonialProps) => {
   const { isDesktop } = useResponsive()
+  if (!testimonials?.length) {
+    return null
+  }
 
   return (
     <section className={`${isBgPrimary && "bg-primary"} w-full`}>

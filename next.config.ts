@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
               font-src 'self' https://fonts.gstatic.com;
               img-src 'self' data: https://res.cloudinary.com;
               frame-src https://www.youtube.com https://www.youtube-nocookie.com;
-              connect-src 'self' https://va.vercel-scripts.com https://www.google-analytics.com;
+              connect-src 'self' https://va.vercel-scripts.com https://www.google-analytics.com https://*.supabase.co wss://*.supabase.co;
             `.replace(/\n/g, "").trim()
           },          
           {

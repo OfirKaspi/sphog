@@ -24,7 +24,7 @@ export interface Media extends Image {
 // }
 
 export interface Product {
-  _id: number;
+  _id: number | string;
   name: string;
   price: number;
   originalPrice?: number;

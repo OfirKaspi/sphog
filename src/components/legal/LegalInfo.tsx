@@ -31,7 +31,7 @@ const LegalInfo = () => {
           <DialogTrigger asChild>
             <li className="text-sm underline cursor-pointer">{item.title}</li>
           </DialogTrigger>
-          <DialogContent className="max-w-[350px] sm:max-w-[450px] rounded-lg">
+          <DialogContent className="max-w-[350px] sm:max-w-[450px] rounded-lg" dir="rtl">
             <DialogHeader>
               <DialogTitle className="text-center">
                 {item.title}

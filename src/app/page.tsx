@@ -1,6 +1,3 @@
-"use client"
-
-import dynamic from "next/dynamic"
 import FAQ from "@/components/common/FAQ"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import AboutUs from "@/components/pages/home/AboutUs"
@@ -10,11 +7,10 @@ import TipsSection from "@/components/pages/home/TipsSection"
 import WorkshopPreview from "@/components/pages/home/WorkshopPreview"
 import getHomeData from "@/lib/api/homeData"
 import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
+import Testimonials from "@/components/common/testimonials/Testimonials"
 
-const Testimonials = dynamic(() => import("@/components/common/testimonials/Testimonials"), {ssr: false})
-
-const Home = () => {
-  const data = getHomeData()
+const Home = async () => {
+  const data = await getHomeData()
 
   return (
     <section className="relative w-full">
