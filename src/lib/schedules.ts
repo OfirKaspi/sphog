@@ -1,5 +1,5 @@
 // lib/schedules.ts
-import { supabase } from './supabase'
+import { getSupabaseServiceRoleClient } from './supabase'
 import { WorkshopSchedule } from '@/types/workshop'
 import { getPrivateSchedules, getPublicSchedules, invalidateScheduleCache } from './scheduleCache'
 
@@ -8,7 +8,8 @@ export { getPrivateSchedules, getPublicSchedules }
 
 // Admin functions for dashboard (no cache, always fresh)
 export async function getAllSchedulesForAdmin(isPrivate: boolean): Promise<WorkshopSchedule[]> {
-  const { data, error } = await supabase
+  const admin = getSupabaseServiceRoleClient()
+  const { data, error } = await admin
     .from('workshop_schedules')
     .select('*')
     .eq('is_private', isPrivate)
@@ -29,9 +30,9 @@ export async function upsertSchedule(schedule: {
   workshop: string
   is_private: boolean
 }): Promise<WorkshopSchedule | null> {
+  const admin = getSupabaseServiceRoleClient()
   try {
-    // First, try to update existing record
-    const { data: existingData } = await supabase
+    const { data: existingData } = await admin
       .from('workshop_schedules')
       .select('id')
       .eq('date', schedule.date)
@@ -39,8 +40,7 @@ export async function upsertSchedule(schedule: {
       .single()
 
     if (existingData) {
-      // Update existing record
-      const { data, error } = await supabase
+      const { data, error } = await admin
         .from('workshop_schedules')
         .update({
           hours: schedule.hours || [],
@@ -56,12 +56,10 @@ export async function upsertSchedule(schedule: {
         return null
       }
 
-      // Invalidate cache after successful update
       invalidateScheduleCache(schedule.is_private)
       return data
     } else {
-      // Insert new record
-      const { data, error } = await supabase
+      const { data, error } = await admin
         .from('workshop_schedules')
         .insert({
           date: schedule.date,
@@ -78,7 +76,6 @@ export async function upsertSchedule(schedule: {
         return null
       }
 
-      // Invalidate cache after successful insert
       invalidateScheduleCache(schedule.is_private)
       return data
     }
@@ -89,8 +86,9 @@ export async function upsertSchedule(schedule: {
 }
 
 export async function deleteSchedule(date: string, isPrivate: boolean): Promise<boolean> {
+  const admin = getSupabaseServiceRoleClient()
   try {
-    const { error } = await supabase
+    const { error } = await admin
       .from('workshop_schedules')
       .delete()
       .eq('date', date)
@@ -101,7 +99,6 @@ export async function deleteSchedule(date: string, isPrivate: boolean): Promise<
       return false
     }
 
-    // Invalidate cache after successful delete
     invalidateScheduleCache(isPrivate)
 
     return true

@@ -2,18 +2,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { getAllSchedulesForAdmin, upsertSchedule, deleteSchedule } from '@/lib/schedules'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseServiceRoleClient } from '@/lib/supabase'
 import { requireAdminAuth } from '@/lib/adminAuth'
 
 // Cleanup function for old schedules
 async function cleanupOldSchedules(): Promise<number> {
   const today = new Date().toISOString().split('T')[0]
+  const admin = getSupabaseServiceRoleClient()
   
   try {
-    const { data, error } = await supabase
+    const { data, error } = await admin
       .from('workshop_schedules')
       .delete()
-      .lt('date', today) // Delete anything before today
+      .lt('date', today)
       .select('id')
 
     if (error) {
