@@ -152,9 +152,11 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
 			</Card>
 
 			<Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
-				<DialogContent className="max-h-[90vh] w-[95vw] max-w-3xl overflow-hidden p-0" dir="rtl">
-					<DialogTitle className="sr-only">תמונות - {product.name}</DialogTitle>
-					<div className="h-[60vh] sm:h-[70vh] md:h-[80vh]">
+				<DialogContent className="flex flex-col h-[80vh] w-[95vw] max-w-3xl overflow-hidden p-0" dir="rtl">
+					<div className="shrink-0 px-4 pt-3 pb-2 border-b border-slate-100">
+						<DialogTitle className="text-base sm:text-lg font-bold text-gray-900 pe-6">{product.name}</DialogTitle>
+					</div>
+					<div className="flex-1 min-h-0">
 						<ProductGallery images={product.galleryImages} productName={product.name} />
 					</div>
 				</DialogContent>
