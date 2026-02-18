@@ -124,7 +124,7 @@ function AdminSchedulesContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, viewType])
 
-  const saveSchedule = async (scheduleData: Partial<WorkshopSchedule>) => {
+  const saveSchedule = async (scheduleData: Partial<WorkshopSchedule>, { silent = false } = {}) => {
     setSavingSchedule(true)
     try {
       const headers = await getHeadersOrNotify(true)
@@ -142,15 +142,15 @@ function AdminSchedulesContent() {
       })
 
       if (!response.ok) {
-        toast.error("שגיאה בשמירה")
+        if (!silent) toast.error(`שגיאה בשמירת לוח זמנים ל-${scheduleData.date}`)
         return
       }
 
       await loadSchedules()
-      toast.success("נשמר בהצלחה")
+      if (!silent) toast.success(`לוח זמנים ל-${scheduleData.date} נשמר בהצלחה`)
     } catch (error) {
       console.error("Error saving schedule:", error)
-      toast.error("שגיאה בשמירה")
+      if (!silent) toast.error(`שגיאה בשמירת לוח זמנים ל-${scheduleData.date}`)
     } finally {
       setSavingSchedule(false)
     }
@@ -173,15 +173,15 @@ function AdminSchedulesContent() {
       })
 
       if (!response.ok) {
-        toast.error("שגיאה במחיקה")
+        toast.error(`שגיאה במחיקת לוח זמנים ל-${date}`)
         return
       }
 
       await loadSchedules()
-      toast.success("נמחק בהצלחה")
+      toast.success(`לוח זמנים ל-${date} נמחק בהצלחה`)
     } catch (error) {
       console.error("Error deleting schedule:", error)
-      toast.error("שגיאה במחיקה")
+      toast.error(`שגיאה במחיקת לוח זמנים ל-${date}`)
     }
   }
 
@@ -667,7 +667,7 @@ function QuickActionsPanel({
   viewType,
   loading,
 }: {
-  onSave: (data: Partial<WorkshopSchedule>) => Promise<void>
+  onSave: (data: Partial<WorkshopSchedule>, opts?: { silent?: boolean }) => Promise<void>
   viewType: ViewType
   loading: boolean
 }) {
@@ -696,7 +696,7 @@ function QuickActionsPanel({
               date: format(d, "yyyy-MM-dd"),
               hours,
               workshop: "advanced",
-            })
+            }, { silent: true })
           )
           addedCount++
         }
@@ -706,7 +706,7 @@ function QuickActionsPanel({
       toast.success(`נוספו ${addedCount} ימי עבודה לחודש הבא!`)
     } catch (error) {
       console.error("Error adding weekdays:", error)
-      toast.error("שגיאה בהוספת ימים")
+      toast.error("שגיאה בהוספת ימים, נסה שוב")
     } finally {
       setBulkLoading(false)
     }

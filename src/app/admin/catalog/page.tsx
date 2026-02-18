@@ -501,31 +501,29 @@ function AdminCatalogContent() {
 
   return (
     <AdminShell title="ניהול קטלוג" onLogout={signOut}>
-      <section className="grid gap-6 lg:grid-cols-3">
-        <div className="bg-white border rounded-2xl p-6 lg:col-span-1 space-y-4">
-          <h2 className="font-bold text-lg">פעולות קטלוג</h2>
-          <p className="text-sm text-gray-600">
-            יצירת מוצר חדש ועריכת מוצר קיים מתבצעות בחלונית קופצת.
-          </p>
+      <section className="space-y-4">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            {TABS.map((tab) => (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? "default" : "outline"}
+                className={activeTab !== tab.id ? "bg-white hover:bg-gray-50" : ""}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {tab.label}
+              </Button>
+            ))}
+          </div>
           <Button
             onClick={openNewProduct}
-            className="w-full bg-cta hover:bg-cta-foreground text-white font-bold"
+            className="bg-cta hover:bg-cta-foreground text-white font-bold"
           >
-            מוצר חדש
+            + מוצר חדש
           </Button>
         </div>
 
-        <div className="bg-white border rounded-2xl p-6 lg:col-span-2">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <h2 className="font-bold text-lg">מוצרים</h2>
-            <div className="flex items-center gap-2">
-              {TABS.map((tab) => (
-                <Button key={tab.id} variant={activeTab === tab.id ? "default" : "outline"} onClick={() => setActiveTab(tab.id)}>
-                  {tab.label}
-                </Button>
-              ))}
-            </div>
-          </div>
+        <div className="bg-white border rounded-2xl p-6">
           {loadingCatalog ? (
             <div className="p-6 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto" />
@@ -535,7 +533,7 @@ function AdminCatalogContent() {
           {!loadingCatalog && filteredProducts.length === 0 ? <p className="text-gray-500">אין מוצרים בלשונית זו</p> : null}
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(event) => void onDragEnd(event)}>
             <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {filteredProducts.map((product) => (
                   <SortableCatalogCard
                     key={product.id}

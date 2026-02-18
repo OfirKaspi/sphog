@@ -45,7 +45,8 @@ export function useAppToast(): AppToast {
                 {
                     variant: "default",
                     duration: 3000,
-                    className: "border border-green-800 bg-green-700 text-white [&_*]:text-white",
+                    className:
+                        "border-green-600 bg-green-600 text-white shadow-xl [&_*]:text-white",
                 },
                 opts
             ),
@@ -56,6 +57,8 @@ export function useAppToast(): AppToast {
                 {
                     variant: "destructive",
                     duration: 5000,
+                    className:
+                        "border-red-600 bg-red-600 text-white shadow-xl [&_*]:text-white",
                 },
                 opts
             ),
@@ -66,6 +69,8 @@ export function useAppToast(): AppToast {
                 {
                     variant: "default",
                     duration: 3000,
+                    className:
+                        "border-gray-300 bg-white text-gray-900 shadow-xl [&_*]:text-gray-900",
                 },
                 opts
             ),

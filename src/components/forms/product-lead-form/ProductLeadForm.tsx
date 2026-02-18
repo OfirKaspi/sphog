@@ -1,6 +1,6 @@
 "use client"
 
-import { FormEvent, useMemo, useState } from "react"
+import { FormEvent, useState } from "react"
 
 import { useAppToast } from "@/hooks/useAppToast"
 import { Button } from "@/components/ui/button"
@@ -11,29 +11,32 @@ import { Textarea } from "@/components/ui/textarea"
 interface ProductLeadFormProps {
   productId: string | number
   productName: string
+  productImage: string
 }
 
-const ProductLeadForm = ({ productId, productName }: ProductLeadFormProps) => {
-  const lockedMessage = useMemo(
-    () => `אני מעוניינ/ת בפריט "${productName}". אשמח לפרטים נוספים`,
-    [productName]
-  )
+const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFormProps) => {
+  const defaultMessage = `אני מעוניינ/ת בפריט "${productName}". אשמח לפרטים נוספים`
   const toast = useAppToast()
 
   const [fullName, setFullName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("")
+  const [message, setMessage] = useState(defaultMessage)
   const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<{ fullName?: string; phoneNumber?: string }>({})
+  const [errors, setErrors] = useState<{ fullName?: string; phoneNumber?: string; message?: string }>({})
   const [isSubmitted, setIsSubmitted] = useState(false)
 
   const validate = () => {
-    const nextErrors: { fullName?: string; phoneNumber?: string } = {}
+    const nextErrors: { fullName?: string; phoneNumber?: string; message?: string } = {}
     if (!fullName.trim()) {
       nextErrors.fullName = "נדרש שם מלא"
     }
 
     if (!phoneNumber.match(/^05\d{8}$/)) {
       nextErrors.phoneNumber = "אנא מלא מספר טלפון תקין"
+    }
+
+    if (!message.trim()) {
+      nextErrors.message = "נדרשת הודעה"
     }
 
     setErrors(nextErrors)
@@ -54,8 +57,10 @@ const ProductLeadForm = ({ productId, productName }: ProductLeadFormProps) => {
         body: JSON.stringify({
           fullName,
           phoneNumber,
+          message,
           productName,
           productId: String(productId),
+          productImage,
         }),
       })
 
@@ -67,6 +72,7 @@ const ProductLeadForm = ({ productId, productName }: ProductLeadFormProps) => {
       setIsSubmitted(true)
       setFullName("")
       setPhoneNumber("")
+      setMessage("")
       toast.success("הפרטים נשלחו בהצלחה")
     } catch (error) {
       console.error("Product lead submit failed:", error)
@@ -114,11 +120,11 @@ const ProductLeadForm = ({ productId, productName }: ProductLeadFormProps) => {
         <Label htmlFor={`product-lead-message-${productId}`}>הודעה</Label>
         <Textarea
           id={`product-lead-message-${productId}`}
-          value={lockedMessage}
-          readOnly
-          title="שדה קבוע לפי המוצר"
-          className="mt-1 min-h-24 resize-none bg-slate-50 border-slate-200 text-slate-700 cursor-not-allowed hover:bg-slate-100 transition-colors"
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          className="mt-1 min-h-24 resize-none bg-slate-50 border-slate-200 text-slate-700 transition-colors"
         />
+        {errors.message ? <p className="mt-1 text-sm text-red-600">{errors.message}</p> : null}
       </div>
 
       <Button type="submit" className="w-full bg-cta hover:bg-cta-foreground font-bold" disabled={loading}>

@@ -92,17 +92,19 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
 					}
 				}}
 			>
-				<div className="absolute left-3 top-3 z-20">
-					<Badge
-						className={
-							product.isInStock
-								? "bg-green-700 text-white border-green-800"
-								: "bg-slate-700 text-white border-slate-800"
-						}
-					>
-						{product.isInStock ? "במלאי" : "לא במלאי"}
-					</Badge>
-				</div>
+			<div className="absolute left-3 top-3 z-20">
+				<Badge
+					className={
+					product.isInStock
+						? "bg-pink-600 text-white border-pink-700"
+						: "bg-slate-700 text-white border-slate-800"
+					}
+				>
+					{product.isInStock
+						? product.originalPrice ? "במבצע" : "במלאי"
+						: "לא במלאי"}
+				</Badge>
+			</div>
 
 				<AspectRatio ratio={1}>
 					{!product.isInStock ? (
@@ -174,7 +176,7 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
 					<div className="p-5 md:p-6">
 						<h3 className="mb-1 text-xl font-bold text-gray-900">{product.name}</h3>
 						<p className="mb-4 text-sm text-slate-600">{product.description}</p>
-						<ProductLeadForm productId={product._id} productName={product.name} />
+						<ProductLeadForm productId={product._id} productName={product.name} productImage={product.image.src} />
 					</div>
 					<div className="h-full min-h-72 bg-slate-50">
 						{isDialogImageLoading ? (

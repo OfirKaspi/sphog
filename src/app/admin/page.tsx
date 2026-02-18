@@ -10,7 +10,7 @@ export default function AdminLoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="bg-background flex items-center justify-center py-20">
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-600" />
         </div>
       }
@@ -59,14 +59,14 @@ function AdminLoginContent() {
 
   if (isCheckingAuth || isAuthenticated) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="bg-background flex items-center justify-center py-20">
         <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-green-600" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="bg-background flex items-center justify-center px-4 py-20">
       <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-green-100" dir="rtl">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">

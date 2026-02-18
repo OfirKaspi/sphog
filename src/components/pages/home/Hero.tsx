@@ -1,6 +1,6 @@
-import CTAButton from "@/components/common/CTAButton"
-import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetailsFormDialog"
-import { getWhatsappLink } from "@/utils/getWhatsappLink"
+import Link from "next/link"
+import { Store, BookHeart, Globe } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import OptimizedImage from "@/components/common/OptimizedImage"
 
 interface HeroProps {
@@ -15,10 +15,7 @@ interface HeroProps {
     }
 }
 
-const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: HeroProps) => {
-
-    const whatsappUrl = getWhatsappLink();
-
+const Hero = ({ title, subtitle, paragraphs, image }: HeroProps) => {
     return (
         <section dir="rtl" className="w-full -mt-20 px-5 pt-32 md:pt-36 pb-12 md:pb-16 bg-gradient-to-tr from-green-100 via-background to-green-50 text-slate-900 relative overflow-hidden">
             {/* Decorative background blob */}
@@ -51,21 +48,40 @@ const Hero = ({ title, subtitle, paragraphs, ctaText, ctaLink = "", image }: Her
                             <p key={index}>{paragraph}</p>
                         ))}
                     </div>
-                    {ctaText && (
-                        ctaLink ? (
-                            <a
-                                href={ctaLink ? ctaLink : whatsappUrl || "/"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <CTAButton>
-                                    {ctaText}
-                                </CTAButton>
-                            </a>
-                        ) : (
-                            <LeaveDetailsDialog text={ctaText} />
-                        )
-                    )}
+                    <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center md:justify-start gap-3">
+                        <Button
+                            asChild
+                            size="lg"
+                            className="w-full sm:w-auto rounded-full px-6 py-5 text-base font-bold shadow-md bg-cta hover:bg-cta-foreground transition-all duration-300"
+                        >
+                            <Link href="/store">
+                                <Store className="!size-5" />
+                                לחנות
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="lg"
+                            className="w-full sm:w-auto rounded-full px-6 py-5 text-base font-bold shadow-md border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
+                        >
+                            <Link href="/public-workshops">
+                                <Globe className="!size-5" />
+                                סדנאות קבוצתיות
+                            </Link>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="outline"
+                            size="lg"
+                            className="w-full sm:w-auto rounded-full px-6 py-5 text-base font-bold shadow-md border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300"
+                        >
+                            <Link href="/private-workshops">
+                                <BookHeart className="!size-5" />
+                                סדנאות פרטיות
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
         </section>

@@ -20,30 +20,22 @@ export default function StoreTeaser({ products, title, link }: StoreTeaserProps)
                 Number.isFinite(product.price)
             )
         )
-        .slice(0, 3)
 
     if (!previewProducts.length) {
         return null
     }
 
-    const centeredGridBaseClassName = "mx-auto px-0 pb-0 justify-items-center"
-    const previewGridClassName =
-        previewProducts.length === 1
-            ? `${centeredGridBaseClassName} max-w-md grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1`
-            : previewProducts.length === 2
-                ? `${centeredGridBaseClassName} max-w-4xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2`
-                : `${centeredGridBaseClassName} max-w-6xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3`
-
     return (
         <section className="bg-primary">
-            <div className="max-w-screen-lg mx-auto py-16 px-5 bg-primary">
+            <div className="max-w-screen-xl mx-auto py-16 px-5 bg-primary">
 
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-10 text-center">{title}</h2>
 
                 <ProductList
                     products={previewProducts}
-                    className={previewGridClassName}
-                    itemClassName="w-full max-w-sm max-h-[560px]"
+                    className="mx-auto max-w-6xl px-0 pb-0"
+                    itemClassName="w-full max-w-lg max-h-[560px]"
+                    itemWrapperClassName="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.8334rem)]"
                 />
 
                 {link && (
