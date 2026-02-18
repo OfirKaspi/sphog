@@ -87,33 +87,35 @@ const ProductGallery = ({ images, productName }: ProductGalleryProps) => {
 			</div>
 
 			{hasMultiple && (
-				<div className="shrink-0 flex justify-center gap-1.5 sm:gap-2 overflow-x-auto p-2 sm:p-3 bg-white" role="list" aria-label={`תמונות של ${productName}`}>
-					{images.map((image, index) => (
-						<button
-							key={index}
-							type="button"
-							role="listitem"
-							onClick={() => setActiveIndex(index)}
-							className={`relative flex-shrink-0 h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 overflow-hidden rounded-md sm:rounded-lg border-2 transition-all ${
-								index === activeIndex
-									? "border-pink-500 ring-2 ring-pink-300"
-									: "border-slate-200 hover:border-slate-400"
-							}`}
-							aria-label={`תמונה ${index + 1} מתוך ${images.length}`}
-							aria-current={index === activeIndex ? "true" : undefined}
-						>
-							<OptimizedImage
-								src={image.src}
-								alt={image.alt}
-								width={160}
-								height={160}
-								crop="fill"
-								quality={80}
-								format="auto"
-								className="h-full w-full object-cover"
-							/>
-						</button>
-					))}
+				<div className="shrink-0 overflow-x-auto p-2 sm:p-3 bg-white" role="list" aria-label={`תמונות של ${productName}`}>
+					<div className="flex w-fit mx-auto gap-1.5 sm:gap-2">
+						{images.map((image, index) => (
+							<button
+								key={index}
+								type="button"
+								role="listitem"
+								onClick={() => setActiveIndex(index)}
+								className={`relative flex-shrink-0 h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 overflow-hidden rounded-md sm:rounded-lg border-2 transition-all ${
+									index === activeIndex
+										? "border-pink-500 ring-2 ring-pink-300"
+										: "border-slate-200 hover:border-slate-400"
+								}`}
+								aria-label={`תמונה ${index + 1} מתוך ${images.length}`}
+								aria-current={index === activeIndex ? "true" : undefined}
+							>
+								<OptimizedImage
+									src={image.src}
+									alt={image.alt}
+									width={160}
+									height={160}
+									crop="fill"
+									quality={80}
+									format="auto"
+									className="h-full w-full object-cover"
+								/>
+							</button>
+						))}
+					</div>
 				</div>
 			)}
 		</div>

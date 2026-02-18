@@ -163,13 +163,13 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
 			<Dialog open={isLeadFormOpen} onOpenChange={setIsLeadFormOpen}>
 				<DialogContent className="max-h-[90vh] w-[95vw] max-w-4xl overflow-hidden p-0" dir="rtl">
 					<DialogTitle className="sr-only">{product.name}</DialogTitle>
-					<div className="flex flex-col md:grid md:grid-cols-2 md:h-[32rem]" dir="rtl">
-						<div className="p-4 sm:p-5 md:p-6 overflow-y-auto order-2 md:order-1">
+					<div className="md:grid md:grid-cols-2 md:h-[32rem]" dir="rtl">
+						<div className="p-4 sm:p-5 md:p-6 overflow-y-auto">
 							<h3 className="mb-1 text-xl font-bold text-gray-900">{product.name}</h3>
 							<p className="mb-4 text-sm text-slate-600">{product.description}</p>
 							<ProductLeadForm productId={product._id} productName={product.name} productImage={product.image.src} />
 						</div>
-						<div className="h-56 sm:h-72 md:h-full shrink-0 overflow-hidden order-1 md:order-2">
+						<div className="hidden md:block md:h-full overflow-hidden">
 							<ProductGallery images={product.galleryImages} productName={product.name} />
 						</div>
 					</div>
