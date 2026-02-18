@@ -6,15 +6,18 @@ type CatalogProductInsert = Database["public"]["Tables"]["catalog_products"]["In
 type CatalogProductUpdate = Database["public"]["Tables"]["catalog_products"]["Update"]
 
 function mapCatalogRowToProduct(row: CatalogProductRow): Product {
+  const mainImage = { src: row.image_url, alt: row.image_alt || row.name }
+  const extra = Array.isArray(row.gallery_images)
+    ? row.gallery_images.map((img, i) => ({ src: img.url, alt: `${row.name} ${i + 2}` }))
+    : []
+
   return {
     _id: row.id,
     name: row.name,
     price: Number(row.price),
     originalPrice: row.original_price === null ? undefined : Number(row.original_price),
-    image: {
-      src: row.image_url,
-      alt: row.image_alt || row.name,
-    },
+    image: mainImage,
+    galleryImages: [mainImage, ...extra],
     description: row.description,
     isInStock: row.in_stock,
   }

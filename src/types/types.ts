@@ -29,6 +29,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: Image
+  galleryImages: Image[]
   description: string;
   isInStock: boolean;
 }

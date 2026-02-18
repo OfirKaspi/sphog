@@ -186,3 +186,32 @@ html.accessibility-readable-font * {
   background-color: #d1d5db;
   /* gray-400 */
 }
+
+/* Store carousel – Embla padding approach for equal gaps (RTL-friendly) */
+.embla-store {
+  --slide-spacing: 0.75rem;
+  --slide-size: 100%;
+}
+.embla-store__viewport {
+  overflow: hidden;
+}
+.embla-store__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-inline-start: calc(var(--slide-spacing) * -1);
+}
+.embla-store__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-inline-start: var(--slide-spacing);
+}
+@media (min-width: 640px) {
+  .embla-store {
+    --slide-size: calc(50% - var(--slide-spacing) / 2);
+  }
+}
+@media (min-width: 1024px) {
+  .embla-store {
+    --slide-size: calc(33.333% - var(--slide-spacing) * 2 / 3);
+  }
+}

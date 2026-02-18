@@ -31,6 +31,8 @@ type AdminCatalogProduct = Database["public"]["Tables"]["catalog_products"]["Row
 type CatalogTab = "regular" | "discount" | "home" | "archive"
 type FormErrorKey = "name" | "price" | "original_price" | "image_url" | "locations" | "general"
 
+type GalleryImageEntry = { url: string; public_id: string }
+
 type CatalogFormState = {
   id?: string
   slug: string
@@ -41,6 +43,7 @@ type CatalogFormState = {
   image_url: string
   image_public_id: string
   image_alt: string
+  gallery_images: GalleryImageEntry[]
   in_stock: boolean
   show_on_home: boolean
   show_in_regular: boolean
@@ -59,6 +62,7 @@ const EMPTY_CATALOG_FORM: CatalogFormState = {
   image_url: "",
   image_public_id: "",
   image_alt: "",
+  gallery_images: [],
   in_stock: true,
   show_on_home: false,
   show_in_regular: true,
@@ -120,6 +124,8 @@ function AdminCatalogContent() {
   const [uploadingCatalogImage, setUploadingCatalogImage] = useState(false)
   const [catalogImageFile, setCatalogImageFile] = useState<File | null>(null)
   const [catalogImagePreview, setCatalogImagePreview] = useState("")
+  const [galleryFiles, setGalleryFiles] = useState<File[]>([])
+  const [galleryPreviews, setGalleryPreviews] = useState<string[]>([])
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
   const getHeadersOrNotify = async (isJson = false) => {
@@ -184,7 +190,6 @@ function AdminCatalogContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
-  const homePreviewCount = products.filter((product) => product.show_on_home).length
   const editedProduct = catalogForm.id ? products.find((product) => product.id === catalogForm.id) : null
   const filteredProducts = useMemo(() => products.filter((product) => inTab(product, activeTab)), [activeTab, products])
   const sortableIds = filteredProducts.map((product) => product.id)
@@ -205,11 +210,8 @@ function AdminCatalogContent() {
     if (!catalogForm.show_in_regular && !catalogForm.show_in_discount && !catalogForm.show_on_home) {
       errors.locations = "יש לבחור לפחות מיקום אחד"
     }
-    if (catalogForm.show_on_home && !editedProduct?.show_on_home && homePreviewCount >= 3) {
-      errors.general = "ניתן להציג עד 3 מוצרים בלבד בדף הבית"
-    }
     return errors
-  }, [catalogForm, catalogImageFile, editedProduct, homePreviewCount])
+  }, [catalogForm, catalogImageFile])
   const isFormValid = Object.keys(validationErrors).length === 0
 
   const updateCatalogForm = <K extends keyof CatalogFormState>(key: K, value: CatalogFormState[K]) => {
@@ -277,11 +279,14 @@ function AdminCatalogContent() {
     setCatalogForm(EMPTY_CATALOG_FORM)
     setCatalogImageFile(null)
     setCatalogImagePreview("")
+    setGalleryFiles([])
+    setGalleryPreviews([])
     setFieldErrors({})
     setIsEditDialogOpen(false)
   }
 
   const editProduct = (product: AdminCatalogProduct) => {
+    const existingGallery: GalleryImageEntry[] = Array.isArray(product.gallery_images) ? product.gallery_images : []
     setCatalogForm({
       id: product.id,
       slug: product.slug,
@@ -292,6 +297,7 @@ function AdminCatalogContent() {
       image_url: product.image_url,
       image_public_id: product.image_public_id ?? "",
       image_alt: product.image_alt ?? "",
+      gallery_images: existingGallery,
       in_stock: product.in_stock,
       show_on_home: product.show_on_home,
       show_in_regular: product.show_in_regular ?? true,
@@ -302,6 +308,8 @@ function AdminCatalogContent() {
     })
     setCatalogImageFile(null)
     setCatalogImagePreview(product.image_url)
+    setGalleryFiles([])
+    setGalleryPreviews(existingGallery.map((img) => img.url))
     setFieldErrors({})
     setIsEditDialogOpen(true)
   }
@@ -346,6 +354,24 @@ function AdminCatalogContent() {
         imageData = await uploadCatalogImage()
         if (!imageData) return
       }
+
+      const finalGalleryImages = [...catalogForm.gallery_images]
+      if (galleryFiles.length > 0) {
+        for (const file of galleryFiles) {
+          const uploadHeaders = await getHeadersOrNotify()
+          if (!uploadHeaders) return
+          const formData = new FormData()
+          formData.append("image", file)
+          const res = await fetch("/api/admin/catalog/upload-image", { method: "POST", headers: uploadHeaders, body: formData })
+          const result = await res.json().catch(() => null)
+          if (!res.ok || !result?.image_url || !result?.image_public_id) {
+            toast.error(result?.error || "שגיאה בהעלאת תמונת גלריה")
+            return
+          }
+          finalGalleryImages.push({ url: result.image_url, public_id: result.image_public_id })
+        }
+      }
+
       const payload = {
         slug: catalogForm.slug || buildCatalogSlug(catalogForm.name),
         name: catalogForm.name,
@@ -355,6 +381,7 @@ function AdminCatalogContent() {
         image_url: imageData?.image_url ?? catalogForm.image_url,
         image_public_id: imageData?.image_public_id ?? catalogForm.image_public_id ?? null,
         image_alt: catalogForm.image_alt || buildCatalogImageAlt(catalogForm.name),
+        gallery_images: finalGalleryImages.length > 0 ? finalGalleryImages : null,
         in_stock: catalogForm.in_stock,
         is_promo: catalogForm.show_in_discount,
         show_on_home: catalogForm.show_on_home,
@@ -591,12 +618,66 @@ function AdminCatalogContent() {
               )}
               {fieldErrors.image_url ? <p className="text-xs text-red-600">{fieldErrors.image_url}</p> : null}
             </div>
+            <div className="rounded-xl border bg-slate-50 p-3 space-y-3">
+              <Label htmlFor="gallery-images">תמונות נוספות לגלריה (עד 5MB כל אחת)</Label>
+              <Input
+                id="gallery-images"
+                type="file"
+                accept="image/*"
+                multiple
+                className={formFieldClassName}
+                onChange={(event) => {
+                  const files = Array.from(event.target.files ?? [])
+                  const valid = files.filter((f) => f.type.startsWith("image/") && f.size <= 5 * 1024 * 1024)
+                  if (valid.length < files.length) toast.error("חלק מהקבצים לא תקינים (לא תמונה או גדולים מ-5MB)")
+                  if (valid.length === 0) return
+                  setGalleryFiles((prev) => [...prev, ...valid])
+                  void Promise.all(valid.map((f) => toBase64(f))).then((base64Urls) => {
+                    setGalleryPreviews((prev) => [...prev, ...base64Urls])
+                  })
+                  event.target.value = ""
+                }}
+              />
+              {galleryPreviews.length > 0 && (
+                <div className="grid grid-cols-4 gap-2">
+                  {galleryPreviews.map((src, idx) => {
+                    const isExisting = idx < catalogForm.gallery_images.length
+                    return (
+                      <div key={`${idx}-${src.slice(-20)}`} className="relative group">
+                        <div className="aspect-square overflow-hidden rounded-lg border bg-white">
+                          <CatalogImage src={src} alt={`גלריה ${idx + 1}`} />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (isExisting) {
+                              setCatalogForm((prev) => ({
+                                ...prev,
+                                gallery_images: prev.gallery_images.filter((_, i) => i !== idx),
+                              }))
+                            } else {
+                              const fileIdx = idx - catalogForm.gallery_images.length
+                              setGalleryFiles((prev) => prev.filter((_, i) => i !== fileIdx))
+                            }
+                            setGalleryPreviews((prev) => prev.filter((_, i) => i !== idx))
+                          }}
+                          className="absolute -top-1.5 -left-1.5 z-10 hidden group-hover:flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs shadow"
+                          aria-label="הסר תמונה"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
             <div className="grid grid-cols-1 gap-2 text-sm">
               <label className="flex items-center gap-2"><Checkbox checked={catalogForm.in_stock} onChange={(event) => updateCatalogForm("in_stock", event.currentTarget.checked)} /> במלאי</label>
               <label className="flex items-center gap-2"><Checkbox checked={catalogForm.is_hidden} onChange={(event) => updateCatalogForm("is_hidden", event.currentTarget.checked)} /> העבר לארכיון (מוסתר)</label>
               <label className="flex items-center gap-2"><Checkbox checked={catalogForm.show_in_regular} onChange={(event) => updateCatalogForm("show_in_regular", event.currentTarget.checked)} /> הצג בקטגוריה רגילה</label>
               <label className="flex items-center gap-2"><Checkbox checked={catalogForm.show_in_discount} onChange={(event) => updateCatalogForm("show_in_discount", event.currentTarget.checked)} /> הצג בקטגוריית מבצעים</label>
-              <label className="flex items-center gap-2"><Checkbox checked={catalogForm.show_on_home} onChange={(event) => updateCatalogForm("show_on_home", event.currentTarget.checked)} /> הצג בהצצה בדף הבית (מקסימום 3)</label>
+              <label className="flex items-center gap-2"><Checkbox checked={catalogForm.show_on_home} onChange={(event) => updateCatalogForm("show_on_home", event.currentTarget.checked)} /> הצג בהצצה בדף הבית</label>
               <label className="flex items-center gap-2"><Checkbox checked={catalogForm.is_active} onChange={(event) => updateCatalogForm("is_active", event.currentTarget.checked)} /> פעיל</label>
             </div>
             {fieldErrors.locations ? <p className="text-xs text-red-600">{fieldErrors.locations}</p> : null}

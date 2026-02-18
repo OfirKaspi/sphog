@@ -55,6 +55,7 @@ export interface Database {
           image_url: string
           image_public_id: string | null
           image_alt: string
+          gallery_images: Array<{ url: string; public_id: string }> | null
           in_stock: boolean
           is_promo: boolean
           show_on_home: boolean
@@ -77,6 +78,7 @@ export interface Database {
           image_url: string
           image_public_id?: string | null
           image_alt?: string
+          gallery_images?: Array<{ url: string; public_id: string }> | null
           in_stock?: boolean
           is_promo?: boolean
           show_on_home?: boolean
@@ -99,6 +101,7 @@ export interface Database {
           image_url?: string
           image_public_id?: string | null
           image_alt?: string
+          gallery_images?: Array<{ url: string; public_id: string }> | null
           in_stock?: boolean
           is_promo?: boolean
           show_on_home?: boolean

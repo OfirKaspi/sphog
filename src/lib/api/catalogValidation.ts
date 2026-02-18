@@ -8,6 +8,11 @@ const cleanedString = (min: number, max: number) =>
   z.string().min(min).max(max).transform(sanitizeText)
 const cleanedOptionalString = (max: number) => z.string().max(max).transform(sanitizeText)
 
+const galleryImageSchema = z.object({
+  url: z.string().url(),
+  public_id: z.string(),
+})
+
 const catalogProductBaseSchema = z.object({
   slug: cleanedString(2, 120),
   name: cleanedString(2, 200),
@@ -18,6 +23,7 @@ const catalogProductBaseSchema = z.object({
   image_url: z.string().url(),
   image_public_id: cleanedOptionalString(500).nullable().optional(),
   image_alt: cleanedOptionalString(300).default(""),
+  gallery_images: z.array(galleryImageSchema).nullable().optional(),
   in_stock: z.coerce.boolean().default(true),
   is_promo: z.coerce.boolean().default(false),
   show_on_home: z.coerce.boolean().default(false),

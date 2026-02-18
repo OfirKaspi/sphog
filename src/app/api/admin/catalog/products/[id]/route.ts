@@ -4,7 +4,6 @@ import { z } from "zod"
 
 import { requireAdminAuth } from "@/lib/adminAuth"
 import {
-  countAdminHomePreviewProducts,
   deleteCatalogProduct,
   getAdminCatalogProductById,
   updateCatalogProduct,
@@ -63,16 +62,6 @@ export async function PATCH(
   }
 
   const parsedPayload = parsedBody.data as Database["public"]["Tables"]["catalog_products"]["Update"]
-
-  if (parsedPayload.show_on_home === true && !existingProduct.show_on_home) {
-    const homePreviewCount = await countAdminHomePreviewProducts(existingProduct.id)
-    if (homePreviewCount >= 3) {
-      return NextResponse.json(
-        { error: "ניתן להציג עד 3 מוצרים בלבד בדף הבית" },
-        { status: 400 }
-      )
-    }
-  }
 
   const { data, error } = await updateCatalogProduct(parsedParams.data.id, parsedPayload)
   if (error || !data) {

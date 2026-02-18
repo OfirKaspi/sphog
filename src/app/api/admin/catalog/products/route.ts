@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { revalidatePath } from "next/cache"
 
 import { requireAdminAuth } from "@/lib/adminAuth"
-import { countAdminHomePreviewProducts, createCatalogProduct, getAdminCatalogProducts } from "@/lib/api/catalogData"
+import { createCatalogProduct, getAdminCatalogProducts } from "@/lib/api/catalogData"
 import { createCatalogProductSchema } from "@/lib/api/catalogValidation"
 import { buildCatalogImageAlt, buildCatalogSlug } from "@/lib/catalogMetadata"
 import type { Database } from "@/lib/supabase"
@@ -43,16 +43,6 @@ export async function POST(request: NextRequest) {
   }
 
   const parsedPayload = parsed.data as Database["public"]["Tables"]["catalog_products"]["Insert"]
-
-  if (parsedPayload.show_on_home) {
-    const homePreviewCount = await countAdminHomePreviewProducts()
-    if (homePreviewCount >= 3) {
-      return NextResponse.json(
-        { error: "ניתן להציג עד 3 מוצרים בלבד בדף הבית" },
-        { status: 400 }
-      )
-    }
-  }
 
   const { data, error } = await createCatalogProduct(parsedPayload)
   if (error || !data) {

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LinkType, Product } from "@/types/types";
-import ProductList from "@/components/pages/store/ProductList";
+import StoreCarousel from "@/components/pages/home/StoreCarousel";
 import CTAButton from "@/components/common/CTAButton";
 
 interface StoreTeaserProps {
@@ -31,15 +31,10 @@ export default function StoreTeaser({ products, title, link }: StoreTeaserProps)
 
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-10 text-center">{title}</h2>
 
-                <ProductList
-                    products={previewProducts}
-                    className="mx-auto max-w-6xl px-0 pb-0"
-                    itemClassName="w-full max-w-lg max-h-[560px]"
-                    itemWrapperClassName="w-full sm:w-[calc(50%-0.625rem)] lg:w-[calc(33.333%-0.8334rem)]"
-                />
+                <StoreCarousel products={previewProducts} />
 
                 {link && (
-                    <div className="text-center">
+                    <div className="text-center mt-8">
                         <Link href={link.href}>
                             <CTAButton>
                                 {link.text}
