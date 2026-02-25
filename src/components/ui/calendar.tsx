@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { WorkshopType } from "@/types/types";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
@@ -91,18 +91,8 @@ export function Calendar({
         unavailable: "bg-gray-300 hover:bg-gray-300",
       }}
       components={{
-        Chevron: ({ orientation, className }) => {
-          if (orientation === "left") {
-            return <ChevronLeft className={cn("h-4 w-4", className)} />;
-          }
-          if (orientation === "right") {
-            return <ChevronRight className={cn("h-4 w-4", className)} />;
-          }
-          if (orientation === "up") {
-            return <ChevronUp className={cn("h-4 w-4", className)} />;
-          }
-          return <ChevronDown className={cn("h-4 w-4", className)} />;
-        },
+        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+        IconRight: () => <ChevronRight className="h-4 w-4" />,
       }}
       {...props}
     />
