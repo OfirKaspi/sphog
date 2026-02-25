@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
 import { useAppToast } from "@/hooks/useAppToast";
+import { normalizeIsraeliPhone } from "@/lib/phone";
 import {
   Select,
   SelectTrigger,
@@ -42,7 +43,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
     const newErrors: { [key: string]: string } = {};
 
     if (!formData.fullName.trim()) newErrors.fullName = "נדרש שם מלא";
-    if (!formData.phoneNumber.match(/^05\d{8}$/))
+    if (!normalizeIsraeliPhone(formData.phoneNumber))
       newErrors.phoneNumber = "אנא מלא מספר טלפון תקין";
     if (!formData.topic) newErrors.topic = "אנא בחר נושא";
 
@@ -55,6 +56,8 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return;
+    const normalizedPhoneNumber = normalizeIsraeliPhone(formData.phoneNumber);
+    if (!normalizedPhoneNumber) return;
 
     setLoading(true);
     setResponseError(null);
@@ -63,7 +66,7 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, phoneNumber: normalizedPhoneNumber }),
       });
 
       const result = await response.json();

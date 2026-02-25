@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
+import { normalizeIsraeliPhone } from "@/lib/phone";
 import Legend from "./Legend";
 
 // Define the interface for available dates
@@ -145,7 +146,7 @@ export default function WorkshopRegistrationForm({
     if (!formData.selectedDate) newErrors.selectedDate = "אנא בחר תאריך";
     if (!formData.selectedHour) newErrors.selectedHour = "אנא בחר שעה";
     if (!formData.fullName.trim()) newErrors.fullName = "נדרש שם מלא";
-    if (!formData.phoneNumber.match(/^05\d{8}$/))
+    if (!normalizeIsraeliPhone(formData.phoneNumber))
       newErrors.phoneNumber = "אנא מלא מספר טלפון תקין";
     return newErrors;
   };
@@ -157,6 +158,8 @@ export default function WorkshopRegistrationForm({
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) return;
+    const normalizedPhoneNumber = normalizeIsraeliPhone(formData.phoneNumber);
+    if (!normalizedPhoneNumber) return;
 
     setLoading(true);
     setResponseError(null);
@@ -171,7 +174,7 @@ export default function WorkshopRegistrationForm({
             : undefined,
           selectedHour: formData.selectedHour,
           fullName: formData.fullName,
-          phoneNumber: formData.phoneNumber,
+          phoneNumber: normalizedPhoneNumber,
         }),
       });
 

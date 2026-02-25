@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { normalizeIsraeliPhone } from "@/lib/phone"
 
 interface ProductLeadFormProps {
   productId: string | number
@@ -31,7 +32,7 @@ const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFo
       nextErrors.fullName = "נדרש שם מלא"
     }
 
-    if (!phoneNumber.match(/^05\d{8}$/)) {
+    if (!normalizeIsraeliPhone(phoneNumber)) {
       nextErrors.phoneNumber = "אנא מלא מספר טלפון תקין"
     }
 
@@ -48,6 +49,10 @@ const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFo
     if (!validate()) {
       return
     }
+    const normalizedPhoneNumber = normalizeIsraeliPhone(phoneNumber)
+    if (!normalizedPhoneNumber) {
+      return
+    }
 
     setLoading(true)
     try {
@@ -56,7 +61,7 @@ const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFo
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           fullName,
-          phoneNumber,
+          phoneNumber: normalizedPhoneNumber,
           message,
           productName,
           productId: String(productId),

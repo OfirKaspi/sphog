@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
+import { normalizeIsraeliPhone } from "@/lib/phone";
 
 // ✅ Environment variables
 const MONDAY_API_KEY = process.env.MONDAY_API_KEY!;
@@ -11,7 +12,14 @@ const MONDAY_GROUP_ID = process.env.MONDAY_GROUP_ID!;
 // ✅ Zod schema for input validation
 const workshopSchema = z.object({
   fullName: z.string().nonempty("נדרש שם מלא."),
-  phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
+  phoneNumber: z.string().transform((value, ctx) => {
+    const normalizedPhone = normalizeIsraeliPhone(value);
+    if (!normalizedPhone) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "אנא מלא מספר טלפון תקין." });
+      return z.NEVER;
+    }
+    return normalizedPhone;
+  }),
   selectedDate: z.string().nonempty("נדרש תאריך."),
   selectedHour: z.string().nonempty("נדרשת שעה."),
   additionalDetails: z.string().optional(),

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import { z } from "zod"
+import { normalizeIsraeliPhone } from "@/lib/phone"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -13,7 +14,14 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 
 const productLeadSchema = z.object({
   fullName: z.string().nonempty("נדרש שם מלא."),
-  phoneNumber: z.string().regex(/^05\d{8}$/, "אנא מלא מספר טלפון תקין."),
+  phoneNumber: z.string().transform((value, ctx) => {
+    const normalizedPhone = normalizeIsraeliPhone(value)
+    if (!normalizedPhone) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "אנא מלא מספר טלפון תקין." })
+      return z.NEVER
+    }
+    return normalizedPhone
+  }),
   message: z.string().nonempty("נדרשת הודעה.").max(500),
   productName: z.string().nonempty("שם המוצר נדרש."),
   productId: z.string().optional(),
