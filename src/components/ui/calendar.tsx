@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from "lucide-react";
 import { WorkshopType } from "@/types/types";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
@@ -24,38 +24,47 @@ export function Calendar({
     <DayPicker
       dir="rtl"
       locale={he}
+      navLayout="after"
       showOutsideDays={showOutsideDays}
       className={cn("mt-2", className)}
       classNames={{
+        root: "relative",
         months: "flex justify-center items-center",
-        month: "space-y-4",
-        caption: "flex items-center justify-between w-full",
+        month: "space-y-4 relative",
+        month_caption: "flex w-full mb-1 pl-20",
         caption_label: "text-sm sm:text-base md:text-lg",
-        nav: "flex gap-2",
-        nav_button: cn(
+        nav: "absolute left-0 top-[-1.5rem] h-10 flex items-center gap-2 z-20",
+        button_previous: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "h-8 w-8 p-0 opacity-100 border-primary text-primary bg-background shadow-md hover:bg-accent"
         ),
-        table: "w-full border-collapse space-y-1",
-        head_row: "flex w-full gap-1",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2 gap-1",
-
-        cell:
-          "h-9 w-9 p-0 relative focus-within:z-20",
+        button_next: cn(
+          buttonVariants({ variant: "outline" }),
+          "h-8 w-8 p-0 opacity-100 border-primary text-primary bg-background shadow-md hover:bg-accent"
+        ),
+        month_grid: "w-full border-separate border-spacing-y-1",
+        weekdays: "flex w-full justify-between gap-2",
+        weekday:
+          "text-muted-foreground rounded-md w-9 h-9 p-0 font-normal text-[0.8rem] text-center flex items-center justify-center",
+        week: "flex w-full justify-between gap-2 mt-1",
         day: cn(
-          buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal transition-colors duration-150",
-          "aria-selected:border-2 aria-selected:border-primary",
+          "h-9 w-9 p-0 relative focus-within:z-20 text-center text-sm",
+          "aria-selected:font-semibold"
         ),
-        day_range_end: "day-range-end",
-        day_today: "bg-accent text-accent-foreground",
-        day_outside: "day-outside text-muted-foreground pointer-events-none",
-        day_disabled: "pointer-events-none",
-        day_range_middle:
+        day_button: cn(
+          buttonVariants({ variant: "ghost" }),
+          "h-9 w-9 p-0 rounded-lg border-2 border-transparent font-normal transition-colors duration-150",
+          "aria-selected:border-2 aria-selected:border-primary",
+          "aria-selected:ring-2 aria-selected:ring-primary/50 aria-selected:ring-offset-1",
+          "aria-selected:shadow-sm aria-selected:scale-[1.02]"
+        ),
+        range_end: "day-range-end",
+        today: "bg-accent text-accent-foreground",
+        outside: "day-outside text-muted-foreground pointer-events-none",
+        disabled: "pointer-events-none",
+        range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
-        day_hidden: "invisible",
+        hidden: "invisible",
         ...classNames,
       }}
       modifiers={{
@@ -85,14 +94,30 @@ export function Calendar({
         },
       }}
       modifiersClassNames={{
-        tech: "bg-green-200 hover:bg-green-300",
-        family: "bg-sky-200 hover:bg-sky-300",
-        advanced: "bg-pink-200 hover:bg-pink-300",
-        unavailable: "bg-gray-300 hover:bg-gray-300",
+        selected:
+          "[&>button]:border-primary [&>button]:ring-2 [&>button]:ring-primary/50 [&>button]:ring-offset-1",
+        tech:
+          "[&>button]:bg-green-200 hover:[&>button]:bg-green-300 aria-selected:[&>button]:bg-green-400",
+        family:
+          "[&>button]:bg-sky-200 hover:[&>button]:bg-sky-300 aria-selected:[&>button]:bg-sky-400",
+        advanced:
+          "[&>button]:bg-pink-200 hover:[&>button]:bg-pink-300 aria-selected:[&>button]:bg-pink-400",
+        unavailable:
+          "[&>button]:bg-gray-300 hover:[&>button]:bg-gray-300 aria-selected:[&>button]:bg-gray-300 [&>button]:border-transparent [&>button]:ring-0 [&>button]:ring-offset-0",
       }}
       components={{
-        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
-        IconRight: () => <ChevronRight className="h-4 w-4" />,
+        Chevron: ({ orientation, className }) => {
+          if (orientation === "left") {
+            return <ChevronRight className={cn("h-4 w-4", className)} />;
+          }
+          if (orientation === "right") {
+            return <ChevronLeft className={cn("h-4 w-4", className)} />;
+          }
+          if (orientation === "up") {
+            return <ChevronUp className={cn("h-4 w-4", className)} />;
+          }
+          return <ChevronDown className={cn("h-4 w-4", className)} />;
+        },
       }}
       {...props}
     />

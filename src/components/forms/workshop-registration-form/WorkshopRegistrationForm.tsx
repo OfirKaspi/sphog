@@ -98,10 +98,28 @@ export default function WorkshopRegistrationForm({
     return selectedDateData.hours;
   }, [formData.selectedDate, filteredDates]);
 
+  // Keep selection controlled: ignore unselect/invalid dates so previous selection stays visible
+  const handleDateSelect = (date: Date | undefined) => {
+    if (!date) return;
+
+    const dateKey = format(date, "yyyy-MM-dd");
+    const workshopType = dateMap.get(dateKey)?.workshop;
+
+    if (!workshopType || workshopType === WorkshopType.UNAVAILABLE) return;
+
+    setFormData({
+      ...formData,
+      selectedDate: date,
+      selectedHour: null,
+    });
+  };
+
   // Handle day click with special handling for unavailable dates
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDayClick = (date: Date, modifiers: any) => {
+  const handleDayClick = (date: Date, modifiers: any, e: React.MouseEvent) => {
     if (modifiers.unavailable) {
+      e.preventDefault();
+      e.stopPropagation();
       // Show toast but don't select the date
       toast.info("מצטערים, לא נשארו מקומות פנויים בסדנא.");
       return;
@@ -112,17 +130,12 @@ export default function WorkshopRegistrationForm({
     const workshopType = dateMap.get(dateKey)?.workshop;
 
     if (workshopType === WorkshopType.UNAVAILABLE) {
+      e.preventDefault();
+      e.stopPropagation();
       // Show toast but don't select the date
       toast.info("מצטערים, לא נשארו מקומות פנויים בסדנא.");
       return;
     }
-
-    // For available dates, update the selection
-    setFormData({
-      ...formData,
-      selectedDate: date,
-      selectedHour: null,
-    });
   };
 
   // Create a special disabled function to handle dates with workshop: unavailable
@@ -222,6 +235,7 @@ export default function WorkshopRegistrationForm({
         <Calendar
           mode="single"
           selected={formData.selectedDate}
+          onSelect={handleDateSelect}
           disabled={disableUnlistedDates}
           dateMap={dateMap}
           onDayClick={handleDayClick}
