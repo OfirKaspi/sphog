@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { DndContext, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core"
 import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { GripVertical, Loader2, RefreshCw, Send, Trash2 } from "lucide-react"
+import { AlertCircle, GripVertical, Loader2, RefreshCw, Send, Trash2 } from "lucide-react"
 
 import AdminShell from "@/components/admin/AdminShell"
 import PrivateWorkshopLogosCarousel from "@/components/pages/private-workshops/PrivateWorkshopLogosCarousel"
@@ -23,6 +23,26 @@ import { draftAndPublishedLogoRowsEqual } from "@/lib/privateWorkshopLogosCompar
 import type { Database } from "@/lib/supabase"
 
 type AdminLogoRow = Database["public"]["Tables"]["private_workshop_logos"]["Row"]
+
+async function logosResponseErrorMessage(response: Response): Promise<string> {
+  let text = ""
+  try {
+    text = await response.text()
+  } catch {
+    return `שגיאה בטעינת לוגואים (${response.status})`
+  }
+  if (text) {
+    try {
+      const data = JSON.parse(text) as { error?: unknown }
+      if (typeof data.error === "string" && data.error.trim()) {
+        return data.error.trim()
+      }
+    } catch {
+      /* not JSON */
+    }
+  }
+  return `שגיאה בטעינת לוגואים (${response.status})`
+}
 
 function withNewSortOrder(logos: AdminLogoRow[]) {
   return logos.map((logo, index) => ({ ...logo, sort_order: index }))
@@ -42,6 +62,81 @@ function DraftListSkeleton() {
           <div className="h-9 w-20 rounded bg-slate-200" />
         </div>
       ))}
+    </div>
+  )
+}
+
+function ToolbarSkeletonRow() {
+  return (
+    <div className="flex flex-wrap gap-2" aria-busy="true">
+      <div className="h-10 w-24 rounded-md bg-slate-200 animate-pulse" />
+      <div className="h-10 w-32 rounded-md bg-slate-200 animate-pulse" />
+    </div>
+  )
+}
+
+function BadgesSkeletonRow() {
+  return (
+    <div className="flex flex-wrap items-center gap-2" aria-hidden>
+      <div className="h-6 w-40 rounded-full bg-slate-200 animate-pulse" />
+      <div className="h-6 w-52 rounded-full bg-slate-200 animate-pulse" />
+    </div>
+  )
+}
+
+function SettingsCardSkeleton() {
+  return (
+    <div className="rounded-xl border bg-white p-4 space-y-3 animate-pulse" aria-busy="true">
+      <div className="flex flex-wrap items-start gap-4">
+        <div className="h-8 w-12 shrink-0 rounded-full bg-slate-200" />
+        <div className="space-y-2 min-w-0 flex-1">
+          <div className="h-5 w-full max-w-md rounded bg-slate-200" />
+          <div className="h-4 w-full rounded bg-slate-200" />
+        </div>
+      </div>
+      <div className="border-t pt-3 space-y-2">
+        <div className="h-4 w-28 rounded bg-slate-200" />
+        <div className="h-4 w-full rounded bg-slate-200" />
+        <div className="h-4 max-w-xl w-full rounded bg-slate-200" />
+      </div>
+    </div>
+  )
+}
+
+function DraftCardUploadSkeleton() {
+  return (
+    <div className="flex flex-wrap items-end gap-3 animate-pulse" aria-hidden>
+      <div className="space-y-2">
+        <div className="h-4 w-24 rounded bg-slate-200" />
+        <div className="h-10 max-w-xs w-full rounded-md bg-slate-200" />
+      </div>
+    </div>
+  )
+}
+
+function CarouselPreviewSkeletonBand() {
+  return (
+    <div className="min-h-[120px] px-4 py-6 flex flex-col justify-center gap-4 animate-pulse" aria-busy="true">
+      <div className="h-4 w-48 mx-auto rounded bg-slate-200" />
+      <div className="flex flex-wrap justify-center gap-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-12 w-[4.5rem] rounded-md bg-slate-200" />
+        ))}
+      </div>
+      <div className="flex flex-wrap justify-center gap-3">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="h-12 w-[4.5rem] rounded-md bg-slate-200" />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function PreviewCardHeaderSkeleton() {
+  return (
+    <div className="space-y-2 animate-pulse pb-4" aria-hidden>
+      <div className="h-6 w-48 rounded bg-slate-200" />
+      <div className="h-4 w-full max-w-sm rounded bg-slate-200" />
     </div>
   )
 }
@@ -123,6 +218,9 @@ function AdminLogosContent() {
   const [publishedRows, setPublishedRows] = useState<AdminLogoRow[]>([])
   const [carouselEnabled, setCarouselEnabled] = useState(true)
   const [loading, setLoading] = useState(false)
+  /** First successful GET populated draft/published/settings; stays true until logout. */
+  const [successfulHydration, setSuccessfulHydration] = useState(false)
+  const [logosLoadError, setLogosLoadError] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
   const [publishing, setPublishing] = useState(false)
   const [reordering, setReordering] = useState(false)
@@ -150,11 +248,14 @@ function AdminLogosContent() {
 
   const loadLogos = async () => {
     setLoading(true)
+    setLogosLoadError(null)
     try {
       const headers = await getHeadersOrNotify()
       if (!headers) return
       const response = await fetch("/api/admin/logos", { headers })
       if (!response.ok) {
+        const message = await logosResponseErrorMessage(response)
+        setLogosLoadError(message)
         toast.error("שגיאה בטעינת לוגואים")
         return
       }
@@ -162,12 +263,29 @@ function AdminLogosContent() {
         draft: AdminLogoRow[]
         published: AdminLogoRow[]
         carouselEnabled: boolean
+        hasUnpublishedChanges: boolean
       }
-      setLogos(withNewSortOrder(body.draft))
-      setPublishedRows(withNewSortOrder(body.published))
+      const draftOrdered = withNewSortOrder(body.draft)
+      const publishedOrdered = withNewSortOrder(body.published)
+      const derivedUnpublished = !draftAndPublishedLogoRowsEqual(draftOrdered, publishedOrdered)
+      if (derivedUnpublished !== body.hasUnpublishedChanges) {
+        console.warn(
+          "[admin/logos] hasUnpublishedChanges mismatch between client derive and GET",
+          { derivedUnpublished, api: body.hasUnpublishedChanges }
+        )
+      }
+      setLogos(draftOrdered)
+      setPublishedRows(publishedOrdered)
       setCarouselEnabled(body.carouselEnabled)
+      setSuccessfulHydration(true)
+      setLogosLoadError(null)
     } catch (error) {
       console.error(error)
+      const message =
+        typeof error === "object" && error !== null && "message" in error && typeof (error as Error).message === "string"
+          ? (error as Error).message
+          : "שגיאת רשת או תגובה לא תקינה"
+      setLogosLoadError(message)
       toast.error("שגיאה בטעינת לוגואים")
     } finally {
       setLoading(false)
@@ -175,15 +293,40 @@ function AdminLogosContent() {
   }
 
   useEffect(() => {
-    if (!isAuthenticated) return
+    if (!isAuthenticated) {
+      setSuccessfulHydration(false)
+      setLogosLoadError(null)
+      setLogos([])
+      setPublishedRows([])
+      setCarouselEnabled(true)
+      return
+    }
     void loadLogos()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated])
 
+  /** Matches GET `hasUnpublishedChanges` after each successful load; updates as draft/published rows change in the UI. */
   const hasUnpublishedChanges = useMemo(
     () => !draftAndPublishedLogoRowsEqual(logos, publishedRows),
     [logos, publishedRows]
   )
+
+  const awaitingFirstHydration = isAuthenticated && !successfulHydration
+  /** Idle before fetch, in-flight attempt, or retry after clearing error — not an error-blocking view. */
+  const showBootstrapSkeleton = awaitingFirstHydration && (loading || logosLoadError === null)
+  const showBootstrapError = awaitingFirstHydration && logosLoadError !== null && !loading
+  const showStaleDataLoadBanner = Boolean(successfulHydration && logosLoadError && !loading)
+
+  /** Skeleton regions until first successful hydrate; hides misleading defaults until data exists. */
+  const showHydrationPlaceholder = showBootstrapSkeleton
+  const showDraftListSkeleton = showHydrationPlaceholder || (loading && logos.length === 0)
+
+  let loadStatusAria = ""
+  if (showHydrationPlaceholder) {
+    loadStatusAria = "טוען נתוני לוגואים"
+  } else if (showStaleDataLoadBanner || showBootstrapError) {
+    loadStatusAria = `שגיאת טעינה: ${logosLoadError ?? ""}`
+  }
 
   const draftPreviewItems = useMemo(
     () => logos.map((row) => ({ id: row.id, src: row.image_url, alt: row.image_alt || "לוגו" })),
@@ -390,58 +533,105 @@ function AdminLogosContent() {
 
   return (
     <AdminShell title="ניהול לוגואים — סדנאות פרטיות" onLogout={signOut}>
+      {loadStatusAria ? (
+        <p className="sr-only" role="status" aria-live="polite">
+          {loadStatusAria}
+        </p>
+      ) : null}
+      {showBootstrapError ? (
+        <Card role="alert" className="border-red-300 bg-red-50/90">
+          <CardHeader className="flex flex-row items-start gap-2 space-y-0">
+            <AlertCircle className="h-5 w-5 shrink-0 text-red-700 mt-0.5" aria-hidden />
+            <div>
+              <CardTitle className="text-lg text-red-900">שגיאה בטעינת נתוני הלוגואים</CardTitle>
+              <p className="text-sm text-red-900/85 pt-2">לא הצלחנו לטעון את הטיוטה והפרסום מהשרת. ניתן לנסות שוב.</p>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm font-mono break-words text-red-950 bg-white/70 rounded-md border border-red-200 p-3 mb-4">{logosLoadError}</p>
+            <Button type="button" onClick={() => void loadLogos()} disabled={loading} className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white">
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+              נסה שוב
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
       <div className="space-y-6">
-        <div className="flex flex-wrap gap-2">
-          <Button type="button" variant="outline" onClick={() => void loadLogos()} disabled={loading} className="inline-flex items-center gap-2">
-            <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-            רענון
-          </Button>
-          <Button
-            type="button"
-            className="bg-green-600 hover:bg-green-700 text-white inline-flex items-center gap-2"
-            onClick={() => void onPublish()}
-            disabled={publishing || logos.length === 0}
-            title={logos.length === 0 ? "אין לוגואים בטיוטה לפרסום" : undefined}
+        {showStaleDataLoadBanner ? (
+          <div
+            role="alert"
+            className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950 flex flex-wrap items-start justify-between gap-3"
           >
-            {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-            פרסם לאתר
-          </Button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge
-            variant={carouselEnabled ? "default" : "secondary"}
-            className={carouselEnabled ? "border-transparent bg-green-700 text-white hover:bg-green-700" : ""}
-          >
-            {carouselEnabled ? "המקטע מוצג באתר" : "המקטע מוסתר באתר"}
-          </Badge>
-          <Badge variant={hasUnpublishedChanges ? "destructive" : "outline"}>
-            {hasUnpublishedChanges ? "יש שינויים בטיוטה שלא פורסמו" : "הטיוטה תואמת למה שפורסם"}
-          </Badge>
-        </div>
-
-        <div className="rounded-xl border bg-white p-4 text-sm text-gray-700 space-y-3">
-          <div className="flex flex-wrap items-start gap-4">
-            <div dir="ltr" className="flex shrink-0 items-center pt-0.5">
-              <Switch
-                checked={carouselEnabled}
-                disabled={settingsSaving || loading}
-                onCheckedChange={(checked) => void onCarouselEnabledChange(checked)}
-              />
+            <div className="flex gap-2 min-w-0">
+              <AlertCircle className="h-4 w-4 shrink-0 text-amber-800 mt-0.5" aria-hidden />
+              <div className="min-w-0">
+                <p className="font-medium text-amber-950">לא ניתן לרענן את הנתונים מהשרת</p>
+                <p className="text-amber-900/95 mt-1 break-words">{logosLoadError}</p>
+                <p className="text-amber-800/85 mt-1">מוצגים נתונים מהטעינה האחרונה המוצלחת.</p>
+              </div>
             </div>
-            <div className="space-y-1 min-w-0">
-              <p className="text-base font-medium text-foreground">הצג את מקטע לוגואי הלקוחות בדף סדנאות פרטיות</p>
-              <p className="text-gray-600">
-                כבוי — המבקרים לא יראו את הקרוסלה, גם אם יש לוגואים מפורסמים. ההגדרה חלה מיד על האתר.
-              </p>
-            </div>
+            <Button type="button" variant="outline" size="sm" onClick={() => void loadLogos()} disabled={loading} className="shrink-0 border-amber-400">
+              רענון נתונים
+            </Button>
           </div>
-          <p className="font-medium pt-2 border-t">מצב פרסום</p>
-          <p className="text-gray-600">
-            זו טיוטה פנימית. האתר הציבורי מציג את גרסת הפרסום בלבד. חלוקה לשתי שורות בקרוסלה לפי סדר הרשימה: חצי עליון /
-            חצי תחתון.
-          </p>
-        </div>
+        ) : null}
+        {showHydrationPlaceholder ? <ToolbarSkeletonRow /> : (
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" variant="outline" onClick={() => void loadLogos()} disabled={loading} className="inline-flex items-center gap-2">
+              <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+              רענון
+            </Button>
+            <Button
+              type="button"
+              className="bg-green-600 hover:bg-green-700 text-white inline-flex items-center gap-2"
+              onClick={() => void onPublish()}
+              disabled={publishing || logos.length === 0}
+              title={logos.length === 0 ? "אין לוגואים בטיוטה לפרסום" : undefined}
+            >
+              {publishing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+              פרסם לאתר
+            </Button>
+          </div>
+        )}
+
+        {showHydrationPlaceholder ? <BadgesSkeletonRow /> : (
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge
+              variant={carouselEnabled ? "default" : "secondary"}
+              className={carouselEnabled ? "border-transparent bg-green-700 text-white hover:bg-green-700" : ""}
+            >
+              {carouselEnabled ? "המקטע מוצג באתר" : "המקטע מוסתר באתר"}
+            </Badge>
+            <Badge variant={hasUnpublishedChanges ? "destructive" : "outline"}>
+              {hasUnpublishedChanges ? "יש שינויים בטיוטה שלא פורסמו" : "הטיוטה תואמת למה שפורסם"}
+            </Badge>
+          </div>
+        )}
+
+        {showHydrationPlaceholder ? <SettingsCardSkeleton /> : (
+          <div className="rounded-xl border bg-white p-4 text-sm text-gray-700 space-y-3">
+            <div className="flex flex-wrap items-start gap-4">
+              <div dir="ltr" className="flex shrink-0 items-center pt-0.5">
+                <Switch
+                  checked={carouselEnabled}
+                  disabled={settingsSaving || loading}
+                  onCheckedChange={(checked) => void onCarouselEnabledChange(checked)}
+                />
+              </div>
+              <div className="space-y-1 min-w-0">
+                <p className="text-base font-medium text-foreground">הצג את מקטע לוגואי הלקוחות בדף סדנאות פרטיות</p>
+                <p className="text-gray-600">
+                  כבוי — המבקרים לא יראו את הקרוסלה, גם אם יש לוגואים מפורסמים. ההגדרה חלה מיד על האתר.
+                </p>
+              </div>
+            </div>
+            <p className="font-medium pt-2 border-t">מצב פרסום</p>
+            <p className="text-gray-600">
+              זו טיוטה פנימית. האתר הציבורי מציג את גרסת הפרסום בלבד. חלוקה לשתי שורות בקרוסלה לפי סדר הרשימה: חצי עליון /
+              חצי תחתון.
+            </p>
+          </div>
+        )}
 
         <Card>
           <CardHeader>
@@ -449,34 +639,40 @@ function AdminLogosContent() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-wrap items-end gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="new-logo">הוספת לוגו</Label>
-                <Input
-                  id="new-logo"
-                  type="file"
-                  accept="image/*"
-                  disabled={uploading}
-                  className="bg-white max-w-xs"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0] ?? null
-                    event.target.value = ""
-                    void onUpload(file)
-                  }}
-                />
-              </div>
-              {uploading ? (
-                <span className="text-sm text-gray-600 inline-flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" /> מעלה…
-                </span>
-              ) : null}
-              {reordering ? (
-                <span className="text-sm text-gray-600 inline-flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" /> שומר סדר חדש…
-                </span>
-              ) : null}
+              {showHydrationPlaceholder ? (
+                <DraftCardUploadSkeleton />
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="new-logo">הוספת לוגו</Label>
+                    <Input
+                      id="new-logo"
+                      type="file"
+                      accept="image/*"
+                      disabled={uploading || loading}
+                      className="bg-white max-w-xs"
+                      onChange={(event) => {
+                        const file = event.target.files?.[0] ?? null
+                        event.target.value = ""
+                        void onUpload(file)
+                      }}
+                    />
+                  </div>
+                  {uploading ? (
+                    <span className="text-sm text-gray-600 inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" /> מעלה…
+                    </span>
+                  ) : null}
+                  {reordering ? (
+                    <span className="text-sm text-gray-600 inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" /> שומר סדר חדש…
+                    </span>
+                  ) : null}
+                </>
+              )}
             </div>
 
-            {loading ? (
+            {showDraftListSkeleton ? (
               <DraftListSkeleton />
             ) : logos.length === 0 ? (
               <p className="text-gray-600">אין לוגואים בטיוטה. אם יש קבצים ב־Cloudinary בתיקייה הנכונה, הם יוטענו אוטומטית בטעינת העמוד; אחרת ניתן להעלות תמונה כאן.</p>
@@ -503,13 +699,21 @@ function AdminLogosContent() {
         <div className="grid gap-4 md:grid-cols-2">
           <Card className="min-w-0">
             <CardHeader>
-              <CardTitle>באתר החי עכשיו</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                מה שמבקרים רואים בפועל: לוגואים מפורסמים {carouselEnabled ? "והמקטע מופעל" : "— והמקטע מכובה (הקרוסלה מוסתרת)"}.
-              </p>
+              {showHydrationPlaceholder ? (
+                <PreviewCardHeaderSkeleton />
+              ) : (
+                <>
+                  <CardTitle>באתר החי עכשיו</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    מה שמבקרים רואים בפועל: לוגואים מפורסמים {carouselEnabled ? "והמקטע מופעל" : "— והמקטע מכובה (הקרוסלה מוסתרת)"}.
+                  </p>
+                </>
+              )}
             </CardHeader>
             <CardContent className="rounded-xl border bg-slate-50 overflow-hidden min-h-[120px]">
-              {!carouselEnabled ? (
+              {showHydrationPlaceholder ? (
+                <CarouselPreviewSkeletonBand />
+              ) : !carouselEnabled ? (
                 <p className="text-center text-gray-600 py-8 px-2">
                   המקטע כבוי — אף קרוסלה לא מוצגת בדף סדנאות פרטיות (גם אם יש לוגואים שפורסמו).
                 </p>
@@ -523,13 +727,21 @@ function AdminLogosContent() {
 
           <Card className="min-w-0">
             <CardHeader>
-              <CardTitle>טיוטה — איך ייראה אחרי פרסום</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                הכותרת קבועה בקוד. זהו סדר ותוכן הטיוטה; לחיצה על פרסום מעדכנת את מה שמוצג ב&quot;באתר החי&quot;.
-              </p>
+              {showHydrationPlaceholder ? (
+                <PreviewCardHeaderSkeleton />
+              ) : (
+                <>
+                  <CardTitle>טיוטה — איך ייראה אחרי פרסום</CardTitle>
+                  <p className="text-sm text-muted-foreground">
+                    הכותרת קבועה בקוד. זהו סדר ותוכן הטיוטה; לחיצה על פרסום מעדכנת את מה שמוצג ב&quot;באתר החי&quot;.
+                  </p>
+                </>
+              )}
             </CardHeader>
             <CardContent className="rounded-xl border bg-slate-50 overflow-hidden min-h-[120px]">
-              {draftPreviewItems.length === 0 ? (
+              {showHydrationPlaceholder ? (
+                <CarouselPreviewSkeletonBand />
+              ) : draftPreviewItems.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">אין לוגואים בטיוטה</p>
               ) : (
                 <PrivateWorkshopLogosCarousel heading={PRIVATE_WORKSHOP_LOGOS_HEADING} logos={draftPreviewItems} />
@@ -538,6 +750,7 @@ function AdminLogosContent() {
           </Card>
         </div>
       </div>
+      )}
     </AdminShell>
   )
 }
