@@ -2,6 +2,8 @@
 // import { WorkshopType } from "@/types/types";
 
 import { getPrivateSchedules } from "../schedules";
+import { PRIVATE_WORKSHOP_LOGOS_HEADING } from "@/lib/constants/privateWorkshopLogos";
+import { getPrivateWorkshopCarouselEnabled, getPublishedPrivateWorkshopLogos } from "./privateWorkshopLogosData";
 
 // const ISRAEL_TZ = "Asia/Jerusalem";
 
@@ -14,6 +16,11 @@ import { getPrivateSchedules } from "../schedules";
 const getPrivateWorkshopData = async () => {
 
     const availableDates = await getPrivateSchedules()
+    const [carouselEnabled, logosPublished] = await Promise.all([
+        getPrivateWorkshopCarouselEnabled(),
+        getPublishedPrivateWorkshopLogos(),
+    ])
+    const logos = carouselEnabled ? logosPublished : []
 
     // const generateDates = () => {
     //     // Define completely excluded dates (no availability at all)
@@ -217,7 +224,11 @@ const getPrivateWorkshopData = async () => {
         openForm: {
             title: "רוצים לשמוע עוד?",
             description: "שלחו לנו כאן במה אתם מתעניינים ונחזור אליכם ממש מהר.",
-        }
+        },
+        logosCarousel: {
+            heading: PRIVATE_WORKSHOP_LOGOS_HEADING,
+            logos,
+        },
     }
 
     return data;

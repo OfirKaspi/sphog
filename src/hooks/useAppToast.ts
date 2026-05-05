@@ -57,8 +57,6 @@ export function useAppToast(): AppToast {
                 {
                     variant: "destructive",
                     duration: 5000,
-                    className:
-                        "border-red-600 bg-red-600 text-white shadow-xl [&_*]:text-white",
                 },
                 opts
             ),

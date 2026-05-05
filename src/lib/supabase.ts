@@ -133,6 +133,57 @@ export interface Database {
         }
         Relationships: []
       }
+      private_workshop_logos: {
+        Row: {
+          id: string
+          stage: "draft" | "published"
+          image_url: string
+          image_public_id: string | null
+          image_alt: string
+          sort_order: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          stage: "draft" | "published"
+          image_url: string
+          image_public_id?: string | null
+          image_alt?: string
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          stage?: "draft" | "published"
+          image_url?: string
+          image_public_id?: string | null
+          image_alt?: string
+          sort_order?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      private_workshop_settings: {
+        Row: {
+          id: string
+          carousel_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          carousel_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          carousel_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -143,6 +194,10 @@ export interface Database {
           uid: string
         }
         Returns: boolean
+      }
+      publish_private_workshop_logos_from_draft: {
+        Args: Record<string, never>
+        Returns: undefined
       }
     }
     Enums: {
