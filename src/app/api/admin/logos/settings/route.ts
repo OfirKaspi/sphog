@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server"
-import { revalidatePath } from "next/cache"
 
 import { requireAdminAuth } from "@/lib/adminAuth"
 import { updatePrivateWorkshopCarouselEnabled } from "@/lib/api/privateWorkshopLogosData"
 import { updatePrivateWorkshopSettingsSchema } from "@/lib/api/privateWorkshopLogosValidation"
+import { revalidatePrivateWorkshopsPage } from "@/lib/revalidatePrivateWorkshops"
 
 export async function PATCH(request: NextRequest) {
   const auth = await requireAdminAuth(request)
@@ -32,11 +32,7 @@ export async function PATCH(request: NextRequest) {
     )
   }
 
-  try {
-    revalidatePath("/private-workshops")
-  } catch (revalidateError) {
-    console.log("Settings revalidation warning:", revalidateError)
-  }
+  revalidatePrivateWorkshopsPage()
 
   return NextResponse.json(data)
 }

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { requireAdminAuth } from "@/lib/adminAuth"
-import { uploadLogoImage } from "@/lib/cloudinary"
+import { getAdminDraftPrivateWorkshopLogos } from "@/lib/api/privateWorkshopLogosData"
+import { deleteCloudinaryImage, uploadLogoImage } from "@/lib/cloudinary"
+import { LOGO_DUPLICATE_MESSAGE } from "@/lib/constants/privateWorkshopLogos"
+import { draftHasDuplicateAsset } from "@/lib/logoAssetKey"
 
 const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
 
@@ -30,6 +33,21 @@ export async function POST(request: NextRequest) {
     const bytes = await image.arrayBuffer()
     const buffer = Buffer.from(bytes)
     const uploaded = await uploadLogoImage(buffer, image.name.replace(/\.[^/.]+$/, ""))
+
+    const drafts = await getAdminDraftPrivateWorkshopLogos()
+    if (
+      draftHasDuplicateAsset(drafts, {
+        src: uploaded.secure_url,
+        image_public_id: uploaded.public_id,
+      })
+    ) {
+      try {
+        await deleteCloudinaryImage(uploaded.public_id)
+      } catch (error) {
+        console.error("Failed to discard duplicate logo upload from Cloudinary:", uploaded.public_id, error)
+      }
+      return NextResponse.json({ error: LOGO_DUPLICATE_MESSAGE }, { status: 409 })
+    }
 
     return NextResponse.json(
       {

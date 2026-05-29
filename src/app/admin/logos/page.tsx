@@ -19,6 +19,7 @@ import { Switch } from "@/components/ui/switch"
 import { useAdminSession } from "@/hooks/useAdminSession"
 import { useAppToast } from "@/hooks/useAppToast"
 import { PRIVATE_WORKSHOP_LOGOS_HEADING } from "@/lib/constants/privateWorkshopLogos"
+import { dedupeWorkshopLogosByAsset } from "@/lib/logoAssetKey"
 import { draftAndPublishedLogoRowsEqual } from "@/lib/privateWorkshopLogosCompare"
 import type { Database } from "@/lib/supabase"
 
@@ -46,6 +47,17 @@ async function logosResponseErrorMessage(response: Response): Promise<string> {
 
 function withNewSortOrder(logos: AdminLogoRow[]) {
   return logos.map((logo, index) => ({ ...logo, sort_order: index }))
+}
+
+function toDedupedPreviewItems(rows: AdminLogoRow[]) {
+  return dedupeWorkshopLogosByAsset(
+    rows.map((row) => ({
+      id: row.id,
+      src: row.image_url,
+      alt: row.image_alt || "לוגו",
+      image_public_id: row.image_public_id,
+    }))
+  ).map(({ id, src, alt }) => ({ id, src, alt }))
 }
 
 function DraftListSkeleton() {
@@ -185,7 +197,16 @@ function SortableLogoRow({
       >
         <GripVertical className="h-5 w-5" />
       </button>
-      <div className="h-14 w-28 shrink-0 overflow-hidden rounded-md border bg-slate-50 flex items-center justify-center">
+      <div
+        className="h-14 w-28 shrink-0 overflow-hidden rounded-md border flex items-center justify-center"
+        style={{
+          backgroundColor: "#e2e8f0",
+          backgroundImage:
+            "linear-gradient(45deg, #cbd5e1 25%, transparent 25%), linear-gradient(-45deg, #cbd5e1 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #cbd5e1 75%), linear-gradient(-45deg, transparent 75%, #cbd5e1 75%)",
+          backgroundSize: "12px 12px",
+          backgroundPosition: "0 0, 0 6px, 6px -6px, -6px 0",
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={logo.image_url} alt="" className="max-h-12 w-auto object-contain" />
       </div>
@@ -328,15 +349,9 @@ function AdminLogosContent() {
     loadStatusAria = `שגיאת טעינה: ${logosLoadError ?? ""}`
   }
 
-  const draftPreviewItems = useMemo(
-    () => logos.map((row) => ({ id: row.id, src: row.image_url, alt: row.image_alt || "לוגו" })),
-    [logos]
-  )
+  const draftPreviewItems = useMemo(() => toDedupedPreviewItems(logos), [logos])
 
-  const livePreviewItems = useMemo(
-    () => publishedRows.map((row) => ({ id: row.id, src: row.image_url, alt: row.image_alt || "לוגו" })),
-    [publishedRows]
-  )
+  const livePreviewItems = useMemo(() => toDedupedPreviewItems(publishedRows), [publishedRows])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -448,10 +463,12 @@ function AdminLogosContent() {
       formData.set("image", file)
       const uploadRes = await fetch("/api/admin/logos/upload-image", { method: "POST", headers, body: formData })
       if (!uploadRes.ok) {
-        toast.error("העלאה נכשלה")
+        const body = (await uploadRes.json().catch(() => null)) as { error?: string } | null
+        toast.error(body?.error || "העלאה נכשלה")
         return
       }
       const { image_url, image_public_id } = (await uploadRes.json()) as { image_url: string; image_public_id: string }
+
       const jsonHeaders = await getHeadersOrNotify(true)
       if (!jsonHeaders) return
       const createRes = await fetch("/api/admin/logos", {
@@ -464,7 +481,8 @@ function AdminLogosContent() {
         }),
       })
       if (!createRes.ok) {
-        toast.error("שמירת הלוגו נכשלה")
+        const body = (await createRes.json().catch(() => null)) as { error?: string } | null
+        toast.error(body?.error || "שמירת הלוגו נכשלה")
         return
       }
       const created = (await createRes.json()) as AdminLogoRow
@@ -489,7 +507,11 @@ function AdminLogosContent() {
         toast.error((body as { error?: string })?.error || "פרסום נכשל")
         return
       }
+      const body = (await response.json()) as { revalidated?: boolean }
       toast.success("פורסם לאתר")
+      if (body.revalidated === false) {
+        toast.error("הפרסום נשמר אך ייתכן שהאתר יתעדכן בעיכוב — נסו לרענן את הדף")
+      }
       await loadLogos()
     } catch (error) {
       console.error(error)

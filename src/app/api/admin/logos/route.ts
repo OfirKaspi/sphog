@@ -7,9 +7,12 @@ import {
   getAdminCarouselEnabledFromDb,
   getAdminDraftPrivateWorkshopLogos,
   getAdminPublishedPrivateWorkshopLogos,
+  maybeDeleteCloudinaryLogo,
   reorderDraftPrivateWorkshopLogos,
 } from "@/lib/api/privateWorkshopLogosData"
 import { createPrivateWorkshopLogoSchema } from "@/lib/api/privateWorkshopLogosValidation"
+import { LOGO_DUPLICATE_MESSAGE } from "@/lib/constants/privateWorkshopLogos"
+import { draftHasDuplicateAsset } from "@/lib/logoAssetKey"
 import { draftAndPublishedLogoRowsEqual } from "@/lib/privateWorkshopLogosCompare"
 import type { Database } from "@/lib/supabase"
 
@@ -49,6 +52,17 @@ export async function POST(request: NextRequest) {
   }
 
   const drafts = await getAdminDraftPrivateWorkshopLogos()
+
+  if (
+    draftHasDuplicateAsset(drafts, {
+      src: parsed.data.image_url,
+      image_public_id: parsed.data.image_public_id ?? null,
+    })
+  ) {
+    await maybeDeleteCloudinaryLogo(parsed.data.image_public_id)
+    return NextResponse.json({ error: LOGO_DUPLICATE_MESSAGE }, { status: 409 })
+  }
+
   const nextSort = 0
 
   const insertPayload: Database["public"]["Tables"]["private_workshop_logos"]["Insert"] = {

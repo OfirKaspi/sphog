@@ -7,6 +7,8 @@ import WorkshopRegistrationOpenForm from "@/components/forms/workshop-registrati
 import AboutUs from "@/components/pages/home/AboutUs";
 import getPrivateWorkshopData from "@/lib/api/privateWorkshopData";
 
+export const dynamic = "force-dynamic";
+
 const PrivateWorkshop = async () => {
   const data = await getPrivateWorkshopData();
 

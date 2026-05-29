@@ -1,9 +1,12 @@
+import { unstable_noStore as noStore } from "next/cache"
+
 import {
   deleteCloudinaryImage,
   extractCloudinaryPublicIdFromUrl,
   listWorkshopLogoResources,
   normalizeCloudinaryPublicId,
 } from "@/lib/cloudinary"
+import { dedupeWorkshopLogosByAsset } from "@/lib/logoAssetKey"
 import { getSupabaseServiceRoleClient, supabase } from "@/lib/supabase"
 import type { Database } from "@/lib/supabase"
 
@@ -101,6 +104,8 @@ export async function ensureDraftLogosSeededFromCloudinary(): Promise<void> {
 }
 
 export async function getPrivateWorkshopCarouselEnabled(): Promise<boolean> {
+  noStore()
+
   const { data, error } = await supabase
     .from("private_workshop_settings")
     .select("carousel_enabled")
@@ -122,11 +127,14 @@ export async function getPrivateWorkshopCarouselEnabled(): Promise<boolean> {
 }
 
 export async function getPublishedPrivateWorkshopLogos(): Promise<WorkshopLogoPublic[]> {
+  noStore()
+
   const { data, error } = await supabase
     .from("private_workshop_logos")
-    .select("id, image_url, image_alt, sort_order")
+    .select("id, image_url, image_alt, sort_order, image_public_id, created_at")
     .eq("stage", "published")
     .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true })
 
   if (error) {
     if (!isPostgrestRelationNotInSchema(error)) {
@@ -135,11 +143,14 @@ export async function getPublishedPrivateWorkshopLogos(): Promise<WorkshopLogoPu
     return []
   }
 
-  return (data ?? []).map((row) => ({
+  const logos = (data ?? []).map((row) => ({
     id: row.id,
     src: row.image_url,
     alt: row.image_alt?.trim() ? row.image_alt : "לוגו",
+    image_public_id: row.image_public_id,
   }))
+
+  return dedupeWorkshopLogosByAsset(logos).map(({ id, src, alt }) => ({ id, src, alt }))
 }
 
 async function adminFetch<T>(path: string, init: RequestInit = {}) {
@@ -396,6 +407,7 @@ export async function publishPrivateWorkshopLogosFromDraft(): Promise<{ ok: bool
   for (const publicId of refsPreviouslyLive) {
     if (!stillReferenced.has(publicId)) {
       try {
+        console.info("Deleting orphaned Cloudinary logo after publish:", publicId)
         await deleteCloudinaryImage(publicId)
       } catch (error) {
         console.error("Post-publish Cloudinary delete failed for orphaned asset:", publicId, error)

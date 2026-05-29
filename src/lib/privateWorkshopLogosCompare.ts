@@ -13,3 +13,5 @@ export function privateWorkshopLogoRowsSignature(rows: LogoRow[]): string {
 export function draftAndPublishedLogoRowsEqual(draft: LogoRow[], published: LogoRow[]): boolean {
   return privateWorkshopLogoRowsSignature(draft) === privateWorkshopLogoRowsSignature(published)
 }
+
+export { dedupeWorkshopLogosByAsset, draftHasDuplicateAsset } from "@/lib/logoAssetKey"
