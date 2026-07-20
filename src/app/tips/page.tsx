@@ -14,7 +14,7 @@ const Tips = () => {
 
   return (
     <section>
-      <PageHeader {...data.header} />
+      <PageHeader {...data.header} align="center" />
       <VideoTip {...data.videoTip} />
       <TipsGrid tips={data.tips} />
       <Testimonials {...data.testimonials} />

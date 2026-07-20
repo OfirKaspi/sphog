@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
 import { usePathname } from "next/navigation";
+import { WorkshopType } from "@/types/types";
 
 const LegendItem = ({
   color,
@@ -16,26 +16,60 @@ const LegendItem = ({
   </div>
 );
 
-const Legend = () => {
+const PUBLIC_LEGEND_ITEMS: {
+  type: WorkshopType;
+  color: string;
+  label: string;
+}[] = [
+  { type: WorkshopType.TECH, color: "bg-green-200", label: "סדנת טכניקות" },
+  { type: WorkshopType.FAMILY, color: "bg-sky-200", label: "סדנא משפחתית" },
+  {
+    type: WorkshopType.ADVANCED,
+    color: "bg-pink-200",
+    label: "סדנא מתקדמת",
+  },
+  {
+    type: WorkshopType.UNAVAILABLE,
+    color: "bg-gray-300",
+    label: "לא נותרו מקומות",
+  },
+];
+
+interface LegendProps {
+  presentTypes: Set<WorkshopType>;
+}
+
+const Legend = ({ presentTypes }: LegendProps) => {
   const pathname = usePathname();
   const isPrivateWorkshop = pathname === "/private-workshops";
+  const hasUnavailable = presentTypes.has(WorkshopType.UNAVAILABLE);
 
   if (isPrivateWorkshop) {
+    const hasAvailable = [...presentTypes].some(
+      (type) => type !== WorkshopType.UNAVAILABLE
+    );
+
     return (
       <div className="flex justify-center flex-wrap gap-4 mb-2">
-        <LegendItem color="bg-pink-200" label="פנוי" />
-        <LegendItem color="bg-gray-300" label="לא נותרו מקומות" />
+        {hasAvailable && <LegendItem color="bg-pink-200" label="פנוי" />}
+        {hasUnavailable && (
+          <LegendItem color="bg-gray-300" label="לא נותרו מקומות" />
+        )}
       </div>
     );
   }
 
-  // Default legend for public workshops
+  const items = PUBLIC_LEGEND_ITEMS.filter((item) =>
+    presentTypes.has(item.type)
+  );
+
+  if (items.length === 0) return null;
+
   return (
     <div className="flex justify-center flex-wrap gap-4 mb-2">
-      <LegendItem color="bg-green-200" label="סדנת טכניקות" />
-      <LegendItem color="bg-sky-200" label="סדנא משפחתית" />
-      <LegendItem color="bg-pink-200" label="סדנא מתקדמת" />
-      <LegendItem color="bg-gray-300" label="לא נותרו מקומות" />
+      {items.map((item) => (
+        <LegendItem key={item.type} color={item.color} label={item.label} />
+      ))}
     </div>
   );
 };
