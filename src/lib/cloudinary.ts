@@ -28,6 +28,9 @@ function ensureCloudinaryConfigured() {
 /** Cloudinary folder for private-workshop partner logos (existing assets live here). */
 export const CLOUDINARY_LOGOS_FOLDER = "sphog/logos"
 
+/** Cloudinary folder for public gallery images. */
+export const CLOUDINARY_GALLERY_FOLDER = "sphog/gallery"
+
 export async function uploadCatalogImage(buffer: Buffer, filename: string) {
   ensureCloudinaryConfigured()
 
@@ -88,8 +91,9 @@ type CloudinaryResourceListItem = {
   resource_type?: string
 }
 
-/** List image resources under the logos folder (paginated). */
-export async function listWorkshopLogoResources(): Promise<Array<{ public_id: string; secure_url: string }>> {
+async function listFolderResources(
+  folder: string
+): Promise<Array<{ public_id: string; secure_url: string }>> {
   ensureCloudinaryConfigured()
 
   const collected: Array<{ public_id: string; secure_url: string }> = []
@@ -98,7 +102,7 @@ export async function listWorkshopLogoResources(): Promise<Array<{ public_id: st
   do {
     const result = (await cloudinary.api.resources({
       type: "upload",
-      prefix: CLOUDINARY_LOGOS_FOLDER,
+      prefix: folder,
       max_results: 200,
       ...(next_cursor ? { next_cursor } : {}),
     })) as {
@@ -117,6 +121,43 @@ export async function listWorkshopLogoResources(): Promise<Array<{ public_id: st
   } while (next_cursor)
 
   return collected.sort((a, b) => a.public_id.localeCompare(b.public_id))
+}
+
+/** List image resources under the logos folder (paginated). */
+export async function listWorkshopLogoResources(): Promise<Array<{ public_id: string; secure_url: string }>> {
+  return listFolderResources(CLOUDINARY_LOGOS_FOLDER)
+}
+
+export async function uploadGalleryImage(buffer: Buffer, filename: string) {
+  ensureCloudinaryConfigured()
+
+  return new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: CLOUDINARY_GALLERY_FOLDER,
+        resource_type: "image",
+        overwrite: false,
+        filename_override: filename,
+        use_filename: true,
+        unique_filename: true,
+      },
+      (error, result) => {
+        if (error || !result) {
+          reject(error || new Error("Cloudinary upload failed"))
+          return
+        }
+
+        resolve({ secure_url: result.secure_url, public_id: result.public_id })
+      }
+    )
+
+    stream.end(buffer)
+  })
+}
+
+/** List image resources under the gallery folder (paginated). */
+export async function listGalleryResources(): Promise<Array<{ public_id: string; secure_url: string }>> {
+  return listFolderResources(CLOUDINARY_GALLERY_FOLDER)
 }
 
 export async function deleteCatalogImage(publicId: string) {

@@ -6,7 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { CONFIG } from "@/config/config";
 import FooterNavigation from "@/components/layout/FooterNavigation";
 
-export default function Footer() {
+type FooterProps = {
+  showGallery?: boolean
+}
+
+export default function Footer({ showGallery = false }: FooterProps) {
   const year = CONFIG.year
   return (
     <footer className="p-5 space-y-5 lg:space-y-10 lg:pt-10 border-t-[1px] border-white bg-primary text-white">
@@ -14,7 +18,7 @@ export default function Footer() {
         <div className="border-b-[1px] border-white lg:border-none pb-5 lg:pb-0 lg:flex">
           <Logo isLogoWhite={true} isTextShow={false} size={80} />
         </div>
-        <FooterNavigation />
+        <FooterNavigation showGallery={showGallery} />
         <SocialMedia />
       </div>
       <Separator className="hidden lg:flex" />
