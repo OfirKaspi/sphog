@@ -33,17 +33,12 @@ const LG_MIN = 1024
 
 export type GalleryViewportPreset = "mobile" | "tablet" | "desktop"
 
-/**
- * Fixed preview widths sit at (or above) the public breakpoints so forced
- * column counts match `galleryColumnCountForWidth` for that viewport.
- * Admin frames use this exact width (scroll horizontally if the card is narrower).
- */
+/** Admin viewport preview: column count + gaps; frame stays within the card (max-width only). */
 export const GALLERY_VIEWPORT_PRESETS: Record<
   GalleryViewportPreset,
   {
     columns: number
-    /** Exact preview canvas width in px (not a max-width shrink). */
-    previewWidth: number
+    maxWidth: number
     flexClass: string
     itemClass: string
     labelHe: string
@@ -51,21 +46,21 @@ export const GALLERY_VIEWPORT_PRESETS: Record<
 > = {
   mobile: {
     columns: 2,
-    previewWidth: 390,
+    maxWidth: 390,
     flexClass: "flex gap-2",
     itemClass: "mb-2",
     labelHe: "מובייל",
   },
   tablet: {
     columns: 3,
-    previewWidth: MD_MIN,
+    maxWidth: MD_MIN,
     flexClass: "flex gap-3",
     itemClass: "mb-3",
     labelHe: "טאבלט",
   },
   desktop: {
     columns: 4,
-    previewWidth: 1280,
+    maxWidth: 1280,
     flexClass: "flex gap-4",
     itemClass: "mb-4",
     labelHe: "דסקטופ",

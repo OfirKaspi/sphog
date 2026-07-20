@@ -196,20 +196,30 @@ function GalleryViewportTabs({
   )
 }
 
-/** Fixed-width canvas so column count matches the public breakpoint for that preset. */
+const VIEWPORT_FADE_MS = 160
+
+/**
+ * Preview frame sized to the selected viewport; shrinks with max-w-full when the
+ * admin card is narrower (no horizontal scrollbar).
+ */
 function GalleryViewportCanvas({
   preset,
+  contentVisible,
   children,
 }: {
   preset: GalleryViewportPreset
+  contentVisible: boolean
   children: ReactNode
 }) {
-  const { previewWidth } = GALLERY_VIEWPORT_PRESETS[preset]
+  const { maxWidth } = GALLERY_VIEWPORT_PRESETS[preset]
   return (
-    <div className="overflow-x-auto">
+    <div
+      className="mx-auto max-w-full rounded-xl border bg-slate-50/80 p-3 transition-[width] duration-300 ease-in-out"
+      style={{ width: maxWidth }}
+    >
       <div
-        className="mx-auto rounded-xl border bg-slate-50/80 p-3 transition-[width] duration-200"
-        style={{ width: previewWidth }}
+        className="transition-opacity duration-150 ease-in-out"
+        style={{ opacity: contentVisible ? 1 : 0 }}
       >
         {children}
       </div>
@@ -427,8 +437,35 @@ function AdminGalleryContent() {
   const showPublishedPreviewSkeleton =
     showHydrationPlaceholder || publishing || (loading && publishedRows.length === 0)
 
-  const [viewportPreset, setViewportPreset] = useState<GalleryViewportPreset>("desktop")
-  const viewport = GALLERY_VIEWPORT_PRESETS[viewportPreset]
+  const [viewportTab, setViewportTab] = useState<GalleryViewportPreset>("desktop")
+  const [layoutPreset, setLayoutPreset] = useState<GalleryViewportPreset>("desktop")
+  const [viewportContentVisible, setViewportContentVisible] = useState(true)
+  const viewportFadeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (viewportFadeTimerRef.current) {
+        clearTimeout(viewportFadeTimerRef.current)
+      }
+    }
+  }, [])
+
+  const onViewportPresetChange = (next: GalleryViewportPreset) => {
+    if (next === viewportTab) return
+    setViewportTab(next)
+    setViewportContentVisible(false)
+    if (viewportFadeTimerRef.current) {
+      clearTimeout(viewportFadeTimerRef.current)
+    }
+    viewportFadeTimerRef.current = setTimeout(() => {
+      setLayoutPreset(next)
+      requestAnimationFrame(() => {
+        setViewportContentVisible(true)
+      })
+    }, VIEWPORT_FADE_MS)
+  }
+
+  const viewport = GALLERY_VIEWPORT_PRESETS[layoutPreset]
   const columnCount = viewport.columns
   const draftColumns = useMemo(
     () => distributeGalleryToColumns(images, columnCount),
@@ -908,11 +945,14 @@ function AdminGalleryContent() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground">תצוגת מסך</p>
-                  <GalleryViewportTabs value={viewportPreset} onChange={setViewportPreset} />
+                  <GalleryViewportTabs value={viewportTab} onChange={onViewportPresetChange} />
                 </div>
               </div>
 
-              <GalleryViewportCanvas preset={viewportPreset}>
+              <GalleryViewportCanvas
+                preset={viewportTab}
+                contentVisible={viewportContentVisible}
+              >
                 {showDraftGridSkeleton ? (
                   <GalleryGridSkeleton
                     count={8}
@@ -984,9 +1024,12 @@ function AdminGalleryContent() {
             <CardContent className="min-h-[120px] space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs text-muted-foreground">אותה תצוגת מסך כמו בעריכת הטיוטה</p>
-                <GalleryViewportTabs value={viewportPreset} onChange={setViewportPreset} />
+                <GalleryViewportTabs value={viewportTab} onChange={onViewportPresetChange} />
               </div>
-              <GalleryViewportCanvas preset={viewportPreset}>
+              <GalleryViewportCanvas
+                preset={viewportTab}
+                contentVisible={viewportContentVisible}
+              >
                 {showPublishedPreviewSkeleton ? (
                   <PublishedGridSkeleton
                     columnCount={columnCount}
