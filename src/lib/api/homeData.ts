@@ -1,4 +1,5 @@
 import { getPublicCatalogProducts } from "@/lib/api/catalogData"
+import { CTAColorType } from "@/types/types"
 
 export const homeTestimonials = [
     {
@@ -83,6 +84,7 @@ const getHomeData = async () => {
                     src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1749893917/sphog/%D7%A1%D7%93%D7%A0%D7%90%D7%95%D7%AA_%D7%A7%D7%91%D7%95%D7%A6%D7%AA%D7%99%D7%95%D7%AA_%D7%A1%D7%93%D7%A0%D7%90_%D7%9E%D7%AA%D7%A7%D7%93%D7%9E%D7%AA_pdep3p.webp",
                     alt: "תמונה של סדנא פרטית"
                 },
+                ctaColor: CTAColorType.GREEN,
                 links: [
                     {
                         text: "להצטרף לסדנא קבוצתית",

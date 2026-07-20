@@ -1,8 +1,12 @@
+import type { ReactNode } from "react"
+
 interface PageHeaderProps {
   title: string;
   description?: string;
   paragraphs?: string[];
   align?: "start" | "center";
+  /** Optional CTA / content under the description (e.g. gallery link). */
+  footer?: ReactNode;
 }
 
 const PageHeader = ({
@@ -10,6 +14,7 @@ const PageHeader = ({
   description,
   paragraphs,
   align = "start",
+  footer,
 }: PageHeaderProps) => {
   const bodyAlignClass = align === "center" ? "text-center" : "";
 
@@ -33,6 +38,7 @@ const PageHeader = ({
           </p>
         )
       )}
+      {footer}
     </header>
   );
 };

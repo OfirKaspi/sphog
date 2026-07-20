@@ -5,18 +5,24 @@ import Hero from "@/components/pages/home/Hero"
 import StoreTeaser from "@/components/pages/home/StoreTeaser"
 import TipsSection from "@/components/pages/home/TipsSection"
 import WorkshopPreview from "@/components/pages/home/WorkshopPreview"
+import { isGalleryNavVisible } from "@/lib/api/galleryData"
 import getHomeData from "@/lib/api/homeData"
 import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
 import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 
 const Home = async () => {
-  const data = await getHomeData()
+  const [data, showGallery] = await Promise.all([
+    getHomeData(),
+    isGalleryNavVisible(),
+  ])
 
   return (
     <section className="relative w-full">
       {data.hero.isEnabled && <Hero {...data.hero} />}
       {data.shortsShowcase.isEnabled && <ShortsShowcase {...data.shortsShowcase} />}
-      {data.workshopPreviewData.isEnabled && <WorkshopPreview {...data.workshopPreviewData} />}
+      {data.workshopPreviewData.isEnabled && (
+        <WorkshopPreview {...data.workshopPreviewData} showGalleryCta={showGallery} />
+      )}
       {data.storeTeaser.isEnabled && <StoreTeaser {...data.storeTeaser} />}
       {data.tipsSection.isEnabled && <TipsSection {...data.tipsSection} />}
       {data.aboutUs.isEnabled && <AboutUs {...data.aboutUs} />}

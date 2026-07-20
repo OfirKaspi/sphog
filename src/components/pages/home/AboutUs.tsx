@@ -27,7 +27,9 @@ export default function AboutUs({
   const titleAlignClass = isCentered
     ? "text-center"
     : "text-center md:text-start";
-  const bodyAlignClass = isCentered ? "text-center" : "";
+  const bodyAlignClass = isCentered
+    ? "text-center"
+    : "text-center md:text-start";
 
   return (
     <section className={`${isBgPrimary && "bg-primary text-white"} w-full overflow-hidden`}>
@@ -75,7 +77,10 @@ export default function AboutUs({
             ))}
           </p>
           {link && (
-            <Link href={link.href} className="mt-6">
+            <Link
+              href={link.href}
+              className={`mt-6 w-fit ${isCentered ? "mx-auto" : "mx-auto md:mx-0 md:self-start"}`}
+            >
               <CTAButton>{link.text}</CTAButton>
             </Link>
           )}
