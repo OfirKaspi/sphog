@@ -29,9 +29,13 @@ import { AlertCircle, GripVertical, Loader2, RefreshCw, Send, Trash2 } from "luc
 
 import AdminShell from "@/components/admin/AdminShell"
 import GalleryGrid, {
+  GALLERY_COLUMN_CLASS,
+  GALLERY_FLEX_CLASS,
   GALLERY_ITEM_CLASS,
-  GALLERY_MASONRY_CLASS,
+  GalleryGridSkeleton,
+  distributeGalleryToColumns,
   galleryOptimizedSrc,
+  useGalleryColumnLayout,
 } from "@/components/pages/gallery/GalleryGrid"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -82,20 +86,6 @@ function toDedupedPreviewItems(rows: AdminGalleryRow[]) {
   ).map(({ id, src, alt }) => ({ id, src, alt }))
 }
 
-function DraftGridSkeleton() {
-  return (
-    <div className={GALLERY_MASONRY_CLASS} aria-busy="true">
-      {Array.from({ length: 8 }).map((_, index) => (
-        <div
-          key={index}
-          className={`${GALLERY_ITEM_CLASS} animate-pulse rounded-xl bg-slate-200`}
-          style={{ height: `${120 + (index % 3) * 48}px` }}
-        />
-      ))}
-    </div>
-  )
-}
-
 function PreviewCardHeaderSkeleton() {
   return (
     <div className="space-y-2 animate-pulse pb-1" aria-hidden>
@@ -105,19 +95,11 @@ function PreviewCardHeaderSkeleton() {
   )
 }
 
-function PublishedGridSkeleton() {
+function PublishedGridSkeleton({ columnCount }: { columnCount: number }) {
   return (
-    <div className="mx-auto max-w-screen-xl animate-pulse" aria-busy="true">
+    <div className="animate-pulse" aria-busy="true">
       <div className="mx-auto mb-4 h-7 w-28 rounded bg-slate-200" />
-      <div className={GALLERY_MASONRY_CLASS}>
-        {Array.from({ length: 8 }).map((_, index) => (
-          <div
-            key={index}
-            className={`${GALLERY_ITEM_CLASS} rounded-xl bg-slate-200`}
-            style={{ height: `${120 + (index % 3) * 48}px` }}
-          />
-        ))}
-      </div>
+      <GalleryGridSkeleton count={8} columnCount={columnCount} />
     </div>
   )
 }
@@ -355,6 +337,14 @@ function AdminGalleryContent() {
   const showDraftGridSkeleton = showHydrationPlaceholder || (loading && images.length === 0)
   const showPublishedPreviewSkeleton =
     showHydrationPlaceholder || publishing || (loading && publishedRows.length === 0)
+
+  // Use viewport breakpoints (same as public GalleryGrid) so sort_order maps to
+  // the same columns visitors see — not the narrower admin card width.
+  const { columnCount, layoutReady } = useGalleryColumnLayout()
+  const draftColumns = useMemo(
+    () => distributeGalleryToColumns(images, columnCount),
+    [images, columnCount]
+  )
 
   const livePreviewItems = useMemo(() => toDedupedPreviewItems(publishedRows), [publishedRows])
 
@@ -789,7 +779,7 @@ function AdminGalleryContent() {
             <CardHeader>
               <CardTitle>טיוטה — עריכה</CardTitle>
               <p className="text-sm text-muted-foreground">
-                זה מה שיפורסם לאתר אחרי לחיצה על &quot;פרסם לאתר&quot;.
+                זה מה שיפורסם לאתר אחרי לחיצה על &quot;פרסם לאתר&quot;. הפריסה זהה לדף הגלריה.
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -827,8 +817,8 @@ function AdminGalleryContent() {
                 ) : null}
               </div>
 
-              {showDraftGridSkeleton ? (
-                <DraftGridSkeleton />
+              {showDraftGridSkeleton || !layoutReady ? (
+                <GalleryGridSkeleton count={8} columnCount={columnCount} />
               ) : images.length === 0 ? (
                 <p className="text-gray-600">
                   אין תמונות בטיוטה. ניתן להעלות תמונות כאן (תיקיית Cloudinary: sphog/gallery).
@@ -844,24 +834,26 @@ function AdminGalleryContent() {
                   onDragEnd={(event) => void onDragEnd(event)}
                 >
                   <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
-                    <div className="mx-auto max-w-screen-xl rounded-xl border bg-slate-50 px-5 py-4">
-                      <div className={GALLERY_MASONRY_CLASS}>
-                        {images.map((image) => (
-                          <SortableGalleryCard
-                            key={image.id}
-                            image={image}
-                            onAltBlur={onAltBlur}
-                            onDelete={onDelete}
-                            disabled={
-                              uploading ||
-                              publishing ||
-                              reordering ||
-                              deletePendingId === image.id ||
-                              Boolean(activeDragId)
-                            }
-                          />
-                        ))}
-                      </div>
+                    <div className={GALLERY_FLEX_CLASS}>
+                      {draftColumns.map((column, columnIndex) => (
+                        <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
+                          {column.map((image) => (
+                            <SortableGalleryCard
+                              key={image.id}
+                              image={image}
+                              onAltBlur={onAltBlur}
+                              onDelete={onDelete}
+                              disabled={
+                                uploading ||
+                                publishing ||
+                                reordering ||
+                                deletePendingId === image.id ||
+                                Boolean(activeDragId)
+                              }
+                            />
+                          ))}
+                        </div>
+                      ))}
                     </div>
                   </SortableContext>
                   <DragOverlay adjustScale={false} dropAnimation={null}>
@@ -886,9 +878,9 @@ function AdminGalleryContent() {
                 </>
               )}
             </CardHeader>
-            <CardContent className="rounded-xl border bg-slate-50 overflow-hidden min-h-[120px] px-5 py-4">
+            <CardContent className="min-h-[120px]">
               {showPublishedPreviewSkeleton ? (
-                <PublishedGridSkeleton />
+                <PublishedGridSkeleton columnCount={columnCount} />
               ) : !galleryEnabled ? (
                 <p className="text-center text-gray-600 py-8 px-2">
                   הגלריה כבויה — הדף והקישור בתפריט מוסתרים.
@@ -896,7 +888,7 @@ function AdminGalleryContent() {
               ) : livePreviewItems.length === 0 ? (
                 <p className="text-center text-gray-500 py-8">אין תמונות מפורסמות — הגלריה ריקה באתר.</p>
               ) : (
-                <div className="mx-auto max-w-screen-xl">
+                <div>
                   <h3 className="text-center text-xl font-bold text-primary mb-4">{GALLERY_PAGE_TITLE}</h3>
                   <GalleryGrid images={livePreviewItems} enableLightbox={false} />
                 </div>

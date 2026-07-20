@@ -14,38 +14,40 @@ export type { GalleryGridItem }
 export { galleryOptimizedSrc }
 
 /**
- * Shared masonry layout for admin editor/preview (CSS columns).
- * Public GalleryGrid uses stable JS columns instead so items don't jump mid-load.
- * 2 → 3 → 4 columns; native aspect ratios preserved.
+ * Shared stable masonry (flex columns). Used by public gallery + admin editor
+ * so draft editing matches what visitors see. 2 → 3 → 4 columns.
  */
-export const GALLERY_MASONRY_CLASS =
-  "columns-2 md:columns-3 lg:columns-4 gap-2 md:gap-3 lg:gap-4 [column-fill:_balance]"
+export const GALLERY_FLEX_CLASS = "flex gap-2 md:gap-3 lg:gap-4"
+export const GALLERY_COLUMN_CLASS = "flex min-w-0 flex-1 flex-col"
+export const GALLERY_ITEM_CLASS = "mb-2 md:mb-3 lg:mb-4"
 
-export const GALLERY_ITEM_CLASS = "mb-2 break-inside-avoid md:mb-3 lg:mb-4"
-
-/** @deprecated Use GALLERY_MASONRY_CLASS — kept as alias so admin stays in sync. */
-export const GALLERY_MASONRY_ADMIN_CLASS = GALLERY_MASONRY_CLASS
-
-/** @deprecated Use GALLERY_ITEM_CLASS — kept as alias so admin stays in sync. */
+/** @deprecated Use GALLERY_FLEX_CLASS */
+export const GALLERY_MASONRY_CLASS = GALLERY_FLEX_CLASS
+/** @deprecated Use GALLERY_FLEX_CLASS */
+export const GALLERY_MASONRY_ADMIN_CLASS = GALLERY_FLEX_CLASS
+/** @deprecated Use GALLERY_ITEM_CLASS */
 export const GALLERY_ITEM_ADMIN_CLASS = GALLERY_ITEM_CLASS
 
 const MD_MIN = 768
 const LG_MIN = 1024
 
-function galleryColumnCountForWidth(width: number) {
+export function galleryColumnCountForWidth(width: number) {
   if (width >= LG_MIN) return 4
   if (width >= MD_MIN) return 3
   return 2
 }
 
-function useGalleryColumnLayout() {
+/** Column breakpoints from viewport width (public gallery page). */
+export function useGalleryColumnLayout() {
   const [columnCount, setColumnCount] = useState(2)
   const [layoutReady, setLayoutReady] = useState(false)
 
   useEffect(() => {
-    const update = () => setColumnCount(galleryColumnCountForWidth(window.innerWidth))
+    const update = () => {
+      setColumnCount(galleryColumnCountForWidth(window.innerWidth))
+      setLayoutReady(true)
+    }
     update()
-    setLayoutReady(true)
     window.addEventListener("resize", update)
     return () => window.removeEventListener("resize", update)
   }, [])
@@ -53,8 +55,8 @@ function useGalleryColumnLayout() {
   return { columnCount, layoutReady }
 }
 
-/** Round-robin into columns — preserves sort order LTR and never moves items across columns as heights resolve. */
-function distributeToColumns<T>(items: T[], columnCount: number): T[][] {
+/** Round-robin into columns — preserves sort order LTR; items never move across columns as heights resolve. */
+export function distributeGalleryToColumns<T>(items: T[], columnCount: number): T[][] {
   const columns = Array.from({ length: columnCount }, () => [] as T[])
   items.forEach((item, index) => {
     columns[index % columnCount].push(item)
@@ -168,14 +170,14 @@ export function GalleryGridSkeleton({
     [count]
   )
   const columns = useMemo(
-    () => distributeToColumns(placeholders, columnCount),
+    () => distributeGalleryToColumns(placeholders, columnCount),
     [placeholders, columnCount]
   )
 
   return (
-    <div className={`flex gap-2 md:gap-3 lg:gap-4 ${className}`} aria-busy="true" aria-label="טוען גלריה">
+    <div className={`${GALLERY_FLEX_CLASS} ${className}`} aria-busy="true" aria-label="טוען גלריה">
       {columns.map((column, columnIndex) => (
-        <div key={columnIndex} className="flex min-w-0 flex-1 flex-col">
+        <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
           {column.map((index) => (
             <div key={index} className={GALLERY_ITEM_CLASS}>
               <GalleryImageSkeleton minHeight={120 + (index % 3) * 48} />
@@ -206,7 +208,7 @@ export default function GalleryGrid({
   const { columnCount, layoutReady } = useGalleryColumnLayout()
 
   const columns = useMemo(
-    () => distributeToColumns(images, columnCount),
+    () => distributeGalleryToColumns(images, columnCount),
     [images, columnCount]
   )
 
@@ -245,9 +247,9 @@ export default function GalleryGrid({
 
   return (
     <>
-      <div className={`flex gap-2 md:gap-3 lg:gap-4 ${className}`}>
+      <div className={`${GALLERY_FLEX_CLASS} ${className}`}>
         {columns.map((column, columnIndex) => (
-          <div key={columnIndex} className="flex min-w-0 flex-1 flex-col">
+          <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
             {column.map((image) => (
               <GalleryTile
                 key={image.id}
