@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/testimonials/Testimonials"
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import GalleryGrid from "@/components/pages/gallery/GalleryGrid"
 import {
@@ -30,9 +30,11 @@ const GalleryPage = async () => {
       <div className="mx-auto max-w-screen-xl px-5 pb-16">
         <GalleryGrid images={images} />
       </div>
-      {homeData.testimonials.isEnabled && (
-        <Testimonials {...homeData.testimonials} isBgPrimary={true} />
-      )}
+      <TestimonialsSection
+        {...homeData.testimonials}
+        isBgPrimary={true}
+        isEnabled={homeData.testimonials.isEnabled}
+      />
       {homeData.openForm.isEnabled && <LeaveDetailsOpenForm {...homeData.openForm} />}
     </section>
   )

@@ -7,7 +7,7 @@ import TipsSection from "@/components/pages/home/TipsSection"
 import WorkshopPreview from "@/components/pages/home/WorkshopPreview"
 import getHomeData from "@/lib/api/homeData"
 import ShortsShowcase from "@/components/pages/home/ShortsShowcase"
-import Testimonials from "@/components/common/testimonials/Testimonials"
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 
 const Home = async () => {
   const data = await getHomeData()
@@ -20,7 +20,7 @@ const Home = async () => {
       {data.storeTeaser.isEnabled && <StoreTeaser {...data.storeTeaser} />}
       {data.tipsSection.isEnabled && <TipsSection {...data.tipsSection} />}
       {data.aboutUs.isEnabled && <AboutUs {...data.aboutUs} />}
-      {data.testimonials.isEnabled && <Testimonials {...data.testimonials} isBgPrimary={false} />}
+      <TestimonialsSection {...data.testimonials} isBgPrimary={false} isEnabled={data.testimonials.isEnabled} />
       {data.faq.isEnabled && <FAQ {...data.faq} />}
       {data.openForm.isEnabled && <LeaveDetailsOpenForm {...data.openForm} />}
     </section>

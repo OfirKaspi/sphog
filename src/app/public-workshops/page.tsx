@@ -6,7 +6,7 @@ import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDet
 import WorkshopList from "@/components/common/WorkshopList";
 import { WorkshopData } from "@/types/types";
 import WorkshopRegistrationOpenForm from "@/components/forms/workshop-registration-form/WorkshopRegistrationOpenForm";
-import Testimonials from "@/components/common/testimonials/Testimonials";
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection";
 
 
 const PublicWorkshop = async () => {
@@ -29,7 +29,7 @@ const PublicWorkshop = async () => {
           availableDates={data.workshopFormData.availableDates}
         />
       </div>
-      <Testimonials {...data.testimonials} />
+      <TestimonialsSection {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>
   );

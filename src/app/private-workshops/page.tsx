@@ -1,5 +1,5 @@
 import PageHeader from "@/components/common/PageHeader";
-import Testimonials from "@/components/common/testimonials/Testimonials";
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection";
 import VideoContainer from "@/components/common/VideoContainer";
 import PrivateWorkshopLogosCarousel from "@/components/pages/private-workshops/PrivateWorkshopLogosCarousel";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
@@ -27,7 +27,7 @@ const PrivateWorkshop = async () => {
         description={data.workshopFormData.header.description}
         availableDates={data.workshopFormData.availableDates}
       />
-      <Testimonials {...data.testimonials} />
+      <TestimonialsSection {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>
   );

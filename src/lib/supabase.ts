@@ -235,6 +235,36 @@ export interface Database {
         }
         Relationships: []
       }
+      google_reviews_cache: {
+        Row: {
+          id: string
+          rating: number
+          review_count: number
+          maps_url: string
+          source: "places" | "fallback"
+          fetched_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          rating?: number
+          review_count?: number
+          maps_url?: string
+          source?: "places" | "fallback"
+          fetched_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          rating?: number
+          review_count?: number
+          maps_url?: string
+          source?: "places" | "fallback"
+          fetched_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

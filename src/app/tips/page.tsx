@@ -1,15 +1,14 @@
-"use client"
+import dynamic from "next/dynamic"
 
 import PageHeader from "@/components/common/PageHeader"
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import VideoTip from "@/components/pages/tips/VideoTip"
 import getTipsData from "@/lib/api/tipsData"
-import dynamic from "next/dynamic"
 
-const Testimonials = dynamic(() => import("@/components/common/testimonials/Testimonials"), {ssr: false})
-const TipsGrid = dynamic(() => import("@/components/pages/tips/TipsGrid"), {ssr: false})
+const TipsGrid = dynamic(() => import("@/components/pages/tips/TipsGrid"), { ssr: false })
 
-const Tips = () => {
+const Tips = async () => {
   const data = getTipsData()
 
   return (
@@ -17,7 +16,7 @@ const Tips = () => {
       <PageHeader {...data.header} align="center" />
       <VideoTip {...data.videoTip} />
       <TipsGrid tips={data.tips} />
-      <Testimonials {...data.testimonials} />
+      <TestimonialsSection {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>
   )

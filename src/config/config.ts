@@ -27,5 +27,7 @@ export const CONFIG = {
   contactAddress: "התחייה 16, תל אביב, ישראל",
   lat: 32.0498611,
   lng: 34.7628056,
+  /** Official Google Maps / reviews short link for Sphog */
+  googleReviewsUrl: "https://maps.app.goo.gl/vab9eWxxaSwFav9s6",
   year: 2025,
 };
