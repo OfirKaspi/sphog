@@ -1,6 +1,6 @@
 "use client"
 
-import type { CSSProperties } from "react"
+import type { CSSProperties, ReactNode } from "react"
 import { Suspense, useEffect, useMemo, useRef, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
@@ -25,17 +25,27 @@ import {
   useSortable,
   type AnimateLayoutChanges,
 } from "@dnd-kit/sortable"
-import { AlertCircle, GripVertical, Loader2, RefreshCw, Send, Trash2 } from "lucide-react"
+import {
+  AlertCircle,
+  GripVertical,
+  Loader2,
+  Monitor,
+  RefreshCw,
+  Send,
+  Smartphone,
+  Tablet,
+  Trash2,
+} from "lucide-react"
 
 import AdminShell from "@/components/admin/AdminShell"
 import GalleryGrid, {
   GALLERY_COLUMN_CLASS,
-  GALLERY_FLEX_CLASS,
   GALLERY_ITEM_CLASS,
+  GALLERY_VIEWPORT_PRESETS,
   GalleryGridSkeleton,
   distributeGalleryToColumns,
   galleryOptimizedSrc,
-  useGalleryColumnLayout,
+  type GalleryViewportPreset,
 } from "@/components/pages/gallery/GalleryGrid"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -95,11 +105,24 @@ function PreviewCardHeaderSkeleton() {
   )
 }
 
-function PublishedGridSkeleton({ columnCount }: { columnCount: number }) {
+function PublishedGridSkeleton({
+  columnCount,
+  flexClass,
+  itemClass,
+}: {
+  columnCount: number
+  flexClass: string
+  itemClass: string
+}) {
   return (
     <div className="animate-pulse" aria-busy="true">
       <div className="mx-auto mb-4 h-7 w-28 rounded bg-slate-200" />
-      <GalleryGridSkeleton count={8} columnCount={columnCount} />
+      <GalleryGridSkeleton
+        count={8}
+        columnCount={columnCount}
+        flexClass={flexClass}
+        itemClass={itemClass}
+      />
     </div>
   )
 }
@@ -130,16 +153,82 @@ export default function AdminGalleryPage() {
   )
 }
 
+function GalleryViewportTabs({
+  value,
+  onChange,
+}: {
+  value: GalleryViewportPreset
+  onChange: (next: GalleryViewportPreset) => void
+}) {
+  const tabs: Array<{ id: GalleryViewportPreset; icon: typeof Smartphone }> = [
+    { id: "mobile", icon: Smartphone },
+    { id: "tablet", icon: Tablet },
+    { id: "desktop", icon: Monitor },
+  ]
+
+  return (
+    <div
+      role="tablist"
+      aria-label="תצוגת viewport"
+      className="inline-flex flex-wrap items-center gap-1 rounded-lg border bg-slate-50 p-1"
+    >
+      {tabs.map(({ id, icon: Icon }) => {
+        const active = value === id
+        return (
+          <button
+            key={id}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(id)}
+            className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition ${
+              active
+                ? "bg-white text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Icon className="h-4 w-4" aria-hidden />
+            {GALLERY_VIEWPORT_PRESETS[id].labelHe}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+/** Fixed-width canvas so column count matches the public breakpoint for that preset. */
+function GalleryViewportCanvas({
+  preset,
+  children,
+}: {
+  preset: GalleryViewportPreset
+  children: ReactNode
+}) {
+  const { previewWidth } = GALLERY_VIEWPORT_PRESETS[preset]
+  return (
+    <div className="overflow-x-auto">
+      <div
+        className="mx-auto rounded-xl border bg-slate-50/80 p-3 transition-[width] duration-200"
+        style={{ width: previewWidth }}
+      >
+        {children}
+      </div>
+    </div>
+  )
+}
+
 function SortableGalleryCard({
   image,
   onAltBlur,
   onDelete,
   disabled,
+  itemClassName = GALLERY_ITEM_CLASS,
 }: {
   image: AdminGalleryRow
   onAltBlur: (id: string, value: string) => void
   onDelete: (id: string) => void
   disabled: boolean
+  itemClassName?: string
 }) {
   const { attributes, listeners, setNodeRef, isDragging, isOver } = useSortable({
     id: image.id,
@@ -156,7 +245,7 @@ function SortableGalleryCard({
     <figure
       ref={setNodeRef}
       style={style}
-      className={`${GALLERY_ITEM_CLASS} group relative ${
+      className={`${itemClassName} group relative ${
         isOver && !isDragging ? "ring-2 ring-primary ring-offset-1 rounded-xl" : ""
       }`}
     >
@@ -338,9 +427,9 @@ function AdminGalleryContent() {
   const showPublishedPreviewSkeleton =
     showHydrationPlaceholder || publishing || (loading && publishedRows.length === 0)
 
-  // Use viewport breakpoints (same as public GalleryGrid) so sort_order maps to
-  // the same columns visitors see — not the narrower admin card width.
-  const { columnCount, layoutReady } = useGalleryColumnLayout()
+  const [viewportPreset, setViewportPreset] = useState<GalleryViewportPreset>("desktop")
+  const viewport = GALLERY_VIEWPORT_PRESETS[viewportPreset]
+  const columnCount = viewport.columns
   const draftColumns = useMemo(
     () => distributeGalleryToColumns(images, columnCount),
     [images, columnCount]
@@ -783,84 +872,98 @@ function AdminGalleryContent() {
               </p>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex flex-wrap items-end gap-3">
-                <div className="space-y-2">
-                  <Label htmlFor="new-gallery-image">הוספת תמונות (ניתן לבחור כמה)</Label>
-                  <Input
-                    id="new-gallery-image"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    disabled={uploading || loading}
-                    className="bg-white max-w-xs"
-                    onChange={(event) => {
-                      // Snapshot before clearing — FileList is live and empties with value=""
-                      const files = Array.from(event.target.files ?? [])
-                      event.target.value = ""
-                      void onUpload(files)
-                    }}
-                  />
-                  <p className="text-xs text-muted-foreground">עד 10MB לתמונה · אפשר לבחור כמה יחד</p>
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div className="flex flex-wrap items-end gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="new-gallery-image">הוספת תמונות (ניתן לבחור כמה)</Label>
+                    <Input
+                      id="new-gallery-image"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      disabled={uploading || loading}
+                      className="bg-white max-w-xs"
+                      onChange={(event) => {
+                        // Snapshot before clearing — FileList is live and empties with value=""
+                        const files = Array.from(event.target.files ?? [])
+                        event.target.value = ""
+                        void onUpload(files)
+                      }}
+                    />
+                    <p className="text-xs text-muted-foreground">עד 10MB לתמונה · אפשר לבחור כמה יחד</p>
+                  </div>
+                  {uploading ? (
+                    <span className="text-sm text-gray-600 inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      {uploadProgress
+                        ? `מעלה ${uploadProgress.current} מתוך ${uploadProgress.total}…`
+                        : "מעלה תמונות…"}
+                    </span>
+                  ) : null}
+                  {reordering ? (
+                    <span className="text-sm text-gray-600 inline-flex items-center gap-2">
+                      <Loader2 className="h-4 w-4 animate-spin" /> שומר סדר חדש…
+                    </span>
+                  ) : null}
                 </div>
-                {uploading ? (
-                  <span className="text-sm text-gray-600 inline-flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    {uploadProgress
-                      ? `מעלה ${uploadProgress.current} מתוך ${uploadProgress.total}…`
-                      : "מעלה תמונות…"}
-                  </span>
-                ) : null}
-                {reordering ? (
-                  <span className="text-sm text-gray-600 inline-flex items-center gap-2">
-                    <Loader2 className="h-4 w-4 animate-spin" /> שומר סדר חדש…
-                  </span>
-                ) : null}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">תצוגת מסך</p>
+                  <GalleryViewportTabs value={viewportPreset} onChange={setViewportPreset} />
+                </div>
               </div>
 
-              {showDraftGridSkeleton || !layoutReady ? (
-                <GalleryGridSkeleton count={8} columnCount={columnCount} />
-              ) : images.length === 0 ? (
-                <p className="text-gray-600">
-                  אין תמונות בטיוטה. ניתן להעלות תמונות כאן (תיקיית Cloudinary: sphog/gallery).
-                </p>
-              ) : (
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={galleryCollisionDetection}
-                  measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
-                  onDragStart={onDragStart}
-                  onDragOver={onDragOver}
-                  onDragCancel={onDragCancel}
-                  onDragEnd={(event) => void onDragEnd(event)}
-                >
-                  <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
-                    <div className={GALLERY_FLEX_CLASS}>
-                      {draftColumns.map((column, columnIndex) => (
-                        <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
-                          {column.map((image) => (
-                            <SortableGalleryCard
-                              key={image.id}
-                              image={image}
-                              onAltBlur={onAltBlur}
-                              onDelete={onDelete}
-                              disabled={
-                                uploading ||
-                                publishing ||
-                                reordering ||
-                                deletePendingId === image.id ||
-                                Boolean(activeDragId)
-                              }
-                            />
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  </SortableContext>
-                  <DragOverlay adjustScale={false} dropAnimation={null}>
-                    {activeDragImage ? <GalleryDragOverlayCard image={activeDragImage} /> : null}
-                  </DragOverlay>
-                </DndContext>
-              )}
+              <GalleryViewportCanvas preset={viewportPreset}>
+                {showDraftGridSkeleton ? (
+                  <GalleryGridSkeleton
+                    count={8}
+                    columnCount={columnCount}
+                    flexClass={viewport.flexClass}
+                    itemClass={viewport.itemClass}
+                  />
+                ) : images.length === 0 ? (
+                  <p className="text-gray-600">
+                    אין תמונות בטיוטה. ניתן להעלות תמונות כאן (תיקיית Cloudinary: sphog/gallery).
+                  </p>
+                ) : (
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={galleryCollisionDetection}
+                    measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
+                    onDragStart={onDragStart}
+                    onDragOver={onDragOver}
+                    onDragCancel={onDragCancel}
+                    onDragEnd={(event) => void onDragEnd(event)}
+                  >
+                    <SortableContext items={sortableIds} strategy={rectSortingStrategy}>
+                      <div className={viewport.flexClass}>
+                        {draftColumns.map((column, columnIndex) => (
+                          <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
+                            {column.map((image) => (
+                              <SortableGalleryCard
+                                key={image.id}
+                                image={image}
+                                onAltBlur={onAltBlur}
+                                onDelete={onDelete}
+                                itemClassName={viewport.itemClass}
+                                disabled={
+                                  uploading ||
+                                  publishing ||
+                                  reordering ||
+                                  deletePendingId === image.id ||
+                                  Boolean(activeDragId)
+                                }
+                              />
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </SortableContext>
+                    <DragOverlay adjustScale={false} dropAnimation={null}>
+                      {activeDragImage ? <GalleryDragOverlayCard image={activeDragImage} /> : null}
+                    </DragOverlay>
+                  </DndContext>
+                )}
+              </GalleryViewportCanvas>
             </CardContent>
           </Card>
 
@@ -878,21 +981,35 @@ function AdminGalleryContent() {
                 </>
               )}
             </CardHeader>
-            <CardContent className="min-h-[120px]">
-              {showPublishedPreviewSkeleton ? (
-                <PublishedGridSkeleton columnCount={columnCount} />
-              ) : !galleryEnabled ? (
-                <p className="text-center text-gray-600 py-8 px-2">
-                  הגלריה כבויה — הדף והקישור בתפריט מוסתרים.
-                </p>
-              ) : livePreviewItems.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">אין תמונות מפורסמות — הגלריה ריקה באתר.</p>
-              ) : (
-                <div>
-                  <h3 className="text-center text-xl font-bold text-primary mb-4">{GALLERY_PAGE_TITLE}</h3>
-                  <GalleryGrid images={livePreviewItems} enableLightbox={false} />
-                </div>
-              )}
+            <CardContent className="min-h-[120px] space-y-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="text-xs text-muted-foreground">אותה תצוגת מסך כמו בעריכת הטיוטה</p>
+                <GalleryViewportTabs value={viewportPreset} onChange={setViewportPreset} />
+              </div>
+              <GalleryViewportCanvas preset={viewportPreset}>
+                {showPublishedPreviewSkeleton ? (
+                  <PublishedGridSkeleton
+                    columnCount={columnCount}
+                    flexClass={viewport.flexClass}
+                    itemClass={viewport.itemClass}
+                  />
+                ) : !galleryEnabled ? (
+                  <p className="text-center text-gray-600 py-8 px-2">
+                    הגלריה כבויה — הדף והקישור בתפריט מוסתרים.
+                  </p>
+                ) : livePreviewItems.length === 0 ? (
+                  <p className="text-center text-gray-500 py-8">אין תמונות מפורסמות — הגלריה ריקה באתר.</p>
+                ) : (
+                  <div>
+                    <h3 className="text-center text-xl font-bold text-primary mb-4">{GALLERY_PAGE_TITLE}</h3>
+                    <GalleryGrid
+                      images={livePreviewItems}
+                      enableLightbox={false}
+                      forcedColumnCount={columnCount}
+                    />
+                  </div>
+                )}
+              </GalleryViewportCanvas>
             </CardContent>
           </Card>
         </div>

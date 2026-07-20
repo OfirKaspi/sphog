@@ -31,10 +31,68 @@ export const GALLERY_ITEM_ADMIN_CLASS = GALLERY_ITEM_CLASS
 const MD_MIN = 768
 const LG_MIN = 1024
 
+export type GalleryViewportPreset = "mobile" | "tablet" | "desktop"
+
+/**
+ * Fixed preview widths sit at (or above) the public breakpoints so forced
+ * column counts match `galleryColumnCountForWidth` for that viewport.
+ * Admin frames use this exact width (scroll horizontally if the card is narrower).
+ */
+export const GALLERY_VIEWPORT_PRESETS: Record<
+  GalleryViewportPreset,
+  {
+    columns: number
+    /** Exact preview canvas width in px (not a max-width shrink). */
+    previewWidth: number
+    flexClass: string
+    itemClass: string
+    labelHe: string
+  }
+> = {
+  mobile: {
+    columns: 2,
+    previewWidth: 390,
+    flexClass: "flex gap-2",
+    itemClass: "mb-2",
+    labelHe: "מובייל",
+  },
+  tablet: {
+    columns: 3,
+    previewWidth: MD_MIN,
+    flexClass: "flex gap-3",
+    itemClass: "mb-3",
+    labelHe: "טאבלט",
+  },
+  desktop: {
+    columns: 4,
+    previewWidth: 1280,
+    flexClass: "flex gap-4",
+    itemClass: "mb-4",
+    labelHe: "דסקטופ",
+  },
+}
+
 export function galleryColumnCountForWidth(width: number) {
   if (width >= LG_MIN) return 4
   if (width >= MD_MIN) return 3
   return 2
+}
+
+export function galleryViewportPresetForWidth(width: number): GalleryViewportPreset {
+  const columns = galleryColumnCountForWidth(width)
+  if (columns >= 4) return "desktop"
+  if (columns >= 3) return "tablet"
+  return "mobile"
+}
+
+export function galleryClassesForColumns(columnCount: number) {
+  if (columnCount >= 4) {
+    return { flexClass: "flex gap-4", itemClass: "mb-4" }
+  }
+  if (columnCount >= 3) {
+    return { flexClass: "flex gap-3", itemClass: "mb-3" }
+  }
+  return { flexClass: "flex gap-2", itemClass: "mb-2" }
 }
 
 /** Column breakpoints from viewport width (public gallery page). */
@@ -96,12 +154,14 @@ function GalleryTile({
   isOpening,
   openingBusy,
   onOpen,
+  itemClassName = GALLERY_ITEM_CLASS,
 }: {
   image: GalleryGridItem
   enableLightbox: boolean
   isOpening: boolean
   openingBusy: boolean
   onOpen: (image: GalleryGridItem) => void
+  itemClassName?: string
 }) {
   const [loaded, setLoaded] = useState(false)
   const src = galleryOptimizedSrc(image.src)
@@ -127,14 +187,14 @@ function GalleryTile({
 
   if (!enableLightbox) {
     return (
-      <figure className={GALLERY_ITEM_CLASS}>
+      <figure className={itemClassName}>
         <div className="relative overflow-hidden rounded-xl">{imageEl}</div>
       </figure>
     )
   }
 
   return (
-    <figure className={GALLERY_ITEM_CLASS}>
+    <figure className={itemClassName}>
       <button
         type="button"
         onClick={() => onOpen(image)}
@@ -160,10 +220,14 @@ export function GalleryGridSkeleton({
   count = 8,
   columnCount = 2,
   className = "",
+  flexClass,
+  itemClass,
 }: {
   count?: number
   columnCount?: number
   className?: string
+  flexClass?: string
+  itemClass?: string
 }) {
   const placeholders = useMemo(
     () => Array.from({ length: count }, (_, index) => index),
@@ -173,13 +237,16 @@ export function GalleryGridSkeleton({
     () => distributeGalleryToColumns(placeholders, columnCount),
     [placeholders, columnCount]
   )
+  const resolved = galleryClassesForColumns(columnCount)
+  const rowClass = flexClass ?? resolved.flexClass
+  const tileClass = itemClass ?? resolved.itemClass
 
   return (
-    <div className={`${GALLERY_FLEX_CLASS} ${className}`} aria-busy="true" aria-label="טוען גלריה">
+    <div className={`${rowClass} ${className}`} aria-busy="true" aria-label="טוען גלריה">
       {columns.map((column, columnIndex) => (
         <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
           {column.map((index) => (
-            <div key={index} className={GALLERY_ITEM_CLASS}>
+            <div key={index} className={tileClass}>
               <GalleryImageSkeleton minHeight={120 + (index % 3) * 48} />
             </div>
           ))}
@@ -194,6 +261,11 @@ type GalleryGridProps = {
   className?: string
   /** Open a lightbox on click (public gallery). Off for admin DnD. */
   enableLightbox?: boolean
+  /**
+   * Force a column count (admin viewport preview). When set, gaps match that
+   * preset instead of the live CSS breakpoints.
+   */
+  forcedColumnCount?: number
 }
 
 /** Stable multi-column masonry that preserves sort order while images load. */
@@ -201,11 +273,18 @@ export default function GalleryGrid({
   images,
   className = "",
   enableLightbox = true,
+  forcedColumnCount,
 }: GalleryGridProps) {
   const [activeImage, setActiveImage] = useState<GalleryGridItem | null>(null)
   const [openingId, setOpeningId] = useState<string | null>(null)
   const openRequestId = useRef(0)
-  const { columnCount, layoutReady } = useGalleryColumnLayout()
+  const liveLayout = useGalleryColumnLayout()
+  const columnCount = forcedColumnCount ?? liveLayout.columnCount
+  const layoutReady = forcedColumnCount != null ? true : liveLayout.layoutReady
+  const { flexClass, itemClass } =
+    forcedColumnCount != null
+      ? galleryClassesForColumns(forcedColumnCount)
+      : { flexClass: GALLERY_FLEX_CLASS, itemClass: GALLERY_ITEM_CLASS }
 
   const columns = useMemo(
     () => distributeGalleryToColumns(images, columnCount),
@@ -241,13 +320,15 @@ export default function GalleryGrid({
         count={Math.min(images.length, 12)}
         columnCount={columnCount}
         className={className}
+        flexClass={flexClass}
+        itemClass={itemClass}
       />
     )
   }
 
   return (
     <>
-      <div className={`${GALLERY_FLEX_CLASS} ${className}`}>
+      <div className={`${flexClass} ${className}`}>
         {columns.map((column, columnIndex) => (
           <div key={columnIndex} className={GALLERY_COLUMN_CLASS}>
             {column.map((image) => (
@@ -258,6 +339,7 @@ export default function GalleryGrid({
                 isOpening={openingId === image.id}
                 openingBusy={Boolean(openingId)}
                 onOpen={(next) => void openLightbox(next)}
+                itemClassName={itemClass}
               />
             ))}
           </div>
