@@ -11,6 +11,7 @@ export interface AboutUsProps {
   link?: LinkType;
   isBgPrimary?: boolean;
   isNonePaddingBottom?: boolean;
+  contentAlign?: "start" | "center";
 }
 
 export default function AboutUs({
@@ -20,7 +21,16 @@ export default function AboutUs({
   paragraphs,
   media,
   link,
+  contentAlign = "start",
 }: AboutUsProps) {
+  const isCentered = contentAlign === "center";
+  const titleAlignClass = isCentered
+    ? "text-center"
+    : "text-center md:text-start";
+  const bodyAlignClass = isCentered
+    ? "text-center"
+    : "text-center md:text-start";
+
   return (
     <section className={`${isBgPrimary && "bg-primary text-white"} w-full overflow-hidden`}>
       <div
@@ -54,11 +64,11 @@ export default function AboutUs({
         </div>
         <div className="flex flex-col justify-center mx-auto max-w-full">
           {title && (
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center md:text-start">
+            <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${titleAlignClass}`}>
               {title}
             </h2>
           )}
-          <p className="md:text-lg leading-relaxed">
+          <p className={`md:text-lg leading-relaxed ${bodyAlignClass}`}>
             {paragraphs.map((paragraph, index) => (
               <span key={index}>
                 {paragraph}
@@ -67,7 +77,10 @@ export default function AboutUs({
             ))}
           </p>
           {link && (
-            <Link href={link.href} className="mt-6">
+            <Link
+              href={link.href}
+              className={`mt-6 w-fit ${isCentered ? "mx-auto" : "mx-auto md:mx-0 md:self-start"}`}
+            >
               <CTAButton>{link.text}</CTAButton>
             </Link>
           )}

@@ -1,12 +1,14 @@
+import type { ReactNode } from "react";
 import WorkshopItemNew from "./WorkshopItemNew";
 import { WorkshopData } from "@/types/types";
 import WorkshopItemOld from "./WorkshopItemOld";
 
 interface WorkshopListProps {
     workshops: WorkshopData[];
+    footer?: ReactNode;
 }
 
-const WorkshopList = ({ workshops }: WorkshopListProps) => {
+const WorkshopList = ({ workshops, footer }: WorkshopListProps) => {
 
     return (
         <section className="bg-primary w-full">
@@ -20,6 +22,7 @@ const WorkshopList = ({ workshops }: WorkshopListProps) => {
                         </div>
                     </div>
                 ))}
+                {footer}
             </div>
         </section>
     );

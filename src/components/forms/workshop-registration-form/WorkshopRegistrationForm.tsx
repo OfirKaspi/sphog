@@ -78,6 +78,11 @@ export default function WorkshopRegistrationForm({
     return map;
   }, [filteredDates]);
 
+  const presentTypes = useMemo(
+    () => new Set(filteredDates.map((d) => d.workshop)),
+    [filteredDates]
+  );
+
   const toast = useAppToast();
 
   // Get available hours for the selected date
@@ -228,7 +233,7 @@ export default function WorkshopRegistrationForm({
       className="grid gap-4 py-4 text-base md:text-lg"
     >
       <div className="grid gap-2">
-        <Legend />
+        <Legend presentTypes={presentTypes} />
         <Label htmlFor="calendar" className="text-base md:text-lg">
           תאריך
         </Label>

@@ -8,10 +8,13 @@ import WhatsAppButton from "@/components/common/WhatsAppButton";
 import Navbar from "@/components/layout/Navbar";
 import CookieNotice from "@/components/legal/CookieNotice";
 import { Toaster } from "@/components/ui/toaster";
+import { isGalleryNavVisible } from "@/lib/api/galleryData";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const showGallery = await isGalleryNavVisible();
+
   return (
     <html lang="he" dir="rtl">
       <head>
@@ -85,10 +88,10 @@ export default function RootLayout({
         </script>
       </head>
       <body className="antialiased bg-background text-text font-fredoka">
-        <Navbar />
+        <Navbar showGallery={showGallery} />
         {children}
         <Toaster />
-        <Footer />
+        <Footer showGallery={showGallery} />
         <WhatsAppButton />
         <AccessibilityWidget />
         <CookieNotice />

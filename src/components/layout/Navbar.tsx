@@ -3,15 +3,19 @@
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { links } from "@/components/common/links";
+import { getNavLinks } from "@/components/common/links";
 import useResponsive from "@/hooks/useResponsive";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import Logo from "@/components/common/Logo";
 import LeaveDetailsDialog from "@/components/forms/leave-details-form/LeaveDetailsFormDialog";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const Navbar = () => {
+type NavbarProps = {
+  showGallery?: boolean;
+};
+
+const Navbar = ({ showGallery = false }: NavbarProps) => {
   const data = {
     _id: "1",
     header: "ברוכים הבאים ל-Sphog!",
@@ -22,6 +26,7 @@ const Navbar = () => {
   const { isDesktop } = useResponsive();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setScrolled] = useState(false);
+  const navLinks = useMemo(() => getNavLinks(showGallery), [showGallery]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -66,7 +71,7 @@ const Navbar = () => {
             <SheetDescription asChild>
               <div className="space-y-5">
                 <ul className="space-y-5">
-                  {links.map((link) => (
+                  {navLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
@@ -91,7 +96,7 @@ const Navbar = () => {
       {isDesktop && (
         <>
           <ul className="flex gap-2">
-            {links.map((link) => (
+            {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

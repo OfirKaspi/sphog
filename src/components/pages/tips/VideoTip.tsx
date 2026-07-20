@@ -16,7 +16,7 @@ const VideoTip = ({ title, description, media }: VideoTipProps) => {
         {/* Text Section */}
         <div className="mb-8 max-w-2xl">
           <h2 className="text-4xl md:text-5xl font-bold text-center">{title}</h2>
-          <p className="md:text-lg mt-4">{description}</p>
+          <p className="md:text-lg mt-4 text-center">{description}</p>
         </div>
 
         {/* Video Container */}

@@ -1,16 +1,21 @@
 {
-    "redirects": [
-      {
-        "source": "/(.*)",
-        "has": [
-          {
-            "type": "host",
-            "value": "sphog.vercel.app"
-          }
-        ],
-        "destination": "https://sphogmoss.com/$1",
-        "statusCode": 301
-      }
-    ]
-  }
-  
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "sphog.vercel.app"
+        }
+      ],
+      "destination": "https://sphogmoss.com/$1",
+      "statusCode": 301
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/refresh-google-reviews",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
