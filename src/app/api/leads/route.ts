@@ -2,6 +2,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
+import {
+  appendAttributionToDetails,
+  attributionSchema,
+  formatMondayCampaign,
+  formatMondayLeadSource,
+  sanitizeAttribution,
+} from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
 // ✅ Monday config
@@ -22,6 +29,7 @@ const leadSchema = z.object({
   }),
   topic: z.enum(["סדנא פרטית", "הצטרפות לסדנא קבוצתית", "קניית טרריום", "אחר"]),
   details: z.string().optional(),
+  attribution: attributionSchema,
 });
 
 // ✅ In-memory IP rate limiter
@@ -29,9 +37,9 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// ✅ Sanitize strings
-const sanitize = (val: string) =>
-  val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
+// ✅ Sanitize strings (details may include an appended UTM note)
+const sanitize = (val: string, max = 100) =>
+  val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
 // ✅ Topic mapping
 const topicMapping: Record<string, string> = {
@@ -123,15 +131,17 @@ export async function POST(req: NextRequest) {
     const phone = sanitize(data.phoneNumber);
     const topic = sanitize(data.topic);
     const mappedTopic = topicMapping[topic];
-    const details = sanitize(data.details || "");
+    const details = sanitize(data.details || "", 200);
+
+    const attribution = sanitizeAttribution(data.attribution);
 
     await sendToMonday(fullName, {
       full_name: fullName,
       phone: phone,
       topic: mappedTopic,
-      details: details,
-      lead_source: "Website",
-      campaign: "General form",
+      details: appendAttributionToDetails(details, attribution, 500),
+      lead_source: formatMondayLeadSource(attribution),
+      campaign: formatMondayCampaign("GeneralForm"),
     });
 
     return NextResponse.json(

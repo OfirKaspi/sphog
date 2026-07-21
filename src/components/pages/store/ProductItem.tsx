@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
+import { trackCta } from "@/lib/metaPixel"
 
 interface ProductItemProps {
 	product: Product
@@ -144,7 +145,10 @@ const ProductItem = ({ product, className }: ProductItemProps) => {
 					<Button
 						type="button"
 						className="w-full bg-cta hover:bg-cta-foreground text-white font-bold"
-						onClick={() => setIsLeadFormOpen(true)}
+						onClick={() => {
+							trackCta("ProductInterest_Open")
+							setIsLeadFormOpen(true)
+						}}
 					>
 						לרכישה
 					</Button>

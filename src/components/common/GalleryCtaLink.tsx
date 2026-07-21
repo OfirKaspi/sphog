@@ -1,5 +1,6 @@
-import Link from "next/link"
+"use client"
 
+import TrackedCtaLink from "@/components/analytics/TrackedCtaLink"
 import CTAButton from "@/components/common/CTAButton"
 import { GALLERY_CTA_LABEL } from "@/lib/constants/gallery"
 
@@ -11,9 +12,9 @@ type GalleryCtaLinkProps = {
 export default function GalleryCtaLink({ className = "mt-6 flex justify-center" }: GalleryCtaLinkProps) {
   return (
     <div className={className}>
-      <Link href="/gallery">
+      <TrackedCtaLink href="/gallery" ctaName="GalleryCTA_Click">
         <CTAButton>{GALLERY_CTA_LABEL}</CTAButton>
-      </Link>
+      </TrackedCtaLink>
     </div>
   )
 }

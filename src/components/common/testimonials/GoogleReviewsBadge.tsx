@@ -1,6 +1,7 @@
 "use client"
 
 import type { GoogleReviewsBadgeData } from "@/lib/api/googleReviewsData"
+import { trackCta } from "@/lib/metaPixel"
 
 type GoogleReviewsBadgeProps = {
   reviews: GoogleReviewsBadgeData
@@ -80,6 +81,7 @@ export default function GoogleReviewsBadge({
       href={mapsUrl}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => trackCta("GoogleReviews_Click")}
       className={`relative z-10 mt-8 inline-flex max-w-full cursor-pointer items-center gap-3 rounded-2xl px-4 py-3 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${shellClass} ${
         isBgPrimary ? "focus-visible:ring-white" : "focus-visible:ring-primary"
       }`}

@@ -2,6 +2,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
+import {
+  appendAttributionToDetails,
+  attributionSchema,
+  formatMondayCampaign,
+  formatMondayLeadSource,
+  sanitizeAttribution,
+} from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
 // ✅ Environment variables
@@ -23,6 +30,7 @@ const workshopSchema = z.object({
   selectedDate: z.string().nonempty("נדרש תאריך."),
   selectedHour: z.string().nonempty("נדרשת שעה."),
   additionalDetails: z.string().optional(),
+  attribution: attributionSchema,
 });
 
 // ✅ Simple in-memory rate limiting
@@ -30,9 +38,9 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// ✅ Clean up user inputs
-const sanitize = (val: string) =>
-  val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
+// ✅ Clean up user inputs (details may include an appended UTM note)
+const sanitize = (val: string, max = 100) =>
+  val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
 // ✅ Send the lead into Monday.com
 async function sendToMonday(itemName: string, values: Record<string, any>) {
@@ -115,16 +123,18 @@ export async function POST(req: NextRequest) {
     const phone = sanitize(data.phoneNumber);
     const selectedDate = sanitize(data.selectedDate);
     const selectedHour = sanitize(data.selectedHour);
-    const details = sanitize(data.additionalDetails || "");
+    const details = sanitize(data.additionalDetails || "", 200);
+
+    const attribution = sanitizeAttribution(data.attribution);
 
     await sendToMonday(fullName, {
       full_name: fullName,
       phone: phone,
-      details: details,
+      details: appendAttributionToDetails(details, attribution, 500),
       selected_date: selectedDate,
       selected_hour: selectedHour,
-      lead_source: "Website",
-      campaign: "WS form",
+      lead_source: formatMondayLeadSource(attribution),
+      campaign: formatMondayCampaign("WSForm"),
     });
 
     return NextResponse.json(

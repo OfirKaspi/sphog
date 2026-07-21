@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { getAttribution } from "@/lib/attribution"
+import { trackLead } from "@/lib/metaPixel"
 import { normalizeIsraeliPhone } from "@/lib/phone"
 
 interface ProductLeadFormProps {
@@ -66,6 +68,7 @@ const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFo
           productName,
           productId: String(productId),
           productImage,
+          attribution: getAttribution() ?? undefined,
         }),
       })
 
@@ -74,6 +77,7 @@ const ProductLeadForm = ({ productId, productName, productImage }: ProductLeadFo
         throw new Error(result?.message || "Submission failed")
       }
 
+      trackLead("ProductForm")
       setIsSubmitted(true)
       setFullName("")
       setPhoneNumber("")
