@@ -1,0 +1,222 @@
+import { z } from "zod"
+
+export type FormKey = "GeneralForm" | "WSForm" | "ProductForm"
+
+export const attributionSchema = z
+  .object({
+    utm_source: z.string().max(80).optional(),
+    utm_medium: z.string().max(80).optional(),
+    utm_campaign: z.string().max(80).optional(),
+    utm_content: z.string().max(80).optional(),
+    utm_term: z.string().max(80).optional(),
+    fbclid: z.string().max(200).optional(),
+  })
+  .optional()
+
+export type Attribution = {
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  utm_content?: string
+  utm_term?: string
+  fbclid?: string
+}
+
+const STORAGE_KEY = "sphog_attribution"
+const MAX_FIELD_LEN = 80
+
+const UTM_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_content",
+  "utm_term",
+  "fbclid",
+] as const
+
+function sanitizeField(value: unknown, max = MAX_FIELD_LEN): string | undefined {
+  if (typeof value !== "string") return undefined
+  const cleaned = value.replace(/[\n\r]+/g, "").trim().slice(0, max)
+  return cleaned || undefined
+}
+
+/** Parse attribution from a query string / URLSearchParams. */
+export function parseAttributionFromSearchParams(
+  params: URLSearchParams
+): Attribution | null {
+  const result: Attribution = {}
+  let hasAny = false
+
+  for (const key of UTM_KEYS) {
+    const max = key === "fbclid" ? 200 : MAX_FIELD_LEN
+    const value = sanitizeField(params.get(key) ?? undefined, max)
+    if (value) {
+      result[key] = value
+      hasAny = true
+    }
+  }
+
+  return hasAny ? result : null
+}
+
+/** Persist attribution in sessionStorage (client only). Merges with existing; URL wins for present keys. */
+export function captureAttributionFromUrl(): Attribution | null {
+  if (typeof window === "undefined") return null
+
+  const fromUrl = parseAttributionFromSearchParams(
+    new URLSearchParams(window.location.search)
+  )
+  const existing = getAttribution()
+
+  if (!fromUrl && !existing) return null
+
+  const merged: Attribution = { ...existing, ...fromUrl }
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged))
+  } catch {
+    // ignore quota / private mode
+  }
+  return merged
+}
+
+export function getAttribution(): Attribution | null {
+  if (typeof window === "undefined") return null
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as Attribution
+    return sanitizeAttribution(parsed)
+  } catch {
+    return null
+  }
+}
+
+/** Sanitize an attribution object (client or server). */
+export function sanitizeAttribution(input: unknown): Attribution | null {
+  if (!input || typeof input !== "object") return null
+  const obj = input as Record<string, unknown>
+  const result: Attribution = {}
+  let hasAny = false
+
+  for (const key of UTM_KEYS) {
+    const max = key === "fbclid" ? 200 : MAX_FIELD_LEN
+    const value = sanitizeField(obj[key], max)
+    if (value) {
+      result[key] = value
+      hasAny = true
+    }
+  }
+
+  return hasAny ? result : null
+}
+
+export function hasUtmParams(attr: Attribution | null | undefined): boolean {
+  if (!attr) return false
+  return Boolean(
+    attr.utm_source ||
+      attr.utm_medium ||
+      attr.utm_campaign ||
+      attr.utm_content ||
+      attr.utm_term
+  )
+}
+
+/**
+ * Monday Lead Source is a status column with fixed labels.
+ * Map common UTM sources onto those labels (see Monday board statuses).
+ */
+const MONDAY_LEAD_SOURCE_LABELS = [
+  "Facebook",
+  "Website",
+  "Whatsap",
+  "Insta",
+  "Email",
+  "אתר בסלון",
+] as const
+
+export function formatMondayLeadSource(attr: Attribution | null | undefined): string {
+  const raw = sanitizeField(attr?.utm_source, 100)
+  if (!raw) return "Website"
+
+  const key = raw.toLowerCase()
+  if (key === "facebook" || key === "fb" || key === "meta") return "Facebook"
+  if (key === "instagram" || key === "ig" || key === "insta") return "Insta"
+  if (key === "whatsapp" || key === "wa" || key === "whatsap") return "Whatsap"
+  if (key === "email" || key === "mail") return "Email"
+  if (key === "website" || key === "site" || key === "organic" || key === "direct") {
+    return "Website"
+  }
+
+  // Exact match on known Monday labels (case-insensitive for Latin ones)
+  const exact = MONDAY_LEAD_SOURCE_LABELS.find(
+    (label) => label.toLowerCase() === key || label === raw
+  )
+  if (exact) return exact
+
+  // Unknown paid sources still land as Website so the lead is created;
+  // the full UTM detail remains in the Campaign text column.
+  return "Website"
+}
+
+/**
+ * Monday Campaign (`dup__of_channel__1`) is a status column with fixed labels.
+ * Keep the existing board values; put full UTM detail in the notes/details field
+ * via `appendAttributionToDetails` (no new Monday columns).
+ */
+export function formatMondayCampaign(formKey: FormKey): string {
+  if (formKey === "WSForm") return "WSForm"
+  // Board label is historically "General form" (lowercase f)
+  return "General form"
+}
+
+/** Single-line UTM summary safe for Monday GraphQL text columns (no newlines). */
+export function formatAttributionMondayNote(
+  attr: Attribution | null | undefined
+): string | null {
+  if (!attr || (!hasUtmParams(attr) && !attr.fbclid)) return null
+
+  const parts = [
+    attr.utm_source && `source=${attr.utm_source}`,
+    attr.utm_medium && `medium=${attr.utm_medium}`,
+    attr.utm_campaign && `campaign=${attr.utm_campaign}`,
+    attr.utm_content && `content=${attr.utm_content}`,
+    attr.utm_term && `term=${attr.utm_term}`,
+    attr.fbclid && `fbclid=${attr.fbclid.slice(0, 40)}`,
+  ].filter(Boolean)
+
+  return parts.length ? `UTM: ${parts.join(" | ")}` : null
+}
+
+/** Append a compact single-line UTM note to Monday details. */
+export function appendAttributionToDetails(
+  details: string,
+  attr: Attribution | null | undefined,
+  maxLen = 500
+): string {
+  const base = (details || "").replace(/[\n\r]+/g, " ").trim()
+  const note = formatAttributionMondayNote(attr)
+  if (!note) return base.slice(0, maxLen)
+
+  const combined = base ? `${base} | ${note}` : note
+  return combined.slice(0, maxLen)
+}
+
+/** Plain-text block for product-lead emails. */
+export function formatAttributionEmailBlock(
+  attr: Attribution | null | undefined
+): string {
+  if (!attr || (!hasUtmParams(attr) && !attr.fbclid)) {
+    return "מקור: אתר (ללא UTM)"
+  }
+
+  const lines = [
+    attr.utm_source && `utm_source: ${attr.utm_source}`,
+    attr.utm_medium && `utm_medium: ${attr.utm_medium}`,
+    attr.utm_campaign && `utm_campaign: ${attr.utm_campaign}`,
+    attr.utm_content && `utm_content: ${attr.utm_content}`,
+    attr.utm_term && `utm_term: ${attr.utm_term}`,
+    attr.fbclid && `fbclid: ${attr.fbclid.slice(0, 40)}`,
+  ].filter(Boolean)
+
+  return lines.join("\n")
+}

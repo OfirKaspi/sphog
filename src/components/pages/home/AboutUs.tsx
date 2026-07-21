@@ -1,7 +1,7 @@
+import TrackedCtaLink from "@/components/analytics/TrackedCtaLink";
 import CTAButton from "@/components/common/CTAButton";
 import { Media, LinkType } from "@/types/types";
 import VideoContainer from "@/components/common/VideoContainer";
-import Link from "next/link";
 import OptimizedImage from "@/components/common/OptimizedImage";
 
 export interface AboutUsProps {
@@ -77,12 +77,13 @@ export default function AboutUs({
             ))}
           </p>
           {link && (
-            <Link
+            <TrackedCtaLink
               href={link.href}
+              ctaName={link.href.includes("gallery") ? "GalleryCTA_Click" : link.text}
               className={`mt-6 w-fit ${isCentered ? "mx-auto" : "mx-auto md:mx-0 md:self-start"}`}
             >
               <CTAButton>{link.text}</CTAButton>
-            </Link>
+            </TrackedCtaLink>
           )}
         </div>
       </div>

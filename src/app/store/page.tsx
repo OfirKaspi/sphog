@@ -1,3 +1,4 @@
+import ViewContentTracker from "@/components/analytics/ViewContentTracker"
 import PageHeader from "@/components/common/PageHeader"
 import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
@@ -10,6 +11,7 @@ const Store = async () => {
 
   return (
     <section>
+      <ViewContentTracker contentName="/store" />
       {data.products.length > 0 ? (
         <>
           <PageHeader {...data.header} />

@@ -1,3 +1,4 @@
+import ViewContentTracker from "@/components/analytics/ViewContentTracker";
 import PageHeader from "@/components/common/PageHeader";
 import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection";
 import VideoContainer from "@/components/common/VideoContainer";
@@ -19,6 +20,7 @@ const PrivateWorkshop = async () => {
 
   return (
     <section>
+      <ViewContentTracker contentName="/private-workshops" />
       <PageHeader {...data.header} align="center" />
       {data.logosCarousel.logos.length > 0 ? (
         <PrivateWorkshopLogosCarousel heading={data.logosCarousel.heading} logos={data.logosCarousel.logos} />

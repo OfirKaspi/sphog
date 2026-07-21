@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
+import { getAttribution } from "@/lib/attribution";
+import { trackLead } from "@/lib/metaPixel";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 import Legend from "./Legend";
 
@@ -193,6 +195,7 @@ export default function WorkshopRegistrationForm({
           selectedHour: formData.selectedHour,
           fullName: formData.fullName,
           phoneNumber: normalizedPhoneNumber,
+          attribution: getAttribution() ?? undefined,
         }),
       });
 
@@ -200,6 +203,7 @@ export default function WorkshopRegistrationForm({
 
       if (!response.ok) throw new Error(result?.message || "Unknown error");
 
+      trackLead("WSForm");
       setIsSuccess(true);
       setFormData({
         selectedDate: undefined,

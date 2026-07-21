@@ -1,6 +1,7 @@
 "use server";
 
 import getPublicWorkshopData from "@/lib/api/publicWorkshopData";
+import ViewContentTracker from "@/components/analytics/ViewContentTracker";
 import GalleryCtaLink from "@/components/common/GalleryCtaLink";
 import PageHeader from "@/components/common/PageHeader";
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm";
@@ -25,6 +26,7 @@ const PublicWorkshop = async () => {
 
   return (
     <section>
+      <ViewContentTracker contentName="/public-workshops" />
       <PageHeader {...data.header} />
       <WorkshopList
         workshops={workshopItems}

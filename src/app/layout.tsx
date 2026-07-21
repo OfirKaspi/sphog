@@ -7,6 +7,7 @@ import AccessibilityWidget from "@/components/legal/AccessibilityWidget";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
 import Navbar from "@/components/layout/Navbar";
 import CookieNotice from "@/components/legal/CookieNotice";
+import MetaPixelRoot from "@/components/analytics/MetaPixelRoot";
 import { Toaster } from "@/components/ui/toaster";
 import { isGalleryNavVisible } from "@/lib/api/galleryData";
 
@@ -95,6 +96,7 @@ export default async function RootLayout({
         <WhatsAppButton />
         <AccessibilityWidget />
         <CookieNotice />
+        <MetaPixelRoot />
         <Analytics />
       </body>
     </html>

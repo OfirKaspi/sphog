@@ -1,14 +1,17 @@
-import { CONFIG } from "@/config/config";
-import { Mail, MapPin, Phone } from "lucide-react";
-import MapNavigation from "@/components/common/MapNavigation";
+"use client"
+
+import { CONFIG } from "@/config/config"
+import { Mail, MapPin, Phone } from "lucide-react"
+import MapNavigation from "@/components/common/MapNavigation"
+import { trackContact } from "@/lib/metaPixel"
 
 const Contact = () => {
   const {
     contactEmail,
     phoneNumber,
     contactAddress,
-  } = CONFIG;
-  
+  } = CONFIG
+
   const contacts = [
     {
       icon: <Mail className="text-white" />,
@@ -19,13 +22,14 @@ const Contact = () => {
       icon: <Phone className="text-white" />,
       text: phoneNumber,
       href: `tel:${phoneNumber}`,
+      trackPhone: true,
     },
     {
       icon: <MapPin className="text-white" />,
       text: contactAddress,
       isAddress: true,
     },
-  ];
+  ]
 
   return (
     <ul className="grid lg:grid-flow-col gap-5">
@@ -36,7 +40,15 @@ const Contact = () => {
         >
           <div className="flex gap-2 items-center text-sm">
             {contact.href ? (
-              <a href={contact.href} className="flex gap-2 text-white">
+              <a
+                href={contact.href}
+                className="flex gap-2 text-white"
+                onClick={() => {
+                  if (contact.trackPhone) {
+                    trackContact("phone")
+                  }
+                }}
+              >
                 {contact.icon}
                 <span className="ml-2">{contact.text}</span>
               </a>
@@ -51,7 +63,7 @@ const Contact = () => {
         </li>
       ))}
     </ul>
-  );
-};
+  )
+}
 
-export default Contact;
+export default Contact

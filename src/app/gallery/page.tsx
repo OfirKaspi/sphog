@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 
+import ViewContentTracker from "@/components/analytics/ViewContentTracker"
 import PageHeader from "@/components/common/PageHeader"
 import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
@@ -26,6 +27,7 @@ const GalleryPage = async () => {
 
   return (
     <section>
+      <ViewContentTracker contentName="/gallery" />
       <PageHeader title={GALLERY_PAGE_TITLE} align="center" />
       <div className="mx-auto max-w-screen-xl px-5 pb-16">
         <GalleryGrid images={images} />

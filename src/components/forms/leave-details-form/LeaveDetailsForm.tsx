@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
 import { useAppToast } from "@/hooks/useAppToast";
+import { getAttribution } from "@/lib/attribution";
+import { trackLead } from "@/lib/metaPixel";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 import {
   Select,
@@ -66,13 +68,18 @@ const LeaveDetailsForm = ({ isSuccess, setIsSuccess }: LeaveDetailsFormProps) =>
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, phoneNumber: normalizedPhoneNumber }),
+        body: JSON.stringify({
+          ...formData,
+          phoneNumber: normalizedPhoneNumber,
+          attribution: getAttribution() ?? undefined,
+        }),
       });
 
       const result = await response.json();
 
       if (!response.ok) throw new Error(result?.message || "Unknown error");
 
+      trackLead("GeneralForm");
       setIsSuccess(true);
       setFormData({
         fullName: "",
