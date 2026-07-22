@@ -10,7 +10,10 @@ import {
   getPublishedGalleryImages,
 } from "@/lib/api/galleryData"
 import getHomeData from "@/lib/api/homeData"
-import { GALLERY_PAGE_TITLE } from "@/lib/constants/gallery"
+import {
+  GALLERY_PAGE_TITLE,
+  galleryTestimonials,
+} from "@/lib/constants/gallery"
 
 export const dynamic = "force-dynamic"
 
@@ -33,7 +36,8 @@ const GalleryPage = async () => {
         <GalleryGrid images={images} />
       </div>
       <TestimonialsSection
-        {...homeData.testimonials}
+        title={homeData.testimonials.title}
+        testimonials={galleryTestimonials}
         isBgPrimary={true}
         isEnabled={homeData.testimonials.isEnabled}
       />
