@@ -1,8 +1,8 @@
 import type { Testimonial } from "@/types/types"
 
-export const GALLERY_PAGE_TITLE = "גלריה"
+export const GALLERY_PAGE_TITLE = "מבחר טרריום שיצרו בסדנאות שלנו"
 
-export const GALLERY_CTA_LABEL = "לגלריה"
+export const GALLERY_CTA_LABEL = "לראות מה יצרו בסדנאות שלנו"
 
 export const GALLERY_DUPLICATE_MESSAGE = "תמונה זו כבר קיימת בגלריה"
 
