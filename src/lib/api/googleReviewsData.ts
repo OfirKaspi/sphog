@@ -4,7 +4,6 @@ import { cache } from "react"
 import { CONFIG } from "@/config/config"
 import { getSupabaseServiceRoleClient, supabase } from "@/lib/supabase"
 
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000
 const FALLBACK_RATING = 5
 const FALLBACK_REVIEW_COUNT = 50
 
@@ -62,13 +61,6 @@ function fallbackReviews(): GoogleReviewsBadgeData {
     mapsUrl: resolveGoogleReviewsUrl(),
     source: "fallback",
   }
-}
-
-function isFresh(fetchedAt: string | null | undefined) {
-  if (!fetchedAt) return false
-  const ts = Date.parse(fetchedAt)
-  if (Number.isNaN(ts)) return false
-  return Date.now() - ts < CACHE_TTL_MS
 }
 
 function rowToBadge(row: Omit<CacheRow, "fetched_at">): GoogleReviewsBadgeData {
@@ -262,8 +254,13 @@ export async function refreshGoogleReviewsCache(): Promise<RefreshGoogleReviewsR
 }
 
 /**
- * Public badge data: fresh cache when possible; Places refresh when stale;
- * last cache or static 50+ / 5★ fallback otherwise (Places kept for later).
+ * Public badge data with layered fallbacks (prefer cache for cost):
+ * 1. Cached Places data (fresh or stale) — no Google call
+ * 2. Places API when cache is missing, unreadable, or only static fallback
+ * 3. Any cached row (including prior fallback seed)
+ * 4. Hardcoded 5★ / 50+ static fallback
+ *
+ * Cron still refreshes nightly; page views only hit Places when cache cannot serve live data.
  */
 export const getGoogleReviews = cache(async (): Promise<GoogleReviewsBadgeData> => {
   noStore()
@@ -271,11 +268,11 @@ export const getGoogleReviews = cache(async (): Promise<GoogleReviewsBadgeData> 
   const cached = await readCacheRow()
   const cachedRow = cached.ok ? cached.row : null
 
-  if (cachedRow && isFresh(cachedRow.fetched_at) && cachedRow.source === "places") {
+  if (cachedRow && cachedRow.source === "places") {
     return rowToBadge(cachedRow)
   }
 
-  // Stale / empty / only fallback — try Places when credentials exist
+  // Cache empty, unreadable, or only seeded fallback — try Places once.
   try {
     const fresh = await fetchFromPlacesApi()
     if (fresh) {
@@ -287,7 +284,10 @@ export const getGoogleReviews = cache(async (): Promise<GoogleReviewsBadgeData> 
         fetched_at: new Date().toISOString(),
       })
       if (!write.ok) {
-        console.error("getGoogleReviews: serving Places data but cache write failed:", write.error)
+        console.error(
+          "getGoogleReviews: serving Places data but cache write failed:",
+          write.error
+        )
       }
       return fresh
     }
@@ -299,6 +299,5 @@ export const getGoogleReviews = cache(async (): Promise<GoogleReviewsBadgeData> 
     return rowToBadge(cachedRow)
   }
 
-  // Read error or empty: show fallback without writing (avoids clobbering unknown DB state).
   return fallbackReviews()
 })
