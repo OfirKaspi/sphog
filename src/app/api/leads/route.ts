@@ -5,9 +5,11 @@ import axios from "axios";
 import {
   appendAttributionToDetails,
   attributionSchema,
+  buildMondayUtmTextColumns,
   formatMondayCampaign,
   formatMondayLeadSource,
   sanitizeAttribution,
+  type Attribution,
 } from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
@@ -50,7 +52,11 @@ const topicMapping: Record<string, string> = {
 };
 
 // ✅ Send to Monday.com
-async function sendToMonday(itemName: string, values: Record<string, any>) {
+async function sendToMonday(
+  itemName: string,
+  values: Record<string, any>,
+  attribution: Attribution | null
+) {
   const columnValues: Record<string, any> = {
     "name": values.full_name,                              // Full Name
     "lead_phone": {
@@ -59,12 +65,15 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
     },                                                     // Phone (object format)
     "text__1": values.details,                             // What do you want to know
     "dup__of_channel9__1": values.lead_source,             // Lead Source (e.g. "Website - Workshop")
-    "dup__of_channel__1": values.campaign,                 // Campaign
+    "dup__of_channel__1": values.campaign,                 // Campaign (form type status)
   };
 
   if (values.topic) {
     columnValues["dup__of_channel2__1"] = values.topic;    // Topic (only if not "Other")
   }
+
+  // Additive dedicated UTM text columns (allowlisted IDs only)
+  Object.assign(columnValues, buildMondayUtmTextColumns(attribution));
 
   const query = {
     query: `
@@ -135,14 +144,18 @@ export async function POST(req: NextRequest) {
 
     const attribution = sanitizeAttribution(data.attribution);
 
-    await sendToMonday(fullName, {
-      full_name: fullName,
-      phone: phone,
-      topic: mappedTopic,
-      details: appendAttributionToDetails(details, attribution, 500),
-      lead_source: formatMondayLeadSource(attribution),
-      campaign: formatMondayCampaign("GeneralForm"),
-    });
+    await sendToMonday(
+      fullName,
+      {
+        full_name: fullName,
+        phone: phone,
+        topic: mappedTopic,
+        details: appendAttributionToDetails(details, attribution, 500),
+        lead_source: formatMondayLeadSource(attribution),
+        campaign: formatMondayCampaign("GeneralForm"),
+      },
+      attribution
+    );
 
     return NextResponse.json(
       { success: true, message: "הפרטים נשלחו בהצלחה!" },
