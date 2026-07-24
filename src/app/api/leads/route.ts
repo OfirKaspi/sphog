@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
 import {
-  appendAttributionToDetails,
   attributionSchema,
   buildMondayUtmTextColumns,
   formatMondayCampaign,
@@ -39,7 +38,7 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// ✅ Sanitize strings (details may include an appended UTM note)
+// ✅ Sanitize strings for Monday text columns
 const sanitize = (val: string, max = 100) =>
   val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
@@ -150,7 +149,7 @@ export async function POST(req: NextRequest) {
         full_name: fullName,
         phone: phone,
         topic: mappedTopic,
-        details: appendAttributionToDetails(details, attribution, 500),
+        details: details,
         lead_source: formatMondayLeadSource(attribution),
         campaign: formatMondayCampaign("GeneralForm"),
       },
