@@ -5,9 +5,11 @@ import axios from "axios";
 import {
   appendAttributionToDetails,
   attributionSchema,
+  buildMondayUtmTextColumns,
   formatMondayCampaign,
   formatMondayLeadSource,
   sanitizeAttribution,
+  type Attribution,
 } from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
@@ -43,8 +45,12 @@ const sanitize = (val: string, max = 100) =>
   val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
 // ✅ Send the lead into Monday.com
-async function sendToMonday(itemName: string, values: Record<string, any>) {
-  const columnValues = {
+async function sendToMonday(
+  itemName: string,
+  values: Record<string, any>,
+  attribution: Attribution | null
+) {
+  const columnValues: Record<string, any> = {
     "name": values.full_name,                          // Full Name
     "text__1": values.details,                         // Additional Details
     "lead_phone": {                                    // 📞 Phone (must be object format!)
@@ -54,8 +60,11 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
     "date_mkpveq7w": values.selected_date,             // Selected Date
     "text_mks28kgr": values.selected_hour,              // Selected Hour
     "dup__of_channel9__1": values.lead_source,         // Lead Source (e.g. "Website - Workshop")
-    "dup__of_channel__1": values.campaign,             // Campaign (e.g. "WS form")
+    "dup__of_channel__1": values.campaign,             // Campaign (form type status, e.g. "WS form")
   };
+
+  // Additive dedicated UTM text columns (allowlisted IDs only)
+  Object.assign(columnValues, buildMondayUtmTextColumns(attribution));
 
   const query = {
     query: `
@@ -127,15 +136,19 @@ export async function POST(req: NextRequest) {
 
     const attribution = sanitizeAttribution(data.attribution);
 
-    await sendToMonday(fullName, {
-      full_name: fullName,
-      phone: phone,
-      details: appendAttributionToDetails(details, attribution, 500),
-      selected_date: selectedDate,
-      selected_hour: selectedHour,
-      lead_source: formatMondayLeadSource(attribution),
-      campaign: formatMondayCampaign("WSForm"),
-    });
+    await sendToMonday(
+      fullName,
+      {
+        full_name: fullName,
+        phone: phone,
+        details: appendAttributionToDetails(details, attribution, 500),
+        selected_date: selectedDate,
+        selected_hour: selectedHour,
+        lead_source: formatMondayLeadSource(attribution),
+        campaign: formatMondayCampaign("WSForm"),
+      },
+      attribution
+    );
 
     return NextResponse.json(
       { success: true, message: "הפרטים נשלחו בהצלחה!" },

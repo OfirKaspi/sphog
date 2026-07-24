@@ -154,19 +154,52 @@ export function formatMondayLeadSource(attr: Attribution | null | undefined): st
   if (exact) return exact
 
   // Unknown paid sources still land as Website so the lead is created;
-  // the full UTM detail remains in the Campaign text column.
+  // the full UTM detail remains in dedicated text columns + details note.
   return "Website"
 }
 
 /**
  * Monday Campaign (`dup__of_channel__1`) is a status column with fixed labels.
- * Keep the existing board values; put full UTM detail in the notes/details field
- * via `appendAttributionToDetails` (no new Monday columns).
+ * Keep the existing board values; raw UTM campaign goes to dedicated text columns
+ * via `buildMondayUtmTextColumns`, plus the details note via `appendAttributionToDetails`.
  */
 export function formatMondayCampaign(formKey: FormKey): string {
   if (formKey === "WSForm") return "WSForm"
   // Board label is historically "General form" (lowercase f)
   return "General form"
+}
+
+/** Hardcoded Monday text column IDs for raw UTM fields (allowlist only). */
+export const MONDAY_UTM_TEXT_COLUMNS = {
+  source: "text_mm5jmaya",
+  medium: "text_mm5j8bxx",
+  campaign: "text_mm5jbdcv",
+  content: "text_mm5j8tnm",
+} as const
+
+export type MondayUtmTextColumns = {
+  [MONDAY_UTM_TEXT_COLUMNS.source]?: string
+  [MONDAY_UTM_TEXT_COLUMNS.medium]?: string
+  [MONDAY_UTM_TEXT_COLUMNS.campaign]?: string
+  [MONDAY_UTM_TEXT_COLUMNS.content]?: string
+}
+
+/**
+ * Map sanitized attribution onto the four dedicated Monday UTM text columns.
+ * Field-by-field only — never spreads client objects; ignores utm_term / fbclid.
+ * Expects `attr` already passed through `sanitizeAttribution`.
+ */
+export function buildMondayUtmTextColumns(
+  attr: Attribution | null | undefined
+): MondayUtmTextColumns {
+  if (!attr) return {}
+
+  const columns: MondayUtmTextColumns = {}
+  if (attr.utm_source) columns[MONDAY_UTM_TEXT_COLUMNS.source] = attr.utm_source
+  if (attr.utm_medium) columns[MONDAY_UTM_TEXT_COLUMNS.medium] = attr.utm_medium
+  if (attr.utm_campaign) columns[MONDAY_UTM_TEXT_COLUMNS.campaign] = attr.utm_campaign
+  if (attr.utm_content) columns[MONDAY_UTM_TEXT_COLUMNS.content] = attr.utm_content
+  return columns
 }
 
 /** Single-line UTM summary safe for Monday GraphQL text columns (no newlines). */
