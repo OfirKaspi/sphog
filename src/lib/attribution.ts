@@ -154,14 +154,14 @@ export function formatMondayLeadSource(attr: Attribution | null | undefined): st
   if (exact) return exact
 
   // Unknown paid sources still land as Website so the lead is created;
-  // the full UTM detail remains in dedicated text columns + details note.
+  // the full UTM detail remains in dedicated text columns.
   return "Website"
 }
 
 /**
  * Monday Campaign (`dup__of_channel__1`) is a status column with fixed labels.
  * Keep the existing board values; raw UTM campaign goes to dedicated text columns
- * via `buildMondayUtmTextColumns`, plus the details note via `appendAttributionToDetails`.
+ * via `buildMondayUtmTextColumns`.
  */
 export function formatMondayCampaign(formKey: FormKey): string {
   if (formKey === "WSForm") return "WSForm"
@@ -200,38 +200,6 @@ export function buildMondayUtmTextColumns(
   if (attr.utm_campaign) columns[MONDAY_UTM_TEXT_COLUMNS.campaign] = attr.utm_campaign
   if (attr.utm_content) columns[MONDAY_UTM_TEXT_COLUMNS.content] = attr.utm_content
   return columns
-}
-
-/** Single-line UTM summary safe for Monday GraphQL text columns (no newlines). */
-export function formatAttributionMondayNote(
-  attr: Attribution | null | undefined
-): string | null {
-  if (!attr || (!hasUtmParams(attr) && !attr.fbclid)) return null
-
-  const parts = [
-    attr.utm_source && `source=${attr.utm_source}`,
-    attr.utm_medium && `medium=${attr.utm_medium}`,
-    attr.utm_campaign && `campaign=${attr.utm_campaign}`,
-    attr.utm_content && `content=${attr.utm_content}`,
-    attr.utm_term && `term=${attr.utm_term}`,
-    attr.fbclid && `fbclid=${attr.fbclid.slice(0, 40)}`,
-  ].filter(Boolean)
-
-  return parts.length ? `UTM: ${parts.join(" | ")}` : null
-}
-
-/** Append a compact single-line UTM note to Monday details. */
-export function appendAttributionToDetails(
-  details: string,
-  attr: Attribution | null | undefined,
-  maxLen = 500
-): string {
-  const base = (details || "").replace(/[\n\r]+/g, " ").trim()
-  const note = formatAttributionMondayNote(attr)
-  if (!note) return base.slice(0, maxLen)
-
-  const combined = base ? `${base} | ${note}` : note
-  return combined.slice(0, maxLen)
 }
 
 /** Plain-text block for product-lead emails. */
