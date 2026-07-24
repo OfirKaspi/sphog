@@ -35,8 +35,7 @@ export const galleryTestimonials: Testimonial[] = [
       "סדנא מעולה ומעשירה! נהנינו מאוד ואייל מקסים. מומלץ מאוד לכל מי שרוצה לנסות משהו חדש גם מי שחושב שהוא לא יצירתי יוצא משם עם טרריום ואוו, ומלא ידע לעשות את זה לבד בבית",
     role: "סדנת צוות",
     image: {
-      // TODO: Replace with Palo Alto logo once uploaded to Cloudinary (sphog/).
-      src: DEFAULT_TESTIMONIAL_IMAGE,
+      src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1784892577/sphog/palo_alto_smrlxh.jpg",
       alt: "דבורה",
     },
   },
