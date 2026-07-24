@@ -10,8 +10,7 @@ const storeTestimonials = [
       'מהרגע שראיתי את התמונות בגוגל היה לי ברור שזו הבחירה בשבילנו - אבל שום דבר לא הכין אותי לטרריומים המדהימים שיצרנו, קשה להאמין שכולנו הגענו בלי שום ניסיון קודם, והכל הודות להדרכה של אייל האלוף. הצוות שלנו דובר עברית ואנגלית, ואייל התאים את עצמו לכולם בצורה מושלמת, והכל בהומור, בקלילות ובזרימה וגרם לכולנו להתחבר ולהרגיש חלק מהחוויה מהרגע הראשון. מעבר לכך שהסדנא היתה חוויה מגבשת, זורמת ומצחיקה במיוחד, היא גם העניקה לנו המון ערך מוסף וחשפה אותנו לעולם מרתק, שלא הכרנו קודם. יצאנו לסופ"ש עם חיוך ענק ועם טרריומים מהממים',
     role: "סדנת צוות",
     image: {
-      // TODO: Replace with Keren Arison Foundation logo once uploaded to Cloudinary (sphog/).
-      src: DEFAULT_TESTIMONIAL_IMAGE,
+      src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1784892577/sphog/arison_akg5pf.jpg",
       alt: "אביגיל",
     },
   },
@@ -31,8 +30,7 @@ const storeTestimonials = [
       "הגענו צוות קטן לפעילות חברה. היה ממש כיף, מעניין, אווירה טובה וחיובית. ממש נהננו והטרריום יצא אש. תודה אייל היה ממש מיוחד ומהנה",
     role: "סדנת צוות",
     image: {
-      // TODO: Replace with Lightricks logo once uploaded to Cloudinary (sphog/).
-      src: DEFAULT_TESTIMONIAL_IMAGE,
+      src: "https://res.cloudinary.com/dudwjf2pu/image/upload/v1784892577/sphog/lightricks_vkupfg.jpg",
       alt: "בן",
     },
   },
