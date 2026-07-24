@@ -13,7 +13,7 @@ const CTAButton = ({ children, onClick, color = CTAColorType.DEFAULT }: CTAButto
     const colorStyles = {
         [CTAColorType.DEFAULT]: "bg-cta hover:bg-cta-foreground",
         [CTAColorType.BLUE]: "bg-sky-500 hover:bg-sky-600",
-        [CTAColorType.GREEN]: "bg-primary hover:bg-primary-foreground",
+        [CTAColorType.GREEN]: "bg-green-500 hover:bg-green-600",
     }
 
     return (
