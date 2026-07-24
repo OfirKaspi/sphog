@@ -6,7 +6,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
   DndContext,
   DragOverlay,
-  MeasuringStrategy,
   PointerSensor,
   TouchSensor,
   closestCenter,
@@ -138,6 +137,9 @@ const galleryCollisionDetection: CollisionDetection = (args) => {
 
 /** Disable FLIP animations — live DOM reorder + DragOverlay keep gaps stable. */
 const animateLayoutChanges: AnimateLayoutChanges = () => false
+
+/** Pause accepting new swaps while column layout settles after a live reorder. */
+const REORDER_SETTLE_MS = 48
 
 export default function AdminGalleryPage() {
   return (
@@ -348,8 +350,19 @@ function AdminGalleryContent() {
   const imagesRef = useRef<AdminGalleryRow[]>([])
   const dragStartOrderRef = useRef<AdminGalleryRow[] | null>(null)
   const dragChangedRef = useRef(false)
+  const lastOverIdRef = useRef<string | null>(null)
+  const reorderLockedRef = useRef(false)
+  const reorderSettleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   imagesRef.current = images
+
+  const clearReorderSettle = () => {
+    if (reorderSettleTimerRef.current) {
+      clearTimeout(reorderSettleTimerRef.current)
+      reorderSettleTimerRef.current = null
+    }
+    reorderLockedRef.current = false
+  }
 
   const getHeadersOrNotify = async (isJson = false) => {
     const headers = await getAuthHeaders(isJson)
@@ -447,6 +460,9 @@ function AdminGalleryContent() {
       if (viewportFadeTimerRef.current) {
         clearTimeout(viewportFadeTimerRef.current)
       }
+      if (reorderSettleTimerRef.current) {
+        clearTimeout(reorderSettleTimerRef.current)
+      }
     }
   }, [])
 
@@ -482,7 +498,7 @@ function AdminGalleryContent() {
       activationConstraint: { delay: 180, tolerance: 6 },
     })
   )
-  const sortableIds = images.map((image) => image.id)
+  const sortableIds = useMemo(() => images.map((image) => image.id), [images])
 
   const persistSortOrder = async (nextImages: AdminGalleryRow[]) => {
     setImages(nextImages)
@@ -525,25 +541,48 @@ function AdminGalleryContent() {
     setActiveDragId(String(active.id))
     dragStartOrderRef.current = imagesRef.current
     dragChangedRef.current = false
+    lastOverIdRef.current = null
+    clearReorderSettle()
   }
 
+  /**
+   * Live reorder while dragging so the column layout updates under the cursor.
+   * Round-robin columns reshuffle neighbors on every move, which would otherwise
+   * retrigger collision → onDragOver → setState in a loop. Guard with:
+   * - same-over dedupe, and
+   * - a short settle lock after each swap (no MeasuringStrategy.Always).
+   */
   const onDragOver = ({ active, over }: DragOverEvent) => {
     if (!over || active.id === over.id) return
 
-    setImages((items) => {
-      const from = items.findIndex((image) => image.id === active.id)
-      const to = items.findIndex((image) => image.id === over.id)
-      if (from < 0 || to < 0 || from === to) {
-        return items
-      }
-      dragChangedRef.current = true
-      const moved = withNewSortOrder(arrayMove(items, from, to))
-      imagesRef.current = moved
-      return moved
-    })
+    const overId = String(over.id)
+    if (reorderLockedRef.current) return
+    if (lastOverIdRef.current === overId) return
+
+    const items = imagesRef.current
+    const from = items.findIndex((image) => image.id === active.id)
+    const to = items.findIndex((image) => image.id === over.id)
+    if (from < 0 || to < 0 || from === to) return
+
+    lastOverIdRef.current = overId
+    reorderLockedRef.current = true
+    dragChangedRef.current = true
+
+    const moved = withNewSortOrder(arrayMove(items, from, to))
+    imagesRef.current = moved
+    setImages(moved)
+
+    if (reorderSettleTimerRef.current) {
+      clearTimeout(reorderSettleTimerRef.current)
+    }
+    reorderSettleTimerRef.current = setTimeout(() => {
+      reorderLockedRef.current = false
+      reorderSettleTimerRef.current = null
+    }, REORDER_SETTLE_MS)
   }
 
   const onDragCancel = () => {
+    clearReorderSettle()
     setActiveDragId(null)
     if (dragStartOrderRef.current) {
       setImages(dragStartOrderRef.current)
@@ -551,25 +590,24 @@ function AdminGalleryContent() {
     }
     dragStartOrderRef.current = null
     dragChangedRef.current = false
+    lastOverIdRef.current = null
   }
 
   const onDragEnd = async (_event: DragEndEvent) => {
+    clearReorderSettle()
     setActiveDragId(null)
     const start = dragStartOrderRef.current
     const changed = dragChangedRef.current
     dragStartOrderRef.current = null
     dragChangedRef.current = false
+    lastOverIdRef.current = null
 
-    if (!changed || !start) {
-      return
-    }
+    if (!changed || !start) return
 
     const next = withNewSortOrder(imagesRef.current)
     const startSignature = start.map((row) => row.id).join(",")
     const nextSignature = next.map((row) => row.id).join(",")
-    if (startSignature === nextSignature) {
-      return
-    }
+    if (startSignature === nextSignature) return
 
     await persistSortOrder(next)
   }
@@ -968,7 +1006,6 @@ function AdminGalleryContent() {
                   <DndContext
                     sensors={sensors}
                     collisionDetection={galleryCollisionDetection}
-                    measuring={{ droppable: { strategy: MeasuringStrategy.Always } }}
                     onDragStart={onDragStart}
                     onDragOver={onDragOver}
                     onDragCancel={onDragCancel}

@@ -162,11 +162,16 @@ export function formatMondayLeadSource(attr: Attribution | null | undefined): st
  * Monday Campaign (`dup__of_channel__1`) is a status column with fixed labels.
  * Keep the existing board values; raw UTM campaign goes to dedicated text columns
  * via `buildMondayUtmTextColumns`.
+ *
+ * Prefer `{ index }` for WSForm: Monday's label lookup rejects the "WSForm" string
+ * even though index 10 exists on the board (ColumnValueException / missingLabel).
  */
-export function formatMondayCampaign(formKey: FormKey): string {
-  if (formKey === "WSForm") return "WSForm"
+export type MondayStatusValue = { label: string } | { index: number }
+
+export function formatMondayCampaign(formKey: FormKey): MondayStatusValue {
+  if (formKey === "WSForm") return { index: 10 }
   // Board label is historically "General form" (lowercase f)
-  return "General form"
+  return { label: "General form" }
 }
 
 /** Hardcoded Monday text column IDs for raw UTM fields (allowlist only). */
