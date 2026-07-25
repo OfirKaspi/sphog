@@ -1,9 +1,16 @@
 "use client";
 
-import Link from "next/link";
+import TrackedCtaLink from "@/components/analytics/TrackedCtaLink";
 import { WorkshopData, CTAColorType } from "@/types/types";
 import CTAButton from "@/components/common/CTAButton";
+import { trackCta } from "@/lib/metaPixel";
 import OptimizedImage from "./OptimizedImage";
+
+function ctaNameForWorkshopLink(href: string, text: string): string {
+  if (href.includes("public-workshops")) return "HomeWorkshopCTA_Public"
+  if (href.includes("private-workshops")) return "HomeWorkshopCTA_Private"
+  return text || "WorkshopCTA"
+}
 
 export default function WorkshopItemNew({
   title,
@@ -17,6 +24,7 @@ export default function WorkshopItemNew({
 }: WorkshopData & { index: number }) {
 
   const handleScrollToForm = () => {
+    trackCta("WorkshopScrollToForm")
     const formElement = document.getElementById("workshop-form");
     if (formElement) {
       formElement.scrollIntoView({ behavior: "smooth" });
@@ -68,9 +76,13 @@ export default function WorkshopItemNew({
         ) : (
           <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
             {links?.map((link, index) => (
-              <Link key={index} href={link.href}>
+              <TrackedCtaLink
+                key={index}
+                href={link.href}
+                ctaName={ctaNameForWorkshopLink(link.href, link.text)}
+              >
                 <CTAButton color={ctaColor || "default"}>{link.text}</CTAButton>
-              </Link>
+              </TrackedCtaLink>
             ))}
           </div>
         )}

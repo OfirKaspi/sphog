@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useDraggable } from "@/hooks/useDraggable";
 import { MessageCircle, Phone } from "lucide-react";
 import useResponsive from "@/hooks/useResponsive";
+import { trackContact } from "@/lib/metaPixel";
 import { redirectToPlatform } from "@/utils/redirectToPlatform";
 import { getWhatsappLink } from "@/utils/getWhatsappLink";
 
@@ -54,6 +55,9 @@ const WhatsAppButton = () => {
 
   const handleClick = () => {
     if (!whatsappUrl) return;
+    if (!wasDragged.current) {
+      trackContact("whatsapp");
+    }
     redirectToPlatform(whatsappUrl, wasDragged.current);
   };
 

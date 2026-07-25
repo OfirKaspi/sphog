@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Calendar, Images, LogOut, Package } from "lucide-react"
+import { Calendar, Images, LayoutGrid, LogOut, Package } from "lucide-react"
 
 import { useAppToast } from "@/hooks/useAppToast"
 
@@ -26,6 +26,7 @@ export default function AdminShell({ title, onLogout, children }: AdminShellProp
   const schedulesActive = pathname.startsWith("/admin/schedules")
   const catalogActive = pathname.startsWith("/admin/catalog")
   const logosActive = pathname.startsWith("/admin/logos")
+  const galleryActive = pathname.startsWith("/admin/gallery")
 
   return (
     <div className="min-h-screen bg-background p-6" dir="rtl">
@@ -64,6 +65,13 @@ export default function AdminShell({ title, onLogout, children }: AdminShellProp
           >
             <Images className="w-4 h-4" />
             ניהול לוגואים
+          </Link>
+          <Link
+            href="/admin/gallery"
+            className={`rounded-lg px-4 py-2 inline-flex items-center gap-2 ${galleryActive ? "bg-green-600 text-white" : "bg-white border"}`}
+          >
+            <LayoutGrid className="w-4 h-4" />
+            ניהול גלריה
           </Link>
         </div>
 

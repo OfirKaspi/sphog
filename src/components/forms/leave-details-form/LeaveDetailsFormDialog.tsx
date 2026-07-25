@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import LeaveDetailsForm from "@/components/forms/leave-details-form/LeaveDetailsForm"
 import LeaveDetailsFormHeader from "@/components/forms/leave-details-form/LeaveDetailsFormHeader"
 import { trackEvent } from "@/lib/gtag"
+import { trackCta } from "@/lib/metaPixel"
 
 interface LeaveDetailsProps {
   text: string
@@ -28,6 +29,7 @@ const LeaveDetailsDialog = ({ text, isFancyWrapper = true, isDark = true }: Leav
         category: "Dialog",
         label: "Leave Details Form Opened",
       });
+      trackCta("LeaveDetails_Open");
     }
 
     if (!open) {

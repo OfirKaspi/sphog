@@ -1,6 +1,7 @@
 "use client";
 
 import { CONFIG } from "@/config/config";
+import { trackContact, trackSocialClick } from "@/lib/metaPixel";
 import { redirectToPlatform } from "@/utils/redirectToPlatform";
 import Image from "next/image";
 
@@ -22,7 +23,12 @@ const SocialMedia = () => {
     { name: "tiktok", href: tiktokUrl },
   ]
 
-  const handleClick = (href: string) => {
+  const handleClick = (name: string, href: string) => {
+    if (name === "whatsapp") {
+      trackContact("whatsapp")
+    } else {
+      trackSocialClick(name)
+    }
     redirectToPlatform(href)
   }
 
@@ -39,7 +45,7 @@ const SocialMedia = () => {
             <button
               type="button"
               className="relative m-2 h-8 w-8"
-              onClick={() => handleClick(social.href)}
+              onClick={() => handleClick(social.name, social.href)}
               aria-label={social.name}
             >
               <Image

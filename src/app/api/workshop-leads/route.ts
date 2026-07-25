@@ -2,6 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
+import {
+  attributionSchema,
+  buildMondayUtmTextColumns,
+  formatMondayCampaign,
+  formatMondayLeadSource,
+  sanitizeAttribution,
+  type Attribution,
+} from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
 // ✅ Environment variables
@@ -23,6 +31,7 @@ const workshopSchema = z.object({
   selectedDate: z.string().nonempty("נדרש תאריך."),
   selectedHour: z.string().nonempty("נדרשת שעה."),
   additionalDetails: z.string().optional(),
+  attribution: attributionSchema,
 });
 
 // ✅ Simple in-memory rate limiting
@@ -30,13 +39,17 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// ✅ Clean up user inputs
-const sanitize = (val: string) =>
-  val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
+// ✅ Clean up user inputs for Monday text columns
+const sanitize = (val: string, max = 100) =>
+  val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
 // ✅ Send the lead into Monday.com
-async function sendToMonday(itemName: string, values: Record<string, any>) {
-  const columnValues = {
+async function sendToMonday(
+  itemName: string,
+  values: Record<string, any>,
+  attribution: Attribution | null
+) {
+  const columnValues: Record<string, any> = {
     "name": values.full_name,                          // Full Name
     "text__1": values.details,                         // Additional Details
     "lead_phone": {                                    // 📞 Phone (must be object format!)
@@ -46,8 +59,11 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
     "date_mkpveq7w": values.selected_date,             // Selected Date
     "text_mks28kgr": values.selected_hour,              // Selected Hour
     "dup__of_channel9__1": values.lead_source,         // Lead Source (e.g. "Website - Workshop")
-    "dup__of_channel__1": values.campaign,             // Campaign (e.g. "WS form")
+    "dup__of_channel__1": values.campaign,             // Campaign (form type status, e.g. "WS form")
   };
+
+  // Additive dedicated UTM text columns (allowlisted IDs only)
+  Object.assign(columnValues, buildMondayUtmTextColumns(attribution));
 
   const query = {
     query: `
@@ -115,17 +131,23 @@ export async function POST(req: NextRequest) {
     const phone = sanitize(data.phoneNumber);
     const selectedDate = sanitize(data.selectedDate);
     const selectedHour = sanitize(data.selectedHour);
-    const details = sanitize(data.additionalDetails || "");
+    const details = sanitize(data.additionalDetails || "", 200);
 
-    await sendToMonday(fullName, {
-      full_name: fullName,
-      phone: phone,
-      details: details,
-      selected_date: selectedDate,
-      selected_hour: selectedHour,
-      lead_source: "Website",
-      campaign: "WS form",
-    });
+    const attribution = sanitizeAttribution(data.attribution);
+
+    await sendToMonday(
+      fullName,
+      {
+        full_name: fullName,
+        phone: phone,
+        details: details,
+        selected_date: selectedDate,
+        selected_hour: selectedHour,
+        lead_source: formatMondayLeadSource(attribution),
+        campaign: formatMondayCampaign("WSForm"),
+      },
+      attribution
+    );
 
     return NextResponse.json(
       { success: true, message: "הפרטים נשלחו בהצלחה!" },

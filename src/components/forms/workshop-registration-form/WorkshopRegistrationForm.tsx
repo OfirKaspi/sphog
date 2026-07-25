@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import LeaveDetailsFormSuccessMessage from "@/components/forms/leave-details-form/LeaveDetailsFormSuccessMessage";
 import useScrollToCenter from "@/hooks/useScrollToCenter";
+import { getAttribution } from "@/lib/attribution";
+import { trackLead } from "@/lib/metaPixel";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 import Legend from "./Legend";
 
@@ -77,6 +79,11 @@ export default function WorkshopRegistrationForm({
     );
     return map;
   }, [filteredDates]);
+
+  const presentTypes = useMemo(
+    () => new Set(filteredDates.map((d) => d.workshop)),
+    [filteredDates]
+  );
 
   const toast = useAppToast();
 
@@ -188,6 +195,7 @@ export default function WorkshopRegistrationForm({
           selectedHour: formData.selectedHour,
           fullName: formData.fullName,
           phoneNumber: normalizedPhoneNumber,
+          attribution: getAttribution() ?? undefined,
         }),
       });
 
@@ -195,6 +203,7 @@ export default function WorkshopRegistrationForm({
 
       if (!response.ok) throw new Error(result?.message || "Unknown error");
 
+      trackLead("WSForm");
       setIsSuccess(true);
       setFormData({
         selectedDate: undefined,
@@ -228,7 +237,7 @@ export default function WorkshopRegistrationForm({
       className="grid gap-4 py-4 text-base md:text-lg"
     >
       <div className="grid gap-2">
-        <Legend />
+        <Legend presentTypes={presentTypes} />
         <Label htmlFor="calendar" className="text-base md:text-lg">
           תאריך
         </Label>

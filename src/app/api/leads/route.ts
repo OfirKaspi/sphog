@@ -2,6 +2,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import axios from "axios";
+import {
+  attributionSchema,
+  buildMondayUtmTextColumns,
+  formatMondayCampaign,
+  formatMondayLeadSource,
+  sanitizeAttribution,
+  type Attribution,
+} from "@/lib/attribution";
 import { normalizeIsraeliPhone } from "@/lib/phone";
 
 // ✅ Monday config
@@ -22,6 +30,7 @@ const leadSchema = z.object({
   }),
   topic: z.enum(["סדנא פרטית", "הצטרפות לסדנא קבוצתית", "קניית טרריום", "אחר"]),
   details: z.string().optional(),
+  attribution: attributionSchema,
 });
 
 // ✅ In-memory IP rate limiter
@@ -29,9 +38,9 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// ✅ Sanitize strings
-const sanitize = (val: string) =>
-  val?.replace(/[\n\r]+/g, "").trim().slice(0, 100);
+// ✅ Sanitize strings for Monday text columns
+const sanitize = (val: string, max = 100) =>
+  val?.replace(/[\n\r]+/g, " ").trim().slice(0, max);
 
 // ✅ Topic mapping
 const topicMapping: Record<string, string> = {
@@ -42,7 +51,11 @@ const topicMapping: Record<string, string> = {
 };
 
 // ✅ Send to Monday.com
-async function sendToMonday(itemName: string, values: Record<string, any>) {
+async function sendToMonday(
+  itemName: string,
+  values: Record<string, any>,
+  attribution: Attribution | null
+) {
   const columnValues: Record<string, any> = {
     "name": values.full_name,                              // Full Name
     "lead_phone": {
@@ -51,12 +64,15 @@ async function sendToMonday(itemName: string, values: Record<string, any>) {
     },                                                     // Phone (object format)
     "text__1": values.details,                             // What do you want to know
     "dup__of_channel9__1": values.lead_source,             // Lead Source (e.g. "Website - Workshop")
-    "dup__of_channel__1": values.campaign,                 // Campaign
+    "dup__of_channel__1": values.campaign,                 // Campaign (form type status)
   };
 
   if (values.topic) {
     columnValues["dup__of_channel2__1"] = values.topic;    // Topic (only if not "Other")
   }
+
+  // Additive dedicated UTM text columns (allowlisted IDs only)
+  Object.assign(columnValues, buildMondayUtmTextColumns(attribution));
 
   const query = {
     query: `
@@ -123,16 +139,22 @@ export async function POST(req: NextRequest) {
     const phone = sanitize(data.phoneNumber);
     const topic = sanitize(data.topic);
     const mappedTopic = topicMapping[topic];
-    const details = sanitize(data.details || "");
+    const details = sanitize(data.details || "", 200);
 
-    await sendToMonday(fullName, {
-      full_name: fullName,
-      phone: phone,
-      topic: mappedTopic,
-      details: details,
-      lead_source: "Website",
-      campaign: "General form",
-    });
+    const attribution = sanitizeAttribution(data.attribution);
+
+    await sendToMonday(
+      fullName,
+      {
+        full_name: fullName,
+        phone: phone,
+        topic: mappedTopic,
+        details: details,
+        lead_source: formatMondayLeadSource(attribution),
+        campaign: formatMondayCampaign("GeneralForm"),
+      },
+      attribution
+    );
 
     return NextResponse.json(
       { success: true, message: "הפרטים נשלחו בהצלחה!" },

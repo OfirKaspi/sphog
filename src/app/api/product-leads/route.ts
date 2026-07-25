@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 import { z } from "zod"
+import {
+  attributionSchema,
+  formatAttributionEmailBlock,
+  sanitizeAttribution,
+} from "@/lib/attribution"
 import { normalizeIsraeliPhone } from "@/lib/phone"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -26,6 +31,7 @@ const productLeadSchema = z.object({
   productName: z.string().nonempty("שם המוצר נדרש."),
   productId: z.string().optional(),
   productImage: z.string().url().optional(),
+  attribution: attributionSchema,
 })
 
 const sanitize = (val: string) => val?.replace(/[\n\r]+/g, "").trim().slice(0, 500)
@@ -46,9 +52,18 @@ interface EmailData {
   productName: string
   productId: string
   productImage: string
+  attributionBlock: string
 }
 
-function buildEmailHtml({ fullName, phone, message, productName, productId, productImage }: EmailData) {
+function buildEmailHtml({
+  fullName,
+  phone,
+  message,
+  productName,
+  productId,
+  productImage,
+  attributionBlock,
+}: EmailData) {
   const imageSection = productImage
     ? `<tr>
           <td style="padding:0;" align="center">
@@ -143,6 +158,15 @@ function buildEmailHtml({ fullName, phone, message, productName, productId, prod
         </tr>
 
         <tr>
+          <td style="padding:0 32px 24px;text-align:right;">
+            <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:16px 18px;">
+              <p style="margin:0 0 6px;font-size:12px;color:#c2410c;font-weight:700;">מקור הגעה (UTM)</p>
+              <p style="margin:0;font-size:13px;color:#070A12;line-height:1.6;white-space:pre-wrap;font-family:monospace;">${escapeHtml(attributionBlock)}</p>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
           <td style="padding:16px 32px;background:#f0fdf4;border-top:1px solid #d1e7dd;">
             <p style="margin:0;font-size:12px;color:#6b7280;text-align:center;">נשלח אוטומטית מאתר SPHOG</p>
           </td>
@@ -186,12 +210,23 @@ export async function POST(req: NextRequest) {
     const productName = sanitizeShort(data.productName)
     const productId = data.productId ? sanitizeShort(data.productId) : ""
     const productImage = data.productImage || ""
+    const attributionBlock = formatAttributionEmailBlock(
+      sanitizeAttribution(data.attribution)
+    )
 
     const { error } = await resend.emails.send({
       from: FROM_EMAIL,
       to: NOTIFICATION_EMAIL,
       subject: `ליד חדש מהחנות: ${fullName} - ${productName}`,
-      html: buildEmailHtml({ fullName, phone, message, productName, productId, productImage }),
+      html: buildEmailHtml({
+        fullName,
+        phone,
+        message,
+        productName,
+        productId,
+        productImage,
+        attributionBlock,
+      }),
     })
 
     if (error) {

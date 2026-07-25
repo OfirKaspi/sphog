@@ -1,5 +1,6 @@
+import ViewContentTracker from "@/components/analytics/ViewContentTracker"
 import PageHeader from "@/components/common/PageHeader"
-import Testimonials from "@/components/common/testimonials/Testimonials"
+import TestimonialsSection from "@/components/common/testimonials/TestimonialsSection"
 import LeaveDetailsOpenForm from "@/components/forms/leave-details-form/LeaveDetailsOpenForm"
 import ProductList from "@/components/pages/store/ProductList"
 import getStoreData from "@/lib/api/storeData"
@@ -10,6 +11,7 @@ const Store = async () => {
 
   return (
     <section>
+      <ViewContentTracker contentName="/store" />
       {data.products.length > 0 ? (
         <>
           <PageHeader {...data.header} />
@@ -28,7 +30,7 @@ const Store = async () => {
           <p className="mt-2 text-sm text-gray-600">בקרוב יתווספו כאן מוצרים חדשים לרכישה.</p>
         </div>
       ) : null}
-      <Testimonials {...data.testimonials} />
+      <TestimonialsSection {...data.testimonials} />
       <LeaveDetailsOpenForm {...data.openForm} />
     </section>
   )
